@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <title>THMSS - Facilities & Rooms Booking System</title>
+        
+        <link rel="stylesheet" type="text/css" href="/static/css/login.css">
+        <link rel="icon" type="image/png" href="/static/photos/icon.png">
+    </head>
+    <body>
+        <div id="photo"></div>
+        <div id="photo2"></div>
+        <div id="login">
+            
+            <div id="form">
+                <h1>
+                    HKTA Tang Hin Memorial Secondary School
+                </h1>
+                <h3>
+                    Facilities & Rooms Booking System
+                </h3>
+                <div class="login_form">
+                    <form action="/login" method="POST">
+                        <input class = "textbox" type="text" name="userid" placeholder = "Enter UserID" id="content">
+                        <input class = "textbox" type="password" name="password" placeholder = "Enter Password" id="content">
+                        <div class="error">{{ error }}</div>
+                        <input class = "button" type="submit" value="Login">
+                    </form>
+                    
+                </div>
+                
+            </div>
+
+            
+        </div>
+    </body>
+</html>

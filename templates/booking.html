@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <title>Booking</title>
+
+        <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+        <link rel="icon" type="image/png" href="/static/photos/icon.png">
+        <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+        
+    </head>
+    <body>
+        
+        {% include "/top_banner.html" %}
+
+        <div id="content">
+            <h1>
+                Booking
+            </h1>
+            <table class="sortable">
+                <tr>
+                    <th>Room ID</th>
+                    <th>Room Name</th>
+                    <th>Floor</th>
+                    <th>Area (in m²)</th>
+                    <th>Capacity</th>
+                </tr>
+                {% for i in result%}
+                    <tr>
+                    {% for j in range(i|length) %}
+                        {% if j == 0 %}
+                            <td><a href="/booking/{{ i[j]|safe }}">{{ i[j] }}</a></td>
+                        {% elif j == 2  %}
+                            {% if i[j] == 0 %}
+                                <td>G/F</td>
+                            {% else %}
+                                <td>{{ i[j] }}/F</td>
+                            {% endif %}
+                        {% else %}
+                            <td>{{ i[j] }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </body>
+</html>

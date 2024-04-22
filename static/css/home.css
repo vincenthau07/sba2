@@ -1,0 +1,176 @@
+body{
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+a{
+    color: white;
+    font-weight: normal;
+    text-decoration: none;
+}
+a:hover{
+    color: #dadada;
+}
+#top_banner{
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #3C3633;
+    color: white;
+    font-size: 20;
+    font-weight: bold;
+    line-height: 40px;
+}
+.title{
+    top: 0;
+    left: 0;
+    float: left;
+}
+.logout{
+    text-align: right;
+    font-weight: normal;
+    float: right; 
+}
+#top_banner2{
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    padding-left: 10px;
+    background-color: #696360;
+    color: white;
+    font-size: 20;
+    line-height: 40px;
+}
+#top_banner2 td{
+    border: 0px;
+    line-height: 35px;
+    padding-left: 10px;
+    padding-right: 40px;
+}
+#content{
+    margin: 20px 20px 20px 20px;
+}
+#content table{
+    border-collapse: collapse;
+    text-align: center;
+}
+#content th{
+    border: 1px solid;
+    padding: 4px 10px 4px 10px
+}
+#content td{
+    border: 1px solid;
+    padding: 4px 10px 4px 10px
+}
+#content a{
+    color: purple;
+    
+}
+#content a:hover{
+    color: rgb(88, 16, 88);
+    text-decoration: underline;
+}
+#schedule{
+    margin: 20px 20px 20px 20px;
+    position: relative;
+    font-size: 16px;
+    height: auto;
+    display: flex;
+}
+/*
+#schedule table{
+    empty-cells: show;
+    border-collapse: collapse;
+    text-align: center;
+    border: 1px solid;
+    border-color: white;
+}
+#schedule tr{
+    height: 30px
+}
+#schedule th{
+    border: 1px solid;
+    background-color: #3C3633;
+    color: white;
+    width: 122px;
+    border-color: white;
+}
+#schedule td{
+    border: 1px dotted;
+    border-color: #696360;
+    width: 48px;
+    text-align: right;
+}
+*/
+.sch_mark{
+    width: 50px;
+    
+    float: left;
+    text-align: right;
+}
+.sch_div2{
+    border-right: #3C3633 solid 1px;
+    float: left;
+    width: 3px
+}
+.sch_cell3{
+    height: 42px;
+    width: 50px;
+}
+.sch_cell4{
+    height: 15px;
+    width: 50px;
+}
+.sch_div{
+    width: 110px;
+    position: relative;
+    float: left;
+    text-align: center;
+}
+.sch_title{
+    box-sizing: border-box;
+    background-color: #3C3633;
+    width: 110px;
+    border-right: white solid 1px;
+    height: 50px;
+    color: white;
+    line-height: 25px;
+    font-weight: bold;
+}
+.sch_cell1{
+    box-sizing: border-box;
+    border-bottom: 1px solid #3C3633;
+    height: 15px;
+    border-right: 1px solid #3C3633;
+}
+.sch_cell2{
+    box-sizing: border-box;
+    border-bottom: 1px dotted #3C3633;
+    height: 15px;
+    border-right: 1px solid #3C3633;
+}
+.sch_add_record{
+    position: relative;
+    float: left;
+    padding: 40px;
+}
+.box{
+    box-sizing: border-box;
+    border: 1px solid;
+    position: absolute;
+    width: 110px;
+    color: #3C3633;
+    text-align: center;
+    background-color: rgba(255,0,0,0.4);
+}
+
+#sql{
+    margin: 20px;
+    width: calc(100% - 40px);
+    padding: 10px;
+    height: 400px;
+}

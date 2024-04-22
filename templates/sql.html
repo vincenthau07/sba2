@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <title>Home</title>
+
+        <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+        <link rel="icon" type="image/png" href="/static/photos/icon.png">
+        <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+
+    </head>
+    <body>
+        {% include "/top_banner.html" %}
+        
+        <div id="content">
+            <h1>
+                SQL
+            </h1>
+            <form action="/sql" method="POST">
+                <textarea id="sql" rows="4" cols="50" name="sql">{{ cmd }}</textarea>
+                <br>
+                <input type="submit" value="Submit" name = "submit">
+            </form>
+            {% for i in range(result|length) %}
+                {% if column[i] == "" %}
+                    {{ result[i] }}
+                {% else %}
+                <table class="sortable">
+                    <tr>
+                        {% for field in column[i] %}
+                            <th>{{ field }}</th>
+                        {% endfor %}
+                    </tr>
+                    {% for j in result[i] %}
+                        <tr>
+                            {% for k in j %}
+                                <td>{{ k }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+                {% endif %}
+                <br>
+            {% endfor %}
+            
+        </div>
+    </body>
+</html>

@@ -1,0 +1,108 @@
+
+<html>
+    <head>
+        <title>Booking - {{ rid }}</title>
+
+        <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+        <link rel="icon" type="image/png" href="/static/photos/icon.png">
+        <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+        <script>
+            function repeat(n,Txt){
+                for(i=0; i<n;i++)
+                    document.write(Txt); //char(13) to draw new line
+                }
+        </script>
+    </head>
+    <body>
+        {% include "/top_banner.html" %}
+
+        <form action="/booking/{{ rid|safe }}" method="POST">
+        <div id="content">
+            <h1>
+                {{ rid }} - {{ rname }}
+            </h1>
+                
+                <input type="week" name="week" min="{{ minweek|safe }}" value="{{ week|safe }}">
+                <input type="submit" value = "Search" name = "search">
+                <input type="submit" value = "<" name="previous">
+                <input type="submit" value = ">" name="next">
+                
+            
+        </div>
+        
+        <div class="sch_mark">
+            <div class="sch_cell3"></div>
+            <script>
+                for(i=0; i<=24; i++){
+                    if(i<=9)
+                        var j = "0" + i
+                    else
+                        var j = i
+                    document.write('<div class="sch_cell4">'+j+':00</div><div class="sch_cell4"></div>')
+                }
+            </script>
+        </div>
+        
+        <div id="schedule">
+            <div class="sch_div2"></div>
+            {% for i in range(7) %}
+            <div class="sch_div">
+                <div class="sch_title">
+                    {{ date[i] }} <br> Mon
+                </div>
+                <script>repeat(24,'<div class="sch_cell2"></div><div class="sch_cell1"></div>')</script>
+                {% for j in code[i] %}
+                    <div class = 'box' 
+                        style = '
+                        top: {{ j["top"]|safe }}px;
+                        height: {{ j["height"]|safe }}px; 
+                        line-height: {{ j["height"]|safe }}px;
+                        background-color: rgba({{ j["color"]|safe }},0.4);
+                        border-color: rgb({{ j["color"]|safe }}, 0.4)'>
+                        
+                        {{ j["text"] }}
+                    </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            
+            <div class="sch_add_record">
+                <h2>
+                    Add Record
+                </h2>
+                <form action="/booking/{{ rid|safe }}" method="POST">
+                    <input type="datetime-local" name="stime"><br><br>
+                    <input type="datetime-local" name="etime"><br><br>
+                    <input type="text" name="purpose" placeholder = "Purpose"><br><br><br>
+                    <input type="submit" value = "submit" name = "submit"><br>
+                </form>
+                <br>
+                {{ error }}
+                <br>
+                <br>
+
+                <div id="content" style="margin: 0px;">
+                    {% if result %}
+                        <table class="sortable">
+                            <tr>
+                                <th>Start Date/Time</th>
+                                <th>End Date/Time</th>
+                                <th>Purpose</th>
+                            </tr>
+                            {% for row in result %}
+                                <tr>
+                                {% for cell in row %}
+                                    <td>{{ cell }}</td>
+                                {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% endif %}
+                </div>
+            </div>
+            
+        </div> 
+        
+        </form>
+    </body>
+</html>

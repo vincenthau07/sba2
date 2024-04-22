@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <title>Records</title>
+
+        <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+        <link rel="icon" type="image/png" href="/static/photos/icon.png">
+        <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+    </head>
+    <body>
+        {% include "/top_banner.html" %}
+        
+        <div id="content">
+            <h1>
+                Records
+            </h1>
+
+            
+            {% if rcds %}
+                <form method="POST">
+                    <table class="sortable">
+                        <tr>
+                            <th>ID</th>
+                            <th>Start Date/Time</th>
+                            <th>End Date/Time</th>
+                            <th>Room ID</th>
+                            <th>Room Name</th>
+                            <th>Purpose</th>
+                        </tr>
+                        {% for i in rcds %}
+                            <tr>
+                                {% for j in i %}
+                                    <td>
+                                        {{ j }}
+                                    </td>
+                                {% endfor %}
+                                <td>
+                                    <input class = "button" type="submit" name="{{ i[0] }}" value="Cancel">
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </form>
+                {{ remark }}
+            {% else %}
+            {{ remark }}<br>
+                You do not have any record at this moment.
+            {% endif %}
+            
+        </div>
+    </body>
+</html>

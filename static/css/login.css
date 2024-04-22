@@ -1,0 +1,93 @@
+body{
+    color: #3C3633;
+}
+h1{
+    font-family: 'Times New Roman', Times, serif;
+}
+
+h3{
+    font-family: Arial, sans-serif;
+}
+
+#photo{
+    width: calc(100% - 450px);
+    background-image: url(../photos/tanghin.jpg);
+    background-size: cover;
+    filter: blur(3px);
+    background-position: 50% 50%;
+    position: fixed;
+    height: 100%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+#photo2{
+    width: calc(100% - 450px);
+    background-color: rgba(238,237,235, 0.3);
+    background-size: cover;
+    background-position: 50% 50%;
+    position: fixed;
+    height: 100%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+}
+#login{
+    vertical-align: middle;
+    width: 452px;
+    display: table-cell;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: fixed;
+    background: rgb(238,237,235);
+    float: right;
+    display: table;
+    height: 100%;
+}
+#form{
+    width: 95%;
+    position: absolute;
+    top: 20%;
+    transform: translate(0%, -20%);
+
+    padding: 30px 30px 30px 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.login_form{
+    font-family: Arial, Helvetica, sans-serif;
+    left: 45px;
+    right: 150px;
+    margin-top: 100px;
+    position: absolute;
+    z-index: 2;
+}
+.login_form input.textbox {
+    border-radius: 5px;
+    width: 100%;
+    padding: 6px 10px;
+    background: rgb(219, 216, 209);
+    border: none;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+.login_form input.button{
+    margin-top: 5px;
+    margin-left: 180px;
+    padding: 10px 16px;
+    color: #ffffff;
+    background: rgb(175, 170, 159);
+    font-size: 18px;
+    border: 0px;
+}
+.login_form input.button:hover{
+    background: rgb(137, 133, 125);
+}
+.error{
+    margin-bottom: 10px;
+    color: red;
+    font-size: 18px;
+    font-family: 'Times New Roman', Times, serif;
+}
