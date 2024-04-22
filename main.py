@@ -239,5 +239,5 @@ def sqlpage():
         return flask.render_template('sql.html', permission=permission)
 
 if __name__ == '__main__':
-    app.debug=True
+    app.debug=False
     app.run(host=IP, port=PORT)
