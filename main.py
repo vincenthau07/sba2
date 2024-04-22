@@ -240,4 +240,4 @@ def sqlpage():
 
 if __name__ == '__main__':
     app.debug=False
-    app.run(host=IP, port=PORT)
+    app.run()
