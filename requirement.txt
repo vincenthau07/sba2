@@ -1,2 +1,2 @@
-pyodbc
+sqlite3
 flask
