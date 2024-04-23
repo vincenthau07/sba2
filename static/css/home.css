@@ -173,4 +173,5 @@ a:hover{
     width: calc(100% - 40px);
     padding: 10px;
     height: 400px;
+    resize: vertical;
 }
