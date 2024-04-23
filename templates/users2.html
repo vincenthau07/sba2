@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <title>Home</title>
+
+        <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+        <link rel="icon" type="image/png" href="/static/photos/icon.png">
+    </head>
+    <body>
+        {% include "/top_banner.html" %}
+        
+        <div id="content">
+            <h1>
+                User - {{ uid }}
+            </h1>
+            <table>
+                <tr>
+                    {% for field in column %}
+                    <th>
+                        {{ field }}
+                    </th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <form action="/users/{{ uid }}" method="POST">
+                        {% for i in range(column|length) %}
+                            {% if column[i]=="ROLE" %}
+                            <td>
+                                <select name="ROLE">
+                                    {% for r in role %}
+                                        <option value="{{ r }}" {% if r == user[i] %}selected{% endif %}>{{ r }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            {% elif column[i]=="SEX" %}
+                            <td>
+                                <select name="SEX" value = "{{ user[i] }}" selected>
+                                    <option value="M" {% if "M" == user[i] %}selected{% endif %}>M</option>
+                                    <option value="F" {% if "F" == user[i] %}selected{% endif %}>F</option>
+                                </select>
+                            </td>
+                            {% else %}
+                            <td>
+                                <input type="text" name="{{ column[i] }}" placeholder = "{{ column[i] }}" value = "{{ user[i] }}">
+                            </td>
+                            {% endif %}
+                        {% endfor %}
+                    
+                        <td>
+                            <input type="submit" value="Update" name = "submit">
+                        </td>
+                        <td>
+                            <input type="submit" value="Delete" name = "delete">
+                        </td>
+                    </form>
+                </tr>
+            </table>
+            {{ error }}
+        </div>
+    </body>
+</html>

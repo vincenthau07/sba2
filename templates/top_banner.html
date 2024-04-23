@@ -3,7 +3,7 @@
         THMSS - Facilities & Rooms Booking System
     </div>
     <div class="logout">
-        <a href="logout">Logout</a>
+        <a href="/logout">Logout</a>
     </div>
 </div>
 <div id="top_banner2">
@@ -20,11 +20,17 @@
                     <a href="/records"> My Records </a>
                 </td>
             {% endif %}
+            {% if permission["VIEWUSER"] %}
+                <td>
+                    <a href="/users"> Other Users </a>
+                </td>
+            {% endif %}
             {% if permission["ROLE"]=="ADMIN" %}
                 <td>
                     <a href="/sql"> SQL </a>
                 </td>
             {% endif %}
+            
         </tr>
     </table>
 </div>

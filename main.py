@@ -219,24 +219,99 @@ def sqlpage():
         cmd = flask.request.form["sql"]
         result = []
         column = []
-        
+        text = []
         
         for i in cmd.split(";"):
             try:
-                temp = sql.modify(i)
+                result.append(sql.modify(i))
                 if sql.cur.description == None:
-                    temp = f"\"{i}\" succeed."
-                    column.append("")
+                    text.append(f"\"{i}\" succeed.")
+                    column.append([])
                 else:
+                    text.append(f"\"{i}\"")
                     column.append([field[0] for field in sql.cur.description])
-                result.append(temp)
                 
             except Exception as error:
-                result.append(error)
-                column.append("")
-        return flask.render_template('sql.html', permission=permission, column=column, result=result, cmd = cmd)
+                text.append(f"\"{i}\": {error}")
+                result.append([])
+                column.append([])
+
+        return flask.render_template('sql.html', permission=permission, column=column, result=result, cmd = cmd, text=text)
     elif flask.request.method == 'GET':
         return flask.render_template('sql.html', permission=permission)
+
+@app.route('/users', methods=["GET", "POST"])
+def users():
+    if not checkSessionAvai(flask.session):
+        return flask.redirect('/login')
+    permission = sql.getPermission(flask.session.get('UID'))
+    if not permission["VIEWUSER"]:
+        return flask.redirect('/home')
+    
+    error = ""
+    
+    if flask.request.method == 'POST':
+        form = dict(flask.request.form)
+        if all((form[x] for x in form)):
+            del form["submit"]
+
+            try:
+                sql.modify(f"INSERT INTO user ({','.join((x for x in form))}) VALUES ({','.join(("?" for x in form))})", *(form[x] for x in form))
+                error = "Succeed"
+            except Exception as e:
+                error = e
+        else:
+            error = "Please fill in all required information."
+
+    elif flask.request.method == 'GET':
+        pass
+
+    users = sql.sql("SELECT * FROM user")
+    column = [field[0] for field in sql.cur.description]
+    role = [i[0] for i in sql.sql("SELECT ROLE FROM roles")]
+
+    return flask.render_template('users.html', permission=permission, users=users, column=column, role=role, error=error)
+
+@app.route('/users/<uid>', methods=["GET", "POST"])
+def users2(uid):
+    if not checkSessionAvai(flask.session):
+        return flask.redirect('/login')
+    permission = sql.getPermission(flask.session.get('UID'))
+    if not permission["EDITUSER"]:
+        return flask.redirect('/home')
+
+    error = ""
+    print(dict(flask.request.form))
+    if flask.request.method == 'POST':
+        if "delete" in flask.request.form:
+            try:
+                sql.modify("DELETE FROM user WHERE UID = ?",uid)
+                return flask.redirect('/users')
+            except Exception as e:
+                error = e
+
+        else:
+            form = dict(flask.request.form)
+            
+            if all((form[x] for x in form)):
+                del form["submit"]
+
+                try:
+                    sql.modify(f"UPDATE user SET {','.join((x+"=?" for x in form))} WHERE UID = ?", *(form[x] for x in form),uid)
+                    error = "Succeed"
+                    return flask.redirect(f'/users/{form["UID"]}')
+                except Exception as e:
+                    error = str(e)
+            else:
+                error = "Please fill in all required information."
+    elif flask.request.method == 'GET':
+        pass
+
+    user = sql.sql("SELECT * FROM user WHERE UID = ?", uid)
+    column = [field[0] for field in sql.cur.description]
+    role = [i[0] for i in sql.sql("SELECT ROLE FROM roles")]
+
+    return flask.render_template('users2.html', permission=permission, user=user[0], column=column, role = role, error = error, uid=uid)
 
 if __name__ == '__main__':
     app.debug=False

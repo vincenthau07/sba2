@@ -6,7 +6,9 @@ def sql(cmd,*params):
     cur.execute(cmd, params)
     return cur.fetchall()
 def modify(cmd, *params):
+    print(cmd)
     cur.execute(cmd, params)
+    
     conn.commit()
     return cur.fetchall()
 def getSchedule(rid,stime,etime):
