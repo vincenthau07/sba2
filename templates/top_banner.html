@@ -7,30 +7,17 @@
     </div>
 </div>
 <div id="top_banner2">
-    <table>
-        <tr>
-            <td>
-                <a href="/home"> Home </a>
-            </td>
-            <td>
-                <a href="/booking"> Booking </a>
-            </td>
-            {% if permission["ADDRECORD"]%}
-                <td>
-                    <a href="/records"> My Records </a>
-                </td>
-            {% endif %}
-            {% if permission["VIEWUSER"] %}
-                <td>
-                    <a href="/users"> Other Users </a>
-                </td>
-            {% endif %}
-            {% if permission["ROLE"]=="ADMIN" %}
-                <td>
-                    <a href="/sql"> SQL </a>
-                </td>
-            {% endif %}
+    
+    <a class="top-level-entry-container" href="/home"> Home </a>
+    <a class="top-level-entry-container" href="/booking"> Booking </a>
+    {% if permission["ADDRECORD"]%}
+        <a class="top-level-entry-container" href="/records"> My Records </a>
+    {% endif %}
+    {% if permission["VIEWUSER"] %}
+        <a class="top-level-entry-container" href="/users"> Other Users </a>
+    {% endif %}
+    {% if permission["ROLE"]=="ADMIN" %}
+        <a class="top-level-entry-container" href="/sql"> SQL </a>
+    {% endif %}
             
-        </tr>
-    </table>
 </div>

@@ -26,8 +26,6 @@
                 <input type="submit" value = "Search" name = "search">
                 <input type="submit" value = "<" name="previous">
                 <input type="submit" value = ">" name="next">
-                
-            
         </div>
         
         <div class="sch_mark">
@@ -48,7 +46,7 @@
             {% for i in range(7) %}
             <div class="sch_div">
                 <div class="sch_title">
-                    {{ date[i] }} <br> Mon
+                    {{ date[i] }} <br> {{ ["Mon","Tue","Wed","Thur","Fri","Sat","Sun"][i] }}
                 </div>
                 <script>repeat(24,'<div class="sch_cell2"></div><div class="sch_cell1"></div>')</script>
                 {% for j in code[i] %}
@@ -82,22 +80,7 @@
                 <br>
 
                 <div id="content" style="margin: 0px;">
-                    {% if result %}
-                        <table class="sortable">
-                            <tr>
-                                <th>Start Date/Time</th>
-                                <th>End Date/Time</th>
-                                <th>Purpose</th>
-                            </tr>
-                            {% for row in result %}
-                                <tr>
-                                {% for cell in row %}
-                                    <td>{{ cell }}</td>
-                                {% endfor %}
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    {% endif %}
+                    {{ table|safe }}
                 </div>
             </div>
             

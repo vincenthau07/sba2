@@ -15,31 +15,11 @@
                 SQL
             </h1>
             <form action="/sql" method="POST">
-                <textarea id="sql" rows="4" cols="50" name="sql">{{ cmd }}</textarea>
+                <textarea id="sql" rows="4" cols="50" name="sql" value="{{ cmd }}">{{ cmd }}</textarea>
                 <br>
                 <input type="submit" value="Submit" name = "submit">
             </form>
-            {% for i in range(result|length) %}
-                {{ text[i] }}
-                {% if column[i]|length  > 0 %}
-                <table class="sortable">
-                    <tr>
-                        {% for field in column[i] %}
-                            <th>{{ field }}</th>
-                        {% endfor %}
-                    </tr>
-                    {% for j in result[i] %}
-                        <tr>
-                            {% for k in j %}
-                                <td>{{ k }}</td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </table>
-                {% endif %}
-                <br>
-            {% endfor %}
-            
+            {{ code|safe }}
         </div>
     </body>
 </html>
