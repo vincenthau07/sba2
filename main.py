@@ -16,5 +16,5 @@ import webpages.sql
 import webpages.users
 
 if __name__ == '__main__':
-    app.debug=False
+    app.debug=True
     app.run(host=IP,port=PORT)

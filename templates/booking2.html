@@ -19,7 +19,7 @@
         <form action="/booking/{{ rid|safe }}" method="POST">
         <div id="content">
             <h1>
-                {{ rid }} - {{ rname }}
+                <a href = "/booking">Booking</a> >> <a href = "/booking/{{ rid }}">{{ rid }} - {{ rname }}</a>
             </h1>
                 
                 <input type="week" name="week" min="{{ minweek|safe }}" value="{{ week|safe }}">

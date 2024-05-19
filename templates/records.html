@@ -11,41 +11,14 @@
         
         <div id="content">
             <h1>
-                Records
+                <a href="/records">Records</a>
             </h1>
 
-            
-            {% if rcds %}
-                <form method="POST">
-                    <table class="sortable">
-                        <tr>
-                            <th>ID</th>
-                            <th>Start Date/Time</th>
-                            <th>End Date/Time</th>
-                            <th>Room ID</th>
-                            <th>Room Name</th>
-                            <th>Purpose</th>
-                        </tr>
-                        {% for i in rcds %}
-                            <tr>
-                                {% for j in i %}
-                                    <td>
-                                        {{ j }}
-                                    </td>
-                                {% endfor %}
-                                <td>
-                                    <input class = "button" type="submit" name="{{ i[0] }}" value="Cancel">
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                </form>
-                {{ remark }}
-            {% else %}
+            {{ table|safe }}
             {{ remark }}<br>
+            {%if not(table)%}
                 You do not have any record at this moment.
-            {% endif %}
-            
+            {%endif%}
         </div>
     </body>
 </html>

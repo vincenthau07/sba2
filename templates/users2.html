@@ -10,7 +10,7 @@
         
         <div id="content">
             <h1>
-                User - {{ uid }}
+                <a href = "/users"> User Management </a> >> <a href="/users/{{ uid }}">{{ uid }}</a>
             </h1>
             <table>
                 <tr>
@@ -23,7 +23,7 @@
                 <tr>
                     <form action="/users/{{ uid }}" method="POST">
                         {% for i in range(column|length) %}
-                            {% if column[i]=="ROLE" %}
+                            {% if column[i]=="Role" %}
                             <td>
                                 <select name="ROLE">
                                     {% for r in role %}
@@ -31,7 +31,7 @@
                                     {% endfor %}
                                 </select>
                             </td>
-                            {% elif column[i]=="SEX" %}
+                            {% elif column[i]=="Sex" %}
                             <td>
                                 <select name="SEX" value = "{{ user[i] }}" selected>
                                     <option value="M" {% if "M" == user[i] %}selected{% endif %}>M</option>

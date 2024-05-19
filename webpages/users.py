@@ -2,6 +2,7 @@ from __main__ import app
 import flask, datetime
 import modules.sql as sql
 import modules.html as html
+from copy import copy, deepcopy
 
 @app.route('/users', methods=["GET", "POST"])
 def users():
@@ -28,13 +29,17 @@ def users():
 
     elif flask.request.method == 'GET':
         pass
-
-    users = sql.sql("SELECT * FROM user")
-    column = users.field
-    users = users.result
+    result = sql.sql("SELECT * FROM user",tupleToList=True)
+    temp = deepcopy(result)
+    for i in temp.result:
+        i.append(html.hyperlink("Edit",f"/users/{i[0]}"))
+    temp.field_display.append("#Edit")
+    table = html.table(temp.field_display,temp.result, {"class": "sortable"})
+    
+    column = result.field_display
     role = [i[0] for i in sql.sql("SELECT ROLE FROM roles").result]
 
-    return flask.render_template('users.html', permission=permission, users=users, column=column, role=role, error=error)
+    return flask.render_template('users.html', permission=permission, table=table, column=column, role=role, error=error)
 
 @app.route('/users/<uid>', methods=["GET", "POST"])
 def users2(uid):
@@ -45,7 +50,7 @@ def users2(uid):
         return flask.redirect('/home')
 
     error = ""
-    print(dict(flask.request.form))
+    #print(dict(flask.request.form))
     if flask.request.method == 'POST':
         if "delete" in flask.request.form:
             try:
@@ -70,9 +75,10 @@ def users2(uid):
                 error = "Please fill in all required information."
     elif flask.request.method == 'GET':
         pass
-
-    user = sql.sql("SELECT * FROM user WHERE UID = ?", uid).result
-    column = [field[0] for field in sql.cur.description]
+    
+    result = sql.sql("SELECT * FROM user WHERE UID = ?", uid)
+    user = result.result[0]
+    column = result.field_display
     role = [i[0] for i in sql.sql("SELECT ROLE FROM roles").result]
 
-    return flask.render_template('users2.html', permission=permission, user=user[0], column=column, role = role, error = error, uid=uid)
+    return flask.render_template('users2.html', permission=permission, user=user, column=column, role = role, error = error, uid=uid)

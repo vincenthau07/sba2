@@ -16,7 +16,7 @@ def booking():
     for i in range(len(result.result)):
         result.result[i][0] = html.hyperlink(result.result[i][0],f"/booking/{result.result[i][0]}")
         result.result[i][2] = (str(result.result[i][2]) if result.result[i][2] else 'G') + "/F"
-    table = html.table(result.field,result.result,{"class": "sortable"})
+    table = html.table(result.field_display,result.result,{"class": "sortable"})
 
     return flask.render_template('booking.html', table=table, permission = permission)
 
@@ -42,7 +42,7 @@ def booking2(rid):
                     error = "Ending time must be after starting time."
                 elif stime < datetime.datetime.today() + datetime.timedelta(days=1):
                     error = "Only section after 24 hours is available for booking."
-                elif len(sql.commands.recordInfo(rid,str(stime+datetime.timedelta(seconds=1)),str(etime-datetime.timedelta(seconds=1))))>0:
+                elif len(sql.commands.recordInfo(rid,str(stime+datetime.timedelta(seconds=1)),str(etime-datetime.timedelta(seconds=1))).result)>0:
                     error = "Selected time section is occupied by another booking."
                 else:
                     if permission["EDITRECORD"]:
@@ -90,7 +90,7 @@ def booking2(rid):
                 result = sql.commands.recordInfo(rid,str(datetime.datetime.today())[:19],str(date[i])+" 23:59:59")
             else:
                 result = sql.commands.recordInfo(rid,str(date[i])+" 00:00:00",str(date[i])+" 23:59:59")
-            for j in result:
+            for j in result.result:
                 j = list(j)
                 j[0] = datetime.datetime.strptime(j[0], '%Y-%m-%d %H:%M:%S')
                 j[1] = datetime.datetime.strptime(j[1], '%Y-%m-%d %H:%M:%S')
@@ -101,13 +101,13 @@ def booking2(rid):
                 top = (j[0]-t1).total_seconds()/datetime.timedelta(hours=24).total_seconds()*30*24+50
                 height = (j[1]-j[0]).total_seconds()/datetime.timedelta(hours=24).total_seconds()*30*24
                 code[i].append({
-                    "color": "255,0,0",
+                    "color": "0,255,0",
                     "height": height,
                     "top": top,
                     "text": j[2]
                 })
                 if j[3]:
-                    code[i][-1]["color"] = "0,255,0"
+                    code[i][-1]["color"] = "255,0,0"
         else:
             code[i].append({
                     "color": "0,0,0",
@@ -122,8 +122,8 @@ def booking2(rid):
         result = sql.commands.recordInfo(rid,str(datetime.datetime.today())[:19],str(date[6])+" 23:59:59")
     else:
         result = sql.commands.recordInfo(rid,str(date[0])+" 00:00:00",str(date[6])+" 23:59:59")
-    if result:
-        for i in range(len(result)):
-            result[i][3] = ["Approved","Pending"][result[i][3]]
-        table = html.table(["Start Date/Time","End Date/Time","Purpose","State"],result,{"class": "sortable"})
+    if result.result:
+        for i in range(len(result.result)):
+            result.result[i][3] = ["Approved","Pending"][result.result[i][3]]
+        table = html.table(result.field_display,result.result,{"class": "sortable"})
     return flask.render_template('booking2.html',rid=rid,rname=rname,minweek=minweek, week=week, date=date, code=code, table=table,error=error, permission = permission)

@@ -12,31 +12,9 @@
         
         <div id="content">
             <h1>
-                Other Users
+                <a href="/users">User Management</a>
             </h1>
-            <table class="sortable">
-                <tr>
-                    {% for field in column %}
-                    <th>
-                        {{ field }}
-                    </th>
-                    {% endfor %}
-                </tr>
-                {% for i in users %}
-                    <tr>
-                        {% for j in i %}
-                            <td>
-                                {{ j }}
-                            </td>
-                        {% endfor %}
-                        {% if permission["EDITUSER"] %}
-                            <td>
-                                <a href="/users/{{ i[0] }}">Edit</a>
-                            </td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-            </table>
+            {{ table|safe }}
             <br>
                 {% if permission["EDITUSER"] %}
                     <table>
@@ -50,7 +28,7 @@
                             </tr>
                             <tr>
                                 {% for field in column %}
-                                    {% if field=="ROLE" %}
+                                    {% if field=="Role" %}
                                     <td>
                                         <select name="ROLE">
                                             {% for r in role %}
@@ -58,7 +36,7 @@
                                             {% endfor %}
                                         </select>
                                     </td>
-                                    {% elif field=="SEX" %}
+                                    {% elif field=="Sex" %}
                                     <td>
                                         <select name="SEX">
                                             <option value="M">M</option>
