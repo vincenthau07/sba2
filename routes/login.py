@@ -1,12 +1,12 @@
-from __main__ import app
 import flask
 import modules.sql as sql
+login_bp = flask.Blueprint("login", __name__)
 
-@app.route('/')
+@login_bp.route('/')
 def root():
     return flask.redirect('/login')
 
-@app.route('/login', methods=["GET","POST"])
+@login_bp.route('/login', methods=["GET","POST"])
 def login():
     if flask.request.method == 'POST':
         user = flask.request.form["userid"]

@@ -1,11 +1,12 @@
-from __main__ import app
 import flask, datetime
 import modules.sql as sql
 import modules.html as html
 
-@app.route('/sql', methods=["GET", "POST"])
+sql_bp = flask.Blueprint("sql", __name__)
 
-def sqlpage():
+@sql_bp.route('/sql', methods=["GET", "POST"])
+
+def sqlWeb():
     if not sql.commands.sessionValidity(flask.session):
         return flask.redirect('/login')
     permission = sql.commands.rolePermissions(flask.session.get('UID'))

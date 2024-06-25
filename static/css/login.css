@@ -11,7 +11,7 @@ h3{
 
 #photo{
     width: calc(100% - 450px);
-    background-image: url(../photos/tanghin.jpg);
+    background-image: url(/static/photos/tanghin.jpg);
     background-size: cover;
     filter: blur(3px);
     background-position: 50% 50%;

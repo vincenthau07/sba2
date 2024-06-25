@@ -1,10 +1,10 @@
-from __main__ import app
-
 import flask, datetime
 import modules.sql as sql
 import modules.html as html
 
-@app.route('/records', methods=["GET", "POST"])
+myRecords_bp = flask.Blueprint("myRecords", __name__)
+
+@myRecords_bp.route('/my-records', methods=["GET", "POST"])
 
 def records():
     if not sql.commands.sessionValidity(flask.session):

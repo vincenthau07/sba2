@@ -37,11 +37,11 @@ class sql():
             self.result = [list(arr) for arr in self.result]
 
 class commands():
-    def userPassword(uid,*params) -> str:
-        return sql(f"SELECT PASSWORD FROM user WHERE UID = ?", uid,*params).result[0][0]
+    def userPassword(uid) -> str:
+        return sql(f"SELECT PASSWORD FROM user WHERE UID = ?", uid).result[0][0]
 
-    def userName(uid,*params) -> str:
-        return sql(f"SELECT UNAME FROM user WHERE UID = ?", uid,*params).result[0][0]
+    def userName(uid) -> str:
+        return sql(f"SELECT UNAME FROM user WHERE UID = ?", uid).result[0][0]
     
     def sessionValidity(session):
         if 'UID' not in session or 'password' not in session:
@@ -54,17 +54,19 @@ class commands():
             return True
         return False
 
-    def roomName(rid,*params) -> str:
-        return sql(f"SELECT RNAME FROM room WHERE RID = '{rid}'",*params).result[0][0]
-    
-    def recordInfo(rid,stime,etime,*params) -> list:
-        return sql("""SELECT STIME, ETIME, PURPOSE, PENDING
-                       FROM bookingrecord 
-                       WHERE RID = ? AND 
-                       (? BETWEEN STIME AND ETIME OR
-                        ? BETWEEN STIME AND ETIME OR
-                        STIME BETWEEN ? AND ? AND
-                        (AVAILABILITY OR PENDING))""",rid,stime,etime,stime,etime, tupleToList=True,*params)
+    def facilityName(fid) -> str:
+        rtn = sql(f"SELECT FNAME FROM facility WHERE FID = '{fid}'").result
+        if len(rtn)==0:
+            return None
+        else:
+            return rtn[0][0]
+
+    def roomName(rid) -> str:
+        rtn = sql(f"SELECT RNAME FROM room WHERE RID = '{rid}'").result
+        if len(rtn)==0:
+            return None
+        else:
+            return rtn[0][0]
     
     def rolePermissions(uid=None,role=None):
         if uid:

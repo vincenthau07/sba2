@@ -1,0 +1,191 @@
+
+div ul li{
+    margin: 0px;
+    padding: 0px;
+    top: 0%;
+}
+.scrollable{
+    width: 1132px;
+    height: 500px;
+    overflow: auto;
+    padding: 0px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.schedule{
+    float: left;
+    top: 0%;
+    line-height: 24px;
+    font-size: 16px;
+    margin: 0px;
+    border-right: 1px solid #d0c1ba;
+    position: relative;
+}
+
+.timeline{
+    display: block;
+    float: left;
+    width: auto;
+    text-align: right;
+    margin: 0px;
+    padding: 0px;
+    width: 55px;
+}
+.timeline ul{
+    margin: 0px;
+    padding: 0px;
+}
+.timeline li{
+    box-sizing: border-box;
+    padding: 5px;
+    height: 80px;
+.timeline-text{
+    transform: translateY(65px);
+}
+}
+.column{
+    float: left;
+    display: absolute;
+    box-sizing: border-box;
+    border-left: 1px solid #d0c1ba;
+    
+}
+.column ul{
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
+.column li{
+    box-sizing: border-box;
+    display: block;
+    border-bottom: 1px solid #d0c1ba;
+    height: 80px;
+    width: 150px;
+    margin: 0px;
+    z-index: 0;
+}
+.field-bar{
+    margin-top: 15px;
+    line-height: 30px;
+    font-size: 18px;
+    position: absolute;
+    display: block;
+    left: 55px;
+    height: 80px;
+    min-width: 1057px;
+}
+.field{
+    position: relative; 
+    margin: 0;
+    box-sizing: border-box;
+    color: white;
+    background-color: #3C3633;
+    font-weight: bold;
+    text-align: center;
+    padding: 5px 5px 5px 5px;
+    border: 1px solid #d0c1ba;
+    height: 80px;
+    width: 151px;
+    display: block;
+    float: left;
+    overflow: hidden;
+    z-index: 1;
+}
+.event-box{
+    background-color: white;
+    display: block;
+    box-sizing: border-box;
+    position: absolute;
+    display: block;
+    width: 150px;
+    text-align: left;
+}
+.event{
+    box-sizing: border-box;
+    display: inline-block;
+    width: 150px;
+    text-align: left;
+    padding: 5px;
+    opacity: 100%;
+    color: white;
+    transition: opacity 0.5s;
+    overflow: hidden;
+}
+.event:not(.toggle):hover{
+    opacity: 0.8;
+    
+}
+.event h3{
+    font-size: 18px;
+    opacity: 80%;
+    line-height: 0px;
+}
+.event h2{
+    font-size: 20px;
+    line-height: 20px;
+}
+.event.toggle{
+    display: block;
+    position: fixed;
+    z-index: 2;
+    width: 150px;
+    height: 300px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-300px,-150px);
+    transition: none;
+}
+.event.toggle h3{
+    line-height: 20px;
+}
+.event.toggle h2{
+    line-height: 30px;
+}
+.description{
+    box-sizing: border-box;
+    padding: 10px;
+    z-index: 2;
+    background-color: white;
+    display: none;
+    position: fixed;
+    width: 450px;
+    height: 300px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-151px,-150px);
+}
+.description h1{
+    font-size: 20px;
+}
+.close-button{
+    background-image: url("/static/photos/close-button.png");
+    background-size: 30px;
+    display: none;
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    top: 50%;
+    left: 50%;
+    transform: translate(270px,-150px);
+    z-index: 3;
+    transition: opacity 0.5s;
+}
+.close-button:hover{
+    opacity: 0.7;
+}
+.mask{
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0%;
+    left: 0%;
+    background-color: black;
+    content: "";
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 2;
+}
+.description{
+    display: none;
+}

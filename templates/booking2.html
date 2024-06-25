@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Booking - {{ rid }}</title>
-
+        <link rel="stylesheet" type="text/css" href="/static/css/top-navigation.css">
         <link rel="stylesheet" type="text/css" href="/static/css/home.css">
         <link rel="icon" type="image/png" href="/static/photos/icon.png">
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
@@ -14,7 +14,7 @@
         </script>
     </head>
     <body>
-        {% include "/top_banner.html" %}
+        {% include "/top_navigation.html" %}
 
         <form action="/booking/{{ rid|safe }}" method="POST">
         <div id="content">
@@ -40,14 +40,14 @@
                 }
             </script>
         </div>
-        
+        <div class="sch_title">
+            {{ date[i] }} <br> {{ ["Mon","Tue","Wed","Thur","Fri","Sat","Sun"][i] }}
+        </div>
         <div id="schedule">
             <div class="sch_div2"></div>
             {% for i in range(7) %}
             <div class="sch_div">
-                <div class="sch_title">
-                    {{ date[i] }} <br> {{ ["Mon","Tue","Wed","Thur","Fri","Sat","Sun"][i] }}
-                </div>
+                
                 <script>repeat(24,'<div class="sch_cell2"></div><div class="sch_cell1"></div>')</script>
                 {% for j in code[i] %}
                     <div class = 'box' 

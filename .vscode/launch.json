@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Main",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "console": "externalTerminal"
+        },
+        {
             "name": "Python: Current Dir (external)",
             "type": "debugpy",
             "request": "launch",

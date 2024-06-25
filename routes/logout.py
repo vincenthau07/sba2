@@ -1,8 +1,9 @@
-from __main__ import app
 import flask
 import modules.sql as sql
 
-@app.route('/logout')
+logout_bp = flask.Blueprint("logout", __name__)
+
+@logout_bp.route('/logout')
 def logout():
     if not sql.commands.sessionValidity(flask.session):
         return flask.redirect('/login')

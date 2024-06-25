@@ -20,4 +20,7 @@ def weekNumToDate(week):
     return rtn
 
 def strToDate(string):
-    return datetime.datetime(int(string[:4]),int(string[5:7]),int(string[8:10]),int(string[11:13]),int(string[14:16]))
+    if len(string) > 16:
+        return datetime.datetime(int(string[:4]),int(string[5:7]),int(string[8:10]),int(string[11:13]),int(string[14:16]),int(string[17:19]))
+    else:
+        return datetime.datetime(int(string[:4]),int(string[5:7]),int(string[8:10]),int(string[11:13]),int(string[14:16]))

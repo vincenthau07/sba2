@@ -1,12 +1,12 @@
 <html>
     <head>
         <title>Home</title>
-
+        <link rel="stylesheet" type="text/css" href="/static/css/top-navigation.css">
         <link rel="stylesheet" type="text/css" href="/static/css/home.css">
         <link rel="icon" type="image/png" href="/static/photos/icon.png">
     </head>
     <body>
-        {% include "/top_banner.html" %}
+        {% include "/top_navigation.html" %}
         
         <div id="content">
             <h1>
@@ -37,7 +37,7 @@
                                     <option value="M" {% if "M" == user[i] %}selected{% endif %}>M</option>
                                     <option value="F" {% if "F" == user[i] %}selected{% endif %}>F</option>
                                 </select>
-                            </td>
+                            </td> 
                             {% else %}
                             <td>
                                 <input type="text" name="{{ column[i] }}" placeholder = "{{ column[i] }}" value = "{{ user[i] }}">

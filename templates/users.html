@@ -1,24 +1,24 @@
 <html>
     <head>
         <title>Home</title>
-
+        <link rel="stylesheet" type="text/css" href="/static/css/top-navigation.css">
         <link rel="stylesheet" type="text/css" href="/static/css/home.css">
         <link rel="icon" type="image/png" href="/static/photos/icon.png">
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 
     </head>
     <body>
-        {% include "/top_banner.html" %}
+        {% include "/top_navigation.html" %}
         
         <div id="content">
             <h1>
-                <a href="/users">User Management</a>
+                <a href="/management/user">User Management</a>
             </h1>
             {{ table|safe }}
             <br>
                 {% if permission["EDITUSER"] %}
                     <table>
-                        <form action="/users" method="POST">
+                        <form action="/management/user" method="POST">
                             <tr>
                                 {% for field in column %}
                                 <th>
@@ -45,7 +45,7 @@
                                     </td>
                                     {% else %}
                                     <td>
-                                        <input type="text" name="{{ field }}" placeholder = "{{ field }}">
+                                        <input type="text" name="{{ field }}" placeholder = "{{ field_ }}">
                                     </td>
                                     {% endif %}
                                 {% endfor %}

@@ -1,0 +1,68 @@
+<div class="top-navigation-wrap">
+    <span>
+        <a href="/home">THMSS - Facilities & Rooms Booking System</a>
+    </span>
+    <div class="logout">
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="top-navigation-main">
+    <div class="top-level-entry-container">
+        <a href="/home"><button> Home </button></a>
+    </div>
+    <div class="top-level-entry-container">
+        <button> Booking </button>
+        <ul>
+            <a href="/booking/room">
+                <li>Room</li>
+            </a>
+            <a href="/booking/facility">
+                <li>Facility</li>
+            </a>
+        </ul>
+    </div>
+    
+    {% if permission["ADDRECORD"]%}
+    <div class="top-level-entry-container">
+        <a href="/my-records"><button> My Records </button></a>
+    </div>
+    {% endif %}
+    {% if permission["VIEWUSER"] or permission["EDITROOM"] or permission["EDITRECORD"]%}
+    <div class="top-level-entry-container">
+        <button> Management </button>
+        <ul>
+            {% if permission["VIEWUSER"] %}
+            <a href="/management/user">
+                <li>User</li>
+            </a>
+            {% endif %}
+            {% if permission["EDITRECORD"] %}
+            <a href="/management/record">
+                <li>Record</li>
+            </a>
+            {% endif %}
+            {% if permission["EDITROOM"] %}
+            <a href="/management/room">
+                <li>Room</li>
+            </a>
+            {% endif %}
+            {% if permission["EDITFACILITY"] %}
+            <a href="/management/facility">
+                <li>Facility</li>
+            </a>
+            {% endif %}
+            {% if permission["EDITSCHOOLUNIT"] %}
+            <a href="/management/room">
+                <li>School Unit</li>
+            </a>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+    {% if permission["ROLE"]=="ADMIN" %}
+    <div class="top-level-entry-container">
+        <a class="top-level-entry-container" href="/sql"><button> SQL </button></a>
+    </div>
+    {% endif %}
+</div>

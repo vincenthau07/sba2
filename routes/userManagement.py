@@ -1,10 +1,11 @@
-from __main__ import app
 import flask, datetime
 import modules.sql as sql
 import modules.html as html
 from copy import copy, deepcopy
 
-@app.route('/users', methods=["GET", "POST"])
+userManagement_bp = flask.Blueprint("user management", __name__)
+
+@userManagement_bp.route('/management/user', methods=["GET", "POST"])
 def users():
     if not sql.commands.sessionValidity(flask.session):
         return flask.redirect('/login')
@@ -32,7 +33,7 @@ def users():
     result = sql.sql("SELECT * FROM user",tupleToList=True)
     temp = deepcopy(result)
     for i in temp.result:
-        i.append(html.hyperlink("Edit",f"/users/{i[0]}"))
+        i.append(html.hyperlink("Edit",f"/management/user/{i[0]}"))
     temp.field_display.append("#Edit")
     table = html.table(temp.field_display,temp.result, {"class": "sortable"})
     
@@ -41,7 +42,7 @@ def users():
 
     return flask.render_template('users.html', permission=permission, table=table, column=column, role=role, error=error)
 
-@app.route('/users/<uid>', methods=["GET", "POST"])
+@userManagement_bp.route('/management/user/<uid>', methods=["GET", "POST"])
 def users2(uid):
     if not sql.commands.sessionValidity(flask.session):
         return flask.redirect('/login')
@@ -68,7 +69,7 @@ def users2(uid):
                 try:
                     sql.sql(f"UPDATE user SET {','.join((x+'=?' for x in form))} WHERE UID = ?", *(form[x] for x in form),uid,commit=True)
                     error = "Succeed"
-                    return flask.redirect(f'/users/{form["UID"]}')
+                    return flask.redirect(f'/management/user/{form["UID"]}')
                 except Exception as e:
                     error = str(e)
             else:

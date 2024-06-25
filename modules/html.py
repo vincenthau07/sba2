@@ -30,3 +30,12 @@ def hyperlink(text: str, link: str, params: dict={}):
 
 def linebreak():
     return "<br>"
+
+def div(text: str, params: dict={}):
+    rtn = f"<div"
+    for key in params:
+        rtn += f" {key}=\"{params[key]}\""
+    rtn+= ">"
+    rtn+= text
+    rtn+= "</div>"
+    return rtn

@@ -1,8 +1,9 @@
-from __main__ import app
 import flask
 import modules.sql as sql
 
-@app.route('/home')
+home_bp = flask.Blueprint("home", __name__)
+
+@home_bp.route('/home')
 def home():
     if not sql.commands.sessionValidity(flask.session):
         return flask.redirect('/login')
