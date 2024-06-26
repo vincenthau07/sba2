@@ -5,7 +5,8 @@
         <link rel="stylesheet" type="text/css" href="/static/css/home.css">
         <link rel="icon" type="image/png" href="/static/photos/icon.png">
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="/static/js/sql.js"></script>
     </head>
     <body>
         {% include "/top_navigation.html" %}
@@ -14,12 +15,11 @@
             <h1>
                 SQL
             </h1>
-            <form action="/sql" method="POST">
-                <textarea id="sql" rows="4" cols="50" name="sql" value="{{ cmd }}">{{ cmd }}</textarea>
-                <br>
-                <input type="submit" value="Submit" name = "submit">
-            </form>
-            {{ code|safe }}
+            <textarea id="sql" rows="4" cols="50" name="sql"></textarea>
+            <br>
+            <input type="submit" value="Submit" name = "submit">
+            <div class = "code"></div>
+            
         </div>
     </body>
 </html>
