@@ -20,8 +20,16 @@ from routes.myRecords import myRecords_bp
 app.register_blueprint(myRecords_bp)
 from routes.sqlWeb import sql_bp
 app.register_blueprint(sql_bp)
-from routes.userManagement import userManagement_bp
-app.register_blueprint(userManagement_bp)
+
+from routes.management import management_bp
+app.register_blueprint(management_bp)
+# from routes.userManagement import userManagement_bp
+# app.register_blueprint(userManagement_bp)
+# from routes.recordManagement import recordManagement_bp
+# app.register_blueprint(recordManagement_bp)
+# from routes.roomManagement import roomManagement_bp
+# app.register_blueprint(roomManagement_bp)
+
 #start website
 if __name__ == '__main__':
     app.debug=True

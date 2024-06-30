@@ -32,14 +32,19 @@
     <div class="top-level-entry-container">
         <button> Management </button>
         <ul>
-            {% if permission["VIEWUSER"] %}
+            {% if permission["EDITUSER"] %}
             <a href="/management/user">
                 <li>User</li>
             </a>
             {% endif %}
-            {% if permission["EDITRECORD"] %}
-            <a href="/management/record">
-                <li>Record</li>
+            {% if permission["EDITROOMRECORD"] %}
+            <a href="/management/roomrecord">
+                <li>Room Record</li>
+            </a>
+            {% endif %}
+            {% if permission["EDITFACILITYRECORD"] %}
+            <a href="/management/facilityrecord">
+                <li>Facility Record</li>
             </a>
             {% endif %}
             {% if permission["EDITROOM"] %}
@@ -53,8 +58,13 @@
             </a>
             {% endif %}
             {% if permission["EDITSCHOOLUNIT"] %}
-            <a href="/management/room">
+            <a href="/management/schoolunit">
                 <li>School Unit</li>
+            </a>
+            {% endif %}
+            {% if permission["EDITROLES"] %}
+            <a href="/management/roles">
+                <li>Roles</li>
             </a>
             {% endif %}
         </ul>

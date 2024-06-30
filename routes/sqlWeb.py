@@ -15,6 +15,12 @@ def sqlWeb():
     
 @sql_bp.route('/sql', methods = ['POST'])
 def sqlResult():
+    if not sql.commands.sessionValidity(flask.session):
+        return flask.redirect('/login')
+    permission = sql.commands.rolePermissions(flask.session.get('UID'))
+    if permission["ROLE"]!="ADMIN":
+        return flask.redirect('/home')
+
     cmd = flask.request.form["sql"]
     code = ""
     j = 1

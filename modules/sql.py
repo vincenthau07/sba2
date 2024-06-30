@@ -4,7 +4,7 @@ cur = conn.cursor()
 FIELD_NAME = {
     "STIME": "Starting Datetime",
     "ETIME": "Ending Datetime",
-    "PENDING": "Pending",
+    "APPROVED_BY": "Approved by",
     "AVAILABILITY": "Availability",
     "ROLE": "Role",
     "RNAME": "Room Name",
@@ -14,7 +14,7 @@ FIELD_NAME = {
     "SEX": "Sex",
     "EMAIL": "Email",
     "UNAME": "Name",
-    "PURPOSE": "Purpose"
+    "DESCRIPTION": "Description"
 }
 
 class sql():

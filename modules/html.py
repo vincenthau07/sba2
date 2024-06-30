@@ -39,3 +39,11 @@ def div(text: str, params: dict={}):
     rtn+= text
     rtn+= "</div>"
     return rtn
+
+def input(params: dict={}):
+    rtn = f"<input"
+    for key in params:
+        rtn += f" {key}=\"{params[key]}\""
+    rtn += ">"
+    return rtn
+    
