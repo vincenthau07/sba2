@@ -200,7 +200,7 @@ def rmbksubmitform(rid):
         
         elif len(getEventsOfRoom(rid,stime = stime+datetime.timedelta(seconds=1), etime = etime-datetime.timedelta(seconds=1)).result)>0:
             return flask.jsonify({"message": "Error: Selected session is occupied by others."})
-        elif permission["EDITRECORD"]:
+        elif permission["EDITROOMRECORD"]:
             if stime < datetime.datetime.today():
                 return flask.jsonify({"message": "Error: You cannot book rooms in the past."})
             else:
@@ -309,7 +309,7 @@ def fcbksubmitform(fid):
         
         elif len(getEventsOfFacility(fid,stime = stime+datetime.timedelta(seconds=1), etime = etime-datetime.timedelta(seconds=1)).result)>0:
             return flask.jsonify({"message": "Error: Selected session is occupied by others."})
-        elif permission["EDITRECORD"]:
+        elif permission["EDITFACILITYRECORD"]:
             if stime < datetime.datetime.today():
                 return flask.jsonify({"message": "Error: You cannot book facilities in the past."})
             else:
