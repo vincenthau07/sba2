@@ -3,7 +3,7 @@ A website server for facilities and rooms booking.
 
 # Content
 1. [How-to-Get-Started](#how-to-get-started)
-2. [Website-Guide](#webiste-guide)
+2. [Website-Guide](#website-guide)
 3. [Folders](#folders)
 
 
