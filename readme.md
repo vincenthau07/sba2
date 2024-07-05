@@ -58,8 +58,10 @@ You can also sort the table by clicking the field.
 
 ![Room Booking page2](photos/booking2.png)
 You can check the room usage by selecting a week.
+
 ![Room Booking page3](photos/booking3.png)
 You can get more information by clicking the booked session.
+
 ![Room Booking page4](photos/booking4.png)
 You can add a record by filling the form.\
 You can filter school units by selecting a category.
