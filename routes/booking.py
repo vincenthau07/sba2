@@ -155,7 +155,7 @@ def roombooking():
 
 @booking_bp.route('/booking/room/<rid>', methods=["GET"])
 def roombooking2(rid):
-    if not sql.commands.sessionValidity(flask.session):
+    if not sql.commands.sessionValidity(flask.session) or sql.commands.roomName(rid) is None:
         return flask.redirect('/login')
     permission = sql.commands.rolePermissions(flask.session.get('UID'))
 
@@ -186,7 +186,7 @@ def roombooking2(rid):
 
 @booking_bp.route('/booking/room/<rid>', methods=["POST"])
 def rmbksubmitform(rid):
-    if not sql.commands.sessionValidity(flask.session):
+    if not sql.commands.sessionValidity(flask.session) or sql.commands.roomName(rid) is None:
         return flask.redirect('/login')
     
     if len(flask.request.form.get("stime")) == 0  or len(flask.request.form.get("etime")) == 0 or len(flask.request.form.get("description")) == 0 or flask.request.form.get("unit") is None:
@@ -222,6 +222,8 @@ def rmbksubmitform(rid):
 
 @booking_bp.route('/booking/room/<rid>/update', methods=["POST"])
 def rmbkupdate(rid):
+    if not sql.commands.sessionValidity(flask.session) or sql.commands.roomName(rid) is None:
+        return flask.redirect('/login')
     dates = weekNumToDate(flask.request.form.get('week'))
     week = flask.request.form.get('week')
     if 'previous' in flask.request.form:
@@ -243,7 +245,7 @@ def rmbkupdate(rid):
 
 @booking_bp.route('/booking/facility/<fid>', methods=["GET"])
 def facilitybooking2(fid):
-    if not sql.commands.sessionValidity(flask.session):
+    if not sql.commands.sessionValidity(flask.session) or sql.commands.facilityName(fid) is None:
         return flask.redirect('/login')
     permission = sql.commands.rolePermissions(flask.session.get('UID'))
 
@@ -274,6 +276,8 @@ def facilitybooking2(fid):
 
 @booking_bp.route('/booking/facility/<fid>/update', methods=["POST"])
 def fcbkupdate(fid):
+    if not sql.commands.sessionValidity(flask.session) or sql.commands.facilityName(fid) is None:
+        return flask.redirect('/login')
     dates = weekNumToDate(flask.request.form.get('week'))
     week = flask.request.form.get('week')
     if 'previous' in flask.request.form:
@@ -295,7 +299,7 @@ def fcbkupdate(fid):
 
 @booking_bp.route('/booking/facility/<fid>', methods=["POST"])
 def fcbksubmitform(fid):
-    if not sql.commands.sessionValidity(flask.session):
+    if not sql.commands.sessionValidity(flask.session) or sql.commands.facilityName(fid) is None:
         return flask.redirect('/login')
     
     if len(flask.request.form.get("stime")) == 0  or len(flask.request.form.get("etime")) == 0 or len(flask.request.form.get("description")) == 0 or flask.request.form.get("unit") is None:
