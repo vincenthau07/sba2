@@ -11,7 +11,7 @@ A website server for facilities and rooms booking.
 
 **Make sure you have installed Python with 3.10.0 or above, and Pip with version 24.0 or above**
 
-You can get python installer from: [Python 3.10.0](#https://www.python.org/downloads/release/python-3100/)
+You can get python installer from: [Python 3.10.0](https://www.python.org/downloads/release/python-3100/)
 
 **Make sure you have installed Module Flask with version 3.0.2 or above**
 
