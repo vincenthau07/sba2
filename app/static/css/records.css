@@ -1,0 +1,33 @@
+.pagination{
+    display: flex;
+}
+.pagination ul{
+    padding: 0;
+}
+.pagination li{
+    display: inline-block;
+    padding: 0;
+}
+.pagination button{
+    background-color: white;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 7px 10px 7px 10px;
+    border: 0px;
+    font-size: 18;
+    color: #696360;
+}
+.pagination button:hover{
+    background: #9b9490;
+    color: white;
+}
+.pagination button.active{
+    background: #696360;
+    color: white;
+}
+.approved{
+    display: block;
+}
+.denied,.appealing,.cancelled{
+    display: None;
+}
