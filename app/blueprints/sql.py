@@ -19,7 +19,7 @@ def sqlResult(permission):
             continue
         code+= f"<span id='badge'>statement #{j}</span>"
         try:
-            result = sql.sql(i, commit=True)
+            result = sql(i, commit=True)
             code+=f"{i}<span id='badge' style='background-color:#20c836'>Succeed</span>"
             if result.field:
                 code+=html.table(result.field,result.result)

@@ -40,10 +40,10 @@ def records(tname, permission):
 @verifySession(flask.session)
 def records(tname, action, permission):
     if action == "cancel":
-        sql(f"UPDATE {tname+"_record"} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ?",
+        sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ?",
              False, None, flask.request.form.get("BID"), commit = True)
     else:
-        sql(f"UPDATE {tname+"_record"} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ?",
+        sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ?",
              True, flask.session["UID"] if permission["EDIT"+tname.upper()+"_RECORD"] else None, flask.request.form.get("BID"), commit = True)
     table = {
         part: info(tname, part) for part in ("approved", "denied", "appealing", "cancelled")

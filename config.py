@@ -10,7 +10,7 @@ PORT = 5000
 DEBUG = True
 
 # Set time zone of website
-TIME_ZONE = 'GMT+8'
+TIME_ZONE = 'utc+8'
 
 # Time section that is only available for booking after a period of time
 BOOK_TIME = _timedelta(days=7)

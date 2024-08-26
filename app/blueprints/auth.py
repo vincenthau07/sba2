@@ -1,5 +1,6 @@
 import flask
 from app.helpers import *
+from datetime import datetime
 # import modules.sql as sql
 
 blueprint = flask.Blueprint("login", __name__)
@@ -20,8 +21,10 @@ def login():
                 flask.session['UID'] = user
                 flask.session['password'] = pw
                 flask.session.permanent = True
+                sql("INSERT INTO login (UID, IP, TIME) VALUES (?,?,?)", user, flask.request.remote_addr, str(datetime.now()), commit=True)
                 return flask.redirect('/home')
             error = "Invalid username or password"
+        
         return flask.render_template('login.html', error=error)
     
     elif flask.request.method == 'GET':

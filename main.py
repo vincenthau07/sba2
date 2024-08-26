@@ -1,12 +1,20 @@
 from app import create_app
 import config
-import os
+import os, datetime, time
 
-os.environ['TZ'] = config.TIME_ZONE
+tz = list(config.TIME_ZONE)
+tz[3] = '-' if tz[3] == '+' else '+'
+tz = ''.join(tz)
+os.environ['TZ'] = tz
+
 
 #start website
 app = create_app()
 
 if __name__ == '__main__':
-    app.debug=config.DEBUG
-    app.run(host=config.IP, port=config.PORT)
+    if config.SERVER_MODE:
+        from waitress import serve
+        serve(app, host=config.IP, port=config.PORT)
+    else:
+        app.debug=config.DEBUG
+        app.run(host=config.IP, port=config.PORT)

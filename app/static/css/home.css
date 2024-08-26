@@ -106,14 +106,14 @@ a:hover{
     border-radius: 20px;
     margin: 5px;
 }
-input[type="submit"]{
+input[type="submit"],button{
     background-color: #696360;
     color: #ffffff;
     border-radius: 5px;
     padding: 5px 10px 5px 10px;
     border: 0px;
 }
-input[type="submit"]:hover{
+input[type="submit"]:hover,button:hover{
     background-color: #3C3633;
     color: #ffffff;
     border-radius: 5px;

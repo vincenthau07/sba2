@@ -1,0 +1,44 @@
+.progress{
+    position: relative;
+    margin: 4px;
+    font-size: 30px;
+}
+.barOverflow{ /* Wraps the rotating .bar */
+    position: relative;
+    overflow: hidden; /* Comment this line to understand the trick */
+    width: 250px; height: 124px; /* Half circle (overflow) */
+    margin-bottom: -35px; /* bring the numbers up */
+}
+
+.bar{
+    position: absolute;
+    top: 0; left: 0;
+    width: 250px; height: 250px; /* full circle! */
+    border-radius: 50%;
+    box-sizing: border-box;
+    border: 40px solid #e8e8e8;     /* half gray, */
+    border-bottom-color: #696360;  /* half azure */
+    border-right-color: #696360;
+    transform: rotate(45deg);
+}
+.box-row{
+    display: flex;
+    vertical-align: top;
+}
+.box{
+    margin: 3px;
+    display: inline-block;
+    text-align: center;
+    background-color: #eee;
+    border-radius: 20px;
+    padding: 20px;
+}
+.span{
+    font-size: 20px;
+    line-height: 30px;
+    transform: translateY(-25px);
+    margin-bottom: -30px;
+}
+.value{
+    font-size: 40px;
+}
