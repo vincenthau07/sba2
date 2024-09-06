@@ -5,24 +5,6 @@ from config import BOOK_TIME
 blueprint = flask.Blueprint('booking', __name__)
 
 #convert between html weekpicker data & python datetime
-def dateToWeekNumber(date: datetime.datetime) -> str:
-    date += datetime.timedelta(days=4-datetime.date.isoweekday(date))
-    date2 = datetime.date(date.year,1,1)
-    date2 += datetime.timedelta(days=(11-datetime.date.isoweekday(date2))%7-3)
-    return f"{date.year}-W{(date-date2).days//7+1:02d}"
-
-def weekNumToDate(week) -> list:
-    year = int(week[:4])
-    week = int(week[-2:])
-    date = datetime.date(year,1,1)
-    date += datetime.timedelta(days=(11-datetime.date.isoweekday(date))%7-3)
-    date += datetime.timedelta(days=(week-1)*7)
-    d = datetime.timedelta(days=1)
-    rtn = []
-    for i in range(7):
-        rtn.append(date)
-        date += d
-    return rtn
 
 def getInfo(table, floorNumToFloor=True, hyperLink = True, **kwargs):
     field = [i for i in SCHEMA[table].fields if i != "AVAILABILITY"]
@@ -158,7 +140,7 @@ def bksubmitform(tname, id, permission):
                 return flask.jsonify({"message": "Error: You can only book rooms after a week."})
             else:
                 try:
-                    addRecord(stime,etime,flask.session.get('UID'),id,flask.request.form.get("unit"),flask.request.form.get("description"))
+                    addRecord(tname,stime,etime,flask.session.get('UID'),id,flask.request.form.get("unit"),flask.request.form.get("description"))
                     return flask.jsonify({"message": "Succeed."})
                 except Exception as error:
                     return flask.jsonify({"message": f"Error: {error}"})

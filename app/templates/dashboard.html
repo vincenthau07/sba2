@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Home</title>
+        <title>Dashboard</title>
 
         <link rel="stylesheet" type="text/css" href="/static/css/home.css">
         <link rel="stylesheet" type="text/css" href="/static/css/top-navigation.css">
@@ -32,48 +32,75 @@
                     <li><button>1 Year</button></li>
                 </ul>
             </div>
-            <div class="box-row">
-                <div class="box cpu">
-                    <!--Code Source: https://codepen.io/jagathish/pen/ZXzbzN-->
-                    <h2>CPU</h2>
-                    <div class="progress">
-                        <div class="barOverflow">
-                          <div class="bar"></div>
-                        </div>
-                        <span>0</span>%
+        </div>
+        <div class="box-row">
+            <div class="box cpu">
+                <!--Code Source: https://codepen.io/jagathish/pen/ZXzbzN-->
+                <h2>CPU</h2>
+                <div class="progress">
+                    <div class="barOverflow">
+                      <div class="bar"></div>
                     </div>
+                    <span>0</span>%
                 </div>
-                <div class="box ram">
-                    <h2>RAM</h2>
-                    <div class="ram-size span"> {{ ram }} MB </div>
-                    <div class="progress">
-                        <div class="barOverflow">
-                          <div class="bar"></div>
-                        </div>
-                        <span>0</span>%
-                    </div>
-                </div>
-                <div class="box">
-                    <h2> Room Records </h2>
-                    <div class="value room_records"></div>
-                    <span> Total </span>
-                    <div class="value room_records_approved"></div>
-                    <span> Approved </span>
-                </div>
-                <div class="box">
-                    <h2> Facility Records </h2>
-                    <div class="value facility_records"></div>
-                    <span> Total </span>
-                    <div class="value facility_records_approved"></div>
-                    <span> Approved </span>
-                </div>
-                
             </div>
-            <div class="box-row">
-                <div class="box">
-                    <h2> Website Logins </h2>
-                    <div class="value login_times"></div>
+            <div class="box ram">
+                <h2>RAM</h2>
+                <div class="ram-size span"> {{ ram }} MB </div>
+                <div class="progress">
+                    <div class="barOverflow">
+                      <div class="bar"></div>
+                    </div>
+                    <span>0</span>%
                 </div>
+            </div>
+            <div class="box">
+                <h2> Room Records </h2>
+                <div class="value room_records"></div>
+                <span> Total </span>
+                <div class="value room_records_approved"></div>
+                <span> Approved </span>
+            </div>
+            <div class="box">
+                <h2> Facility Records </h2>
+                <div class="value facility_records"></div>
+                <span> Total </span>
+                <div class="value facility_records_approved"></div>
+                <span> Approved </span>
+            </div>
+            <div class="box">
+                <h2> Website Logins </h2>
+                <div class="value login_times"></div>
+            </div>
+        </div>
+        <div class="box-row">
+            <div class="box">
+                <h2> Number of Room Records in Each Hour </h2>
+                <div class="value room_records_num_each_hour"></div>
+            </div>
+            <div class="box">
+                <h2> Number of Facility Records in Each Hour </h2>
+                <div class="value facility_records_num_each_hour"></div>
+            </div>
+        </div>
+        <div class="box-row">
+            <div class="box">
+                <h2> Number of Room Records in Each Day </h2>
+                <div class="value room_records_num_each_day"></div>
+            </div>
+            <div class="box">
+                <h2> Number of Facility Records in Each Day </h2>
+                <div class="value facility_records_num_each_day"></div>
+            </div>
+        </div>
+        <div class="box-row">
+            <div class="box">
+                <h2> Most Popular Rooms </h2>
+                <div class="value most_popular_room"></div>
+            </div>
+            <div class="box">
+                <h2> Most Popular Facilities </h2>
+                <div class="value most_popular_facility"></div>
             </div>
         </div>
     </body>

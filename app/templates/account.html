@@ -1,0 +1,92 @@
+<html>
+    <head>
+        <title>Home</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/top-navigation.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/account.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="/static/js/account.js"></script>
+        <link rel="icon" type="image/png" href="/static/photos/icon.png">
+    </head>
+    <body>
+        {% include "/top_navigation.html" %}
+        
+        <div id="content">
+            <h1>
+                <a href = "/account">My Account</a>
+            </h1>
+            Update your personal information or password here.
+        </div>
+        <table class="form">
+            <tr>
+                <td colspan="2"><h3>
+                    Personal Information
+                </h3></td>
+            </tr>
+            <tr>
+                <td>UID</td>
+                <td>{{ data[0] }}</td>
+            </tr>
+            <tr>
+                <td>Sex</td>
+                <td>
+                    <select name="SEX">
+                        <option value="M" {{ "selected" if data[1]=="M" else "" |safe }}>M</option>
+                        <option value="F" {{ "selected" if data[1]=="F" else "" |safe }}>F</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><input type="text" name="EMAIL" value="{{ data[2] }}"></td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>
+                    <input type="text" name="UNAME" value="{{ data[3] }}">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button class = "submit1">Confirm</button>
+                </td>
+            </tr>
+        </table>
+        <div id="content">
+            <div id="error" class="e1"></div>
+        </div>
+        <table class="form">
+            <tr>
+                <td colspan="2"><h3>
+                    Password
+                </h3></td>
+            </tr>
+            <tr>
+                <td>Old</td>
+                <td>
+                    <input type="password" name="OLD_PASSWORD" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
+                </td>
+            </tr>
+            <tr>
+                <td>New</td>
+                <td>
+                    <input type="password" name="PASSWORD1" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
+                </td>
+            </tr>
+            <tr>
+                <td>Confirm</td>
+                <td>
+                    <input type="password" name="PASSWORD2" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button class = "submit2">Confirm</button>
+                </td>
+            </tr>
+        </table>
+        <div id="content">
+            <div id="error" class="e2"></div>
+        </div>
+    </body>
+</html>

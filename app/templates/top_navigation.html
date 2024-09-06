@@ -34,6 +34,23 @@
             </a>
         </ul>
     </div>
+    {% if permission["EDITROOM_RECORD"] or permission["EDITFACILITY_RECORD"] %}
+    <div class="top-level-entry-container">
+        <button> Approve </button>
+        <ul>
+            {% if permission["EDITROOM_RECORD"] %}
+            <a href="/approve/room">
+                <li>Room</li>
+            </a>
+            {% endif %}
+            {% if permission["EDITFACILITY_RECORD"] %}
+            <a href="/approve/facility">
+                <li>Facility</li>
+            </a>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
     {% set table = ["facility", "facility_record", "roles", "room", "room_record", "school_category", "school_unit", "user"] %}
     {% set flag = [] %}
     {% for i in table %}
@@ -56,10 +73,13 @@
     {% endif %}
     {% if permission["ROLE"]=="ADMIN" %}
     <div class="top-level-entry-container">
-        <a class="top-level-entry-container" href="/dashboard"><button> Dashboard </button></a>
+        <a href="/dashboard"><button> Dashboard </button></a>
     </div>
     <div class="top-level-entry-container">
-        <a class="top-level-entry-container" href="/sql"><button> SQL </button></a>
+        <a href="/sql"><button> SQL </button></a>
     </div>
     {% endif %}
+    <div class="top-level-entry-container">
+        <a href="/account"><button> My Account </button></a>
+    </div>
 </div>

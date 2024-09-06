@@ -1,3 +1,6 @@
+li{
+    list-style-type: none;
+}
 .progress{
     position: relative;
     margin: 4px;
@@ -24,6 +27,7 @@
 .box-row{
     display: flex;
     vertical-align: top;
+    margin-left: 10px;
 }
 .box{
     margin: 3px;
@@ -41,4 +45,119 @@
 }
 .value{
     font-size: 40px;
+}
+.bar_chart{
+    overflow: visible;
+    display: flex;
+    border: none;
+    border-collapse: collapse;
+}
+.bar_chart td{
+    overflow: visible;
+    border: 1px rgb(0,0,0,0.3) solid;
+}
+.bar_chart tr:first-child td {
+    border-top: none;
+}
+.bar_chart tr:last-child td {
+    border-bottom: none;
+}
+
+.bar_chart tr td:first-child {
+    border-left: none;
+}
+
+.bar_chart tr td:last-child {
+    border-right: none;
+}
+.b1 ul{
+    padding: 0;
+    margin: 0;
+    text-align: right;
+}
+.b1 li{
+    font-size: 20px;
+    vertical-align: top;
+    transform: translateY(-10px);
+}
+.b2{
+    box-sizing: border-box;
+    position: relative;
+    height: 300px;
+    width: 600px;
+    overflow: hidden;
+}
+
+.b2_grid_lines{
+    display: block;
+    border-top: rgb(0,0,0,0.3) 1px solid;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+.b2_bars{
+    position: absolute;
+    padding: 0px 10px;
+    width: 560px;
+    align-items: center;
+    display: flex;
+    justify-content: space-around;
+    top: 0;
+    margin: 0;
+}
+.b2_bars ul{
+    display: flex;
+}
+.b2_bars li{
+    display: inline-block;
+    position: relative;
+
+    height: 310px;
+    background-color: rgb(0,0,0,0);
+}
+.b2_bars li .bar_display{
+    position: absolute;
+    display: inline-block;
+
+    height: 310px;
+    border-radius: 5px;
+    opacity: 0.5;
+}
+.b2_bars li span{
+    text-align: center;
+    left: 50%; 
+    background-color: white;
+    position: absolute;
+    z-index: 2;
+    padding: 5px 15px;
+    border-radius: 5px;
+    opacity: 0.7;
+    display: none;
+}
+.b2_bars li:hover span{
+    display: block;
+}
+.b4{
+    box-sizing: border-box;
+    position: relative;
+    width: 600px;
+    overflow: hidden;
+}
+.b4 ul{
+    padding: 0px 14px 10px 6px;
+    width: 560px;
+    align-items: center;
+    display: flex;
+    justify-content: space-around;
+    top: 0;
+    margin: 0;
+    height: auto;
+}
+.b4 li{
+    height: auto;
+    align-items: center;
+    width: 25px;
+    display: inline-block;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
 }

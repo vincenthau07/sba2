@@ -28,6 +28,6 @@
 .approved{
     display: block;
 }
-.denied,.appealing,.cancelled{
+.denied,.pending,.cancelled{
     display: None;
 }

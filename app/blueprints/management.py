@@ -60,7 +60,7 @@ def managementPOST(tname, action, permission):
         if action in ("update", "insert"):
             length = len(flask.request.form.getlist("data[]"))
             placeholders = ','.join(['?'] * length)
-            sql(f"INSERT INTO {tname} VALUES ({placeholders})", *flask.request.form.getlist("data[]"), commit=True)
+            sql(f"INSERT INTO {tname} VALUES ({placeholders})", *map(lambda i: None if i == 'None' else i, flask.request.form.getlist("data[]")), commit=True)
     except Exception as e:
         return flask.jsonify({"error": e})
 

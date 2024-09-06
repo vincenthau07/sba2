@@ -36,8 +36,9 @@ function update_bar(rp){
 }
 
 function update_values(sel){
+    
     for(key in data){
-        $(".value."+key).text(data[key][sel]);
+        $(".value."+key).html(data[key][sel]);
     }
 }
 

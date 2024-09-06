@@ -20,14 +20,14 @@
                 <ul>
                     <li><button class="active">Approved </button></li>
                     <li><button>Denied</button></li>
-                    <li><button>Appealing</button></li>
+                    <li><button>Pending</button></li>
                     <li><button>Cancelled</button></li>
                 </ul>
             </div>
             <div id="error"></div>
             <div class="approved">{{ table["approved"]|safe }}</div>
             <div class="denied">{{ table["denied"]|safe }}</div>
-            <div class="appealing">{{ table["appealing"]|safe }}</div>
+            <div class="pending">{{ table["pending"]|safe }}</div>
             <div class="cancelled">{{ table["cancelled"]|safe }}</div>
         </div>
     </body>
