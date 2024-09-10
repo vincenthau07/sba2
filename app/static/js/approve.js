@@ -16,6 +16,7 @@ $(document).ready(function(){
                     $('.table').html(response.table);
                 }
                 $('#error').text(response.error)
+                filterable();
             },
             error: function(error) {
                 console.log("Error:", error);

@@ -22,7 +22,7 @@ def sqlResult(permission):
             result = sql(i, commit=True)
             code+=f"{i}<span id='badge' style='background-color:#20c836'>Succeed</span>"
             if result.field:
-                code+=html.table(result.field,result.result)
+                code+=html.table(result.field,result.result, {"class": "filterable"})
         except Exception as error:
             code+=f"{i}<span id='badge' style='background-color:#c82036'>Failed</span>"
             code+=html.linebreak()

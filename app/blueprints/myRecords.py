@@ -21,7 +21,7 @@ def info(tname, uid, part):
             i.append(html.input({"name": i[info.field.index(SCHEMA[tname+"_record"].primaryKey)], "type": "submit", "value": value}))
         field = info.field_name()
         field.append("")
-        return html.table(field, info.result, {"class": "sortable"})
+        return html.table(field, info.result, {"class": "sortable filterable"})
     else:
         return "No record at this moment."
 

@@ -6,6 +6,7 @@
         <link rel="icon" type="image/png" href="/static/photos/icon.png">
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="/static/js/filter.js"></script>
         <script>
             $(document).ready(function(){
                 $(document).on('click',"input[name='submit']", function(){
@@ -16,6 +17,7 @@
                         data: {"sql": sql},
                         success: function(response) {
                             $('.code').html(response.code);
+                            filterable();
                         },
                         error: function(error) {
                             console.log("Error:", error);

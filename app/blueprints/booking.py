@@ -6,16 +6,9 @@ blueprint = flask.Blueprint('booking', __name__)
 
 #convert between html weekpicker data & python datetime
 
-def getInfo(table, floorNumToFloor=True, hyperLink = True, **kwargs):
+def getInfo(table, **kwargs):
     field = [i for i in SCHEMA[table].fields if i != "AVAILABILITY"]
     rtn = sql(f"SELECT {', '.join(field)} FROM {table} WHERE AVAILABILITY ORDER BY {SCHEMA[table].primaryKey}", **kwargs)
-    if hyperLink:
-        for row in rtn.result:
-            row[field.index(SCHEMA[table].primaryKey)] = html.hyperlink(row[0], f"/booking/{table}/{row[0]}")
-    if floorNumToFloor and "floor" in field:
-        for row in rtn.result:
-            f = field.index("floor")
-            row[f] = f"{row[f]}/F" if row[f] > 0 else f"B{-row[f]}/F" if row[f] < 0 else "G/F"
     return rtn
 
 def getEvents(table, id: str, date: datetime.date=None, stime: None=None, etime: None=None, **kwargs) -> sql:
@@ -80,7 +73,10 @@ def addRecord(table,stime,etime,uid,primary_key,unit,description,approved=False)
 @verifySession(flask.session)
 def booking(tname, permission):
     roomInfo = getInfo(tname, tupleToList=True)
-    table = html.table(roomInfo.field_name(),roomInfo.result,{"class": "sortable"})
+    if 'FLOOR' in SCHEMA[tname].fields:
+        num_to_floor(roomInfo.result, roomInfo.field.index('FLOOR'))
+    text_to_link(roomInfo.result, f"/booking/{tname}/{{}}", roomInfo.field.index(SCHEMA[tname].primaryKey))
+    table = html.table(roomInfo.field_name(),roomInfo.result,{"class": "sortable filterable"})
 
     return flask.render_template('booking.html', tname=tname, table=table, permission = permission)
 

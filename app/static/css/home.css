@@ -35,9 +35,13 @@ a:hover{
     text-align: left;
     padding: 10px 30px 10px 20px;
 }
-#content tr:nth-child(even){
+#content thead tr:nth-child(even) th{
+    background-color: #696360;
+}
+#content tbody tr:nth-child(even){
     background-color: rgb(128,128,128,0.1);
 }
+
 /*
 #content td:nth-child(even){
     background-color: rgb(128,128,128,0.1);
@@ -126,4 +130,15 @@ input[type="number"]{
 }
 select{
     text-align: center;
+}
+input.filter{
+    background-color: #888280;
+    border: none;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 15px;
+}
+input.filter::placeholder{
+    color: #d2ccc9;
 }

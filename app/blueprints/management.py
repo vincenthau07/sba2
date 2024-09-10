@@ -33,7 +33,7 @@ def info(tname, tableOnly = False):
     field.append("")
     field.append("")
     
-    table = html.table(field, info.result, {"class": "sortable"}) + html.input({"name": "add", "type": "submit", "value": "+"})
+    table = html.table(field, info.result, {"class": "sortable filterable"}) + html.input({"name": "add", "type": "submit", "value": "+"})
 
     if not tableOnly:
         return table, info.field, input_format(tname)
