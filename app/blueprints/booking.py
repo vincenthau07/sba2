@@ -27,7 +27,7 @@ def getEvents(table, id: str, date: datetime.date=None, stime: None=None, etime:
 def eventHTML(result: sql, id) -> str:
     rtn = ""
     for record in result.result:
-        top = (record[result.field.index("STIME")] - datetime.datetime.combine(datetime.datetime.now(TIME_ZONE).date(), datetime.datetime.min.time())).total_seconds() % 86400 * 80 / 3600 + 80
+        top = (record[result.field.index("STIME")] - datetime.datetime.combine(datetime.datetime.now(TIME_ZONE).replace(tzinfo=None).date(), datetime.datetime.min.time())).total_seconds() % 86400 * 80 / 3600 + 80
         height = (record[result.field.index("ETIME")] - record[result.field.index("STIME")]).total_seconds() * 80 / 3600
 
         
@@ -87,7 +87,7 @@ def booking2(tname, id, permission):
     name = get_by_primary_key(tname, id, tname[0].upper()+"NAME")
 
     #minweek value
-    minweek = dateToWeekNumber(datetime.datetime.now(TIME_ZONE).date())
+    minweek = dateToWeekNumber(datetime.datetime.now(TIME_ZONE).replace(tzinfo=None).date())
 
     #exact dates of week
     dates = weekNumToDate(minweek)
@@ -123,7 +123,7 @@ def bksubmitform(tname, id, permission):
             return flask.jsonify({"message": "Error: Selected session is occupied by others."})
         
         elif permission[f"EDIT{tname.upper()}_RECORD"]:
-            if stime < datetime.datetime.now(TIME_ZONE):
+            if stime < datetime.datetime.now(TIME_ZONE).replace(tzinfo=None):
                 return flask.jsonify({"message": "Error: You cannot book rooms in the past."})
             else:
                 try:
@@ -132,7 +132,7 @@ def bksubmitform(tname, id, permission):
                 except Exception as error:
                     return flask.jsonify({"message": f"Error: {error}"})
         else:
-            if stime < datetime.datetime.now(TIME_ZONE) + BOOK_TIME:
+            if stime < datetime.datetime.now(TIME_ZONE).replace(tzinfo=None) + BOOK_TIME:
                 return flask.jsonify({"message": "Error: You can only book rooms after a week."})
             else:
                 try:
@@ -148,7 +148,7 @@ def bkupdate(tname, id, permission):
     dates = weekNumToDate(flask.request.form.get('week'))
     week = flask.request.form.get('week')
     if 'previous' in flask.request.form:
-        if dates[0] > datetime.datetime.now(TIME_ZONE).date():
+        if dates[0] > datetime.datetime.now(TIME_ZONE).replace(tzinfo=None).date():
             week = dateToWeekNumber(dates[0] - datetime.timedelta(days=7))
             dates = weekNumToDate(week)
     elif 'next' in flask.request.form:

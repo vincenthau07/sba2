@@ -28,7 +28,7 @@ def login():
                 if pw == get_by_primary_key("user", user, "PASSWORD"):
                     flask.session['UID'] = user
                     flask.session.permanent = True
-                    sql("INSERT INTO login (UID, IP, TIME) VALUES (?,?,?)", user, flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr), str(datetime.now(TIME_ZONE)), commit=True)
+                    sql("INSERT INTO login (UID, IP, TIME) VALUES (?,?,?)", user, flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr), str(datetime.now(TIME_ZONE).replace(tzinfo=None)), commit=True)
                     return flask.redirect('/home')
             finally:
                 error = "Invalid username or password"
