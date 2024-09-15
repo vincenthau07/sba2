@@ -1,4 +1,6 @@
 from datetime import timedelta as _timedelta
+from pytz import timezone as _timezone
+
 # IP address
 # Set '0.0.0.0' to open for all IPv4 addresses on this local machine
 IP = '0.0.0.0'
@@ -10,7 +12,7 @@ PORT = 5000
 DEBUG = True
 
 # Set time zone of website
-TIME_ZONE = 'utc+8'
+TIME_ZONE = _timezone('Asia/Hong_Kong')
 
 # Time section that is only available for booking after a period of time
 BOOK_TIME = _timedelta(days=7)

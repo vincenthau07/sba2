@@ -1,6 +1,6 @@
 import flask, datetime
 from app.helpers import *
-from config import BOOK_TIME
+from config import BOOK_TIME, TIME_ZONE
 blueprint = flask.Blueprint("myRecords", __name__)
 
 def info(tname, uid, part):
@@ -12,7 +12,7 @@ def info(tname, uid, part):
                FROM {tname+"_record"} a, {tname} b, school_unit c 
                WHERE a.{tname[0].upper()}ID = b.{tname[0].upper()}ID AND a.UNIT = c.UNIT AND
                a.AVAILABILITY = ? AND APPROVED_BY IS {'NOT' if approved else ''} NULL AND
-               ETIME > ? AND a.UID = ?""", availability, str(datetime.datetime.now()),uid, tupleToList=True)
+               ETIME > ? AND a.UID = ?""", availability, str(datetime.datetime.now(TIME_ZONE)),uid, tupleToList=True)
     
     if len(info.result):
         #print(info.field_name())
@@ -48,7 +48,7 @@ def records(tname, action, permission):
             elif permission["EDIT"+tname.upper()+"_RECORD"]:
                 sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ?",
                     True, flask.session["UID"], flask.request.form.get("BID"), commit = True)
-            elif strToDate(sql(f"SELECT STIME FROM {tname}_record WHERE BID = ?", flask.request.form.get("BID")).result[0][0]) - datetime.datetime.now() >= BOOK_TIME:
+            elif strToDate(sql(f"SELECT STIME FROM {tname}_record WHERE BID = ?", flask.request.form.get("BID")).result[0][0]) - datetime.datetime.now(TIME_ZONE) >= BOOK_TIME:
                 sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ?",
                     True, None, flask.request.form.get("BID"), commit = True)
             else:

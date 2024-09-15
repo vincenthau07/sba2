@@ -2,12 +2,6 @@ from app import create_app
 import config
 import os, datetime, time
 
-tz = list(config.TIME_ZONE)
-tz[3] = '-' if tz[3] == '+' else '+'
-tz = ''.join(tz)
-os.environ['TZ'] = tz
-
-
 #start website
 app = create_app()
 

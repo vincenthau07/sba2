@@ -86,6 +86,9 @@ $(document).ready(function(){
                         if ($parrent.children().eq(i).children().attr("type")=="checkbox"){
                             data.push(+$parrent.children().eq(i).children().is(':checked'));
                         }
+                        else if($parrent.children().eq(i).children().attr("type")=="datetime-local"){
+                            data.push($parrent.children().eq(i).children().val().split('T').join(' ')+':00');
+                        }
                         else{
                             data.push($parrent.children().eq(i).children().val());
                         }

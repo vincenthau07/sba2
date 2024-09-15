@@ -1,26 +1,27 @@
 import flask, datetime, math
 from app.helpers import *
 import psutil
+from config import TIME_ZONE
 
 blueprint = flask.Blueprint("dashboard", __name__)
 
 
 
 def get_num_with_times(cmd, *args, **kwargs):
-    TIME = [datetime.datetime.now()-datetime.timedelta(weeks=1),
-            datetime.datetime.now()-datetime.timedelta(days=30),
-            datetime.datetime.now()-datetime.timedelta(days=183),
-            datetime.datetime.now()-datetime.timedelta(days=365)]
+    TIME = [datetime.datetime.now(TIME_ZONE)-datetime.timedelta(weeks=1),
+            datetime.datetime.now(TIME_ZONE)-datetime.timedelta(days=30),
+            datetime.datetime.now(TIME_ZONE)-datetime.timedelta(days=183),
+            datetime.datetime.now(TIME_ZONE)-datetime.timedelta(days=365)]
     rtn = []
     for t in TIME:
-        rtn.append(sql(cmd, str(datetime.datetime.now()), str(t), *args, *kwargs).result[0])
+        rtn.append(sql(cmd, str(datetime.datetime.now(TIME_ZONE)), str(t), *args, *kwargs).result[0])
     return rtn
 
 def get_num_each_hour(tname):
-    TIME = [datetime.datetime.now()-datetime.timedelta(weeks=1),
-            datetime.datetime.now()-datetime.timedelta(days=30),
-            datetime.datetime.now()-datetime.timedelta(days=183),
-            datetime.datetime.now()-datetime.timedelta(days=365)]
+    TIME = [datetime.datetime.now(TIME_ZONE)-datetime.timedelta(weeks=1),
+            datetime.datetime.now(TIME_ZONE)-datetime.timedelta(days=30),
+            datetime.datetime.now(TIME_ZONE)-datetime.timedelta(days=183),
+            datetime.datetime.now(TIME_ZONE)-datetime.timedelta(days=365)]
     rtn = []
     for t in TIME:
         arr = []
@@ -28,34 +29,34 @@ def get_num_each_hour(tname):
             arr.append(sql(f"""SELECT COUNT(*) FROM {tname}_record 
                         WHERE AVAILABILITY AND APPROVED_BY IS NOT NULL AND (STIME < ? AND ETIME > ? ) AND ((TIME(STIME) < ? AND TIME(ETIME) > ?) 
                         OR (DATE(STIME) < DATE(ETIME) AND (TIME(STIME) < ? OR TIME(ETIME) > ?))
-                        OR julianday(ETIME) - julianday(STIME) >= 2)""", str(datetime.datetime.now()), str(t), f"{i+1:02}:00:00", f"{i:02}:00:00", f"{i+1:02}:00:00", f"{i:02}:00:00").result[0][0])
+                        OR julianday(ETIME) - julianday(STIME) >= 2)""", str(datetime.datetime.now(TIME_ZONE)), str(t), f"{i+1:02}:00:00", f"{i:02}:00:00", f"{i+1:02}:00:00", f"{i:02}:00:00").result[0][0])
         rtn.append(arr)
 
     return rtn
 
 def get_num_each_day(tname):
-    TIME = [datetime.datetime.now()-datetime.timedelta(weeks=1),
-            datetime.datetime.now()-datetime.timedelta(days=30),
-            datetime.datetime.now()-datetime.timedelta(days=183),
-            datetime.datetime.now()-datetime.timedelta(days=365)]
+    TIME = [datetime.datetime.now(TIME_ZONE)-datetime.timedelta(weeks=1),
+            datetime.datetime.now(TIME_ZONE)-datetime.timedelta(days=30),
+            datetime.datetime.now(TIME_ZONE)-datetime.timedelta(days=183),
+            datetime.datetime.now(TIME_ZONE)-datetime.timedelta(days=365)]
     
     rtn = []
     for t in TIME:
         arr = []
-        for i in weekNumToDate(dateToWeekNumber(datetime.date.today())):
+        for i in weekNumToDate(dateToWeekNumber(datetime.datetime.now(TIME_ZONE).date())):
             arr.append(sql(f"""SELECT COUNT(*) FROM {tname}_record 
                         WHERE AVAILABILITY AND APPROVED_BY IS NOT NULL AND (STIME < ? AND ETIME > ? ) AND (julianday(?)%7 BETWEEN julianday(STIME)%7 AND julianday(ETIME)%7) 
                         OR (julianday(ETIME)%7 < julianday(STIME)%7 AND (julianday(STIME)%7 <= julianday(?)%7 OR julianday(ETIME) >= julianday(?)%7))
-                        OR (julianday(ETIME) - julianday(STIME) >= 7)""", str(datetime.datetime.now()), str(t), str(i), str(i), str(i)).result[0][0])
+                        OR (julianday(ETIME) - julianday(STIME) >= 7)""", str(datetime.datetime.now(TIME_ZONE)), str(t), str(i), str(i), str(i)).result[0][0])
         rtn.append(arr)
 
     return rtn
 
 def get_most_popular(tname:str):
-    TIME = [datetime.datetime.now()-datetime.timedelta(weeks=1),
-            datetime.datetime.now()-datetime.timedelta(days=30),
-            datetime.datetime.now()-datetime.timedelta(days=183),
-            datetime.datetime.now()-datetime.timedelta(days=365)]
+    TIME = [datetime.datetime.now(TIME_ZONE)-datetime.timedelta(weeks=1),
+            datetime.datetime.now(TIME_ZONE)-datetime.timedelta(days=30),
+            datetime.datetime.now(TIME_ZONE)-datetime.timedelta(days=183),
+            datetime.datetime.now(TIME_ZONE)-datetime.timedelta(days=365)]
     
     rtn1 = []
     rtn2 = []
@@ -63,10 +64,10 @@ def get_most_popular(tname:str):
         result = sql(f"""SELECT a.{tname[0].upper()}ID, IFNULL(SUM(JulianDay(ETIME) - JulianDay(STIME))*24, 0) AS TD FROM {tname} a
                      LEFT JOIN {tname}_record b ON a.{tname[0].upper()}ID = b.{tname[0].upper()}ID AND b.AVAILABILITY AND APPROVED_BY IS NOT NULL AND
                      STIME < ? AND ETIME > ?
-                     GROUP BY a.{tname[0].upper()}ID ORDER BY TD DESC""", str(datetime.datetime.now()), str(t)).result
+                     GROUP BY a.{tname[0].upper()}ID ORDER BY TD DESC""", str(datetime.datetime.now(TIME_ZONE)), str(t)).result
         rtn1.append([result[i][1] for i in range(10)])
         rtn2.append([result[i][0] for i in range(10)])
-    print(rtn1,rtn2)
+    #print(rtn1,rtn2)
     return (rtn1,rtn2)
 
 def bar_charts(values, categorys):
@@ -138,7 +139,7 @@ def bar_charts(values, categorys):
 @verifySession(flask.session, role="ADMIN")
 def dashboard(permission):
     ram = psutil.virtual_memory().total // 2**20
-    data = {"login_times": get_num_with_times("SELECT COUNT(*) FROM login WHERE TIME BETWEEN ? AND ?"),
+    data = {"login_times": get_num_with_times("SELECT COUNT(*) FROM login WHERE TIME < ? AND TIME > ?"),
             "room_records": get_num_with_times("SELECT COUNT(*) FROM room_record WHERE STIME < ? AND ETIME > ? "),
             "room_records_approved": get_num_with_times("SELECT COUNT(*) FROM room_record WHERE (STIME < ? AND ETIME > ? ) AND AVAILABILITY AND APPROVED_BY IS NOT NULL"),
             "facility_records": get_num_with_times("SELECT COUNT(*) FROM facility_record WHERE STIME < ? AND ETIME > ? "),
@@ -149,7 +150,7 @@ def dashboard(permission):
             "facility_records_num_each_day": bar_charts(get_num_each_day("facility"), ['MON','TUE','WED','THU','FRI','SAT','SUN']),
             "most_popular_room": bar_charts(*get_most_popular("room")),
             "most_popular_facility": bar_charts(*get_most_popular("facility"))}
-    print(*get_num_each_hour("room"), sep='\n')
+    #print(data["login_times"])
     return flask.render_template('dashboard.html', permission = permission, ram = ram, data=data)
 
 @blueprint.route('/dashboard/update', methods=["POST"], endpoint = "dashboard update")

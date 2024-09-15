@@ -1,6 +1,7 @@
 import flask
 from app.helpers import *
 from datetime import datetime
+from config import TIME_ZONE
 # import modules.sql as sql
 
 blueprint = flask.Blueprint("login", __name__)
@@ -27,11 +28,10 @@ def login():
                 if pw == get_by_primary_key("user", user, "PASSWORD"):
                     flask.session['UID'] = user
                     flask.session.permanent = True
-                    sql("INSERT INTO login (UID, IP, TIME) VALUES (?,?,?)", user, flask.request.remote_addr, str(datetime.now()), commit=True)
+                    sql("INSERT INTO login (UID, IP, TIME) VALUES (?,?,?)", user, flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr), str(datetime.now(TIME_ZONE)), commit=True)
                     return flask.redirect('/home')
-            except:
-                pass
-            error = "Invalid username or password"
+            finally:
+                error = "Invalid username or password"
         
         return flask.render_template('login.html', error=error)
     

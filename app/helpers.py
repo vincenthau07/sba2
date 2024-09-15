@@ -1,9 +1,13 @@
 import sqlite3, flask, re, datetime
 from typing import Union
+import threading
 
 conn = sqlite3.connect("database/database.sqlite", check_same_thread=False)
 cur = conn.cursor()
 from database.schema import SCHEMA
+
+#lock is used to prevent error "Recursive use of cursors not allowed"
+_lock = threading.Lock()
 
 #sql
 class sql():
@@ -22,27 +26,29 @@ class sql():
         If yes, convert result from tuple to list
     """
     def __init__(self,command: str,*params,commit=False, tupleToList=False) -> None:
-        
+        try:
+            _lock.acquire(True)
+            #execute sql command
+            cur.execute(command, params)
+            if commit:
+                conn.commit()
+            self.result = cur.fetchall()
 
-        #execute sql command
-        cur.execute(command, params)
-        if commit:
-            conn.commit()
-        self.result = cur.fetchall()
-
-        #find which table(s) is/are in use
-        if cur.description:
-            self.table = []
-            for word in re.split(',| |\n', command):
-                if word.lower() in SCHEMA:
-                    self.table.append(word.lower())
+            #find which table(s) is/are in use
+            if cur.description:
+                self.table = []
+                for word in re.split(',| |\n', command):
+                    if word.lower() in SCHEMA:
+                        self.table.append(word.lower())
 
 
-        if tupleToList:
-            self.result = [list(arr) for arr in self.result]
+            if tupleToList:
+                self.result = [list(arr) for arr in self.result]
 
-        self.field = [i[0] for i in cur.description] if cur.description else None
-        #self.description = copy.deepcopy(cur.description)
+            self.field = [i[0] for i in cur.description] if cur.description else None
+            #self.description = copy.deepcopy(cur.description)
+        finally:
+            _lock.release()
     
     def field_name(self):
         """
