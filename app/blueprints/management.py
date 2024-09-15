@@ -8,7 +8,7 @@ def input_format(tname: str):
     rtn = {}
     for field in SCHEMA[tname].fields:
         if SCHEMA[tname].fields[field].foreignKey:
-            rtn[field] = ["select", [row[0] for row in sql(f"""SELECT {SCHEMA[tname].fields[field].foreignKey[1]} FROM {SCHEMA[tname].fields[field].foreignKey[0]} 
+            rtn[field] = ["select", [row[0] for row in sql(f"""SELECT {SCHEMA[tname].fields[field].foreignKey[1]} FROM {SCHEMA[tname].fields[field].foreignKey[0]}
                                                            ORDER BY {SCHEMA[tname].fields[field].foreignKey[1]}""").result]]
         elif SCHEMA[tname].fields[field].options:
             rtn[field] = ["select", SCHEMA[tname].fields[field].options]

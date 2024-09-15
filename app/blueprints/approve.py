@@ -21,7 +21,7 @@ def info(tname):
     field.append("")
     field.append("")
     
-    table = html.table(field, info.result, {"class": "sortable"})
+    table = html.table(field, info.result, {"class": "sortable filterable"})
 
     return table
 

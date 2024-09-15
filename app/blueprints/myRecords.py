@@ -42,7 +42,10 @@ def records(tname, action, permission):
             sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ?",
                 False, None, flask.request.form.get("BID"), commit = True)
         else:
-            if permission["EDIT"+tname.upper()+"_RECORD"]:
+            stime,etime = sql(f"SELECT STIME, ETIME FROM {tname+'_record'} WHERE BID = ?", flask.request.form.get("BID")).result[0]
+            if len(sql(f"SELECT * FROM {tname+'_record'} WHERE AVAILABILITY AND STIME < ? AND ETIME > ?", etime, stime).result) > 0:
+                return flask.jsonify({"error": "Error: Selected session is occupied by others."})
+            elif permission["EDIT"+tname.upper()+"_RECORD"]:
                 sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ?",
                     True, flask.session["UID"], flask.request.form.get("BID"), commit = True)
             elif strToDate(sql(f"SELECT STIME FROM {tname}_record WHERE BID = ?", flask.request.form.get("BID")).result[0][0]) - datetime.datetime.now() >= BOOK_TIME:
