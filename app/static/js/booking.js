@@ -16,8 +16,7 @@ $(document).ready(function(){
         }
     });
     $(document).on('change',"input[name='STIME']", function(){
-        
-        $("input[name='ETIME']").val($(this).val());
+        $("input[name='ETIME']").val($(this).val()); 
     });
     //change data of schedule
     $(document).on('change',"input[name='week']", function(){

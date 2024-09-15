@@ -53,6 +53,7 @@ def records(tname, action, permission):
                     True, None, flask.request.form.get("BID"), commit = True)
             else:
                 return flask.jsonify({"error": "Error: You can only book rooms after a week."})
+            
         table = {
             part: info(tname, flask.session["UID"], part) for part in ("approved", "denied", "pending", "cancelled")
         }

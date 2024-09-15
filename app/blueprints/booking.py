@@ -119,9 +119,9 @@ def bksubmitform(tname, id, permission):
         etime = strToDate(flask.request.form.get("etime"))
         if etime<=stime:
             return flask.jsonify({"message": "Ending time must be after starting time."})
-        
         elif len(getEvents(tname, id,stime = stime+datetime.timedelta(seconds=1), etime = etime-datetime.timedelta(seconds=1)).result)>0:
             return flask.jsonify({"message": "Error: Selected session is occupied by others."})
+        
         elif permission[f"EDIT{tname.upper()}_RECORD"]:
             if stime < datetime.datetime.today():
                 return flask.jsonify({"message": "Error: You cannot book rooms in the past."})
