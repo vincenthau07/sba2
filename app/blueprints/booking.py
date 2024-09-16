@@ -72,13 +72,12 @@ def addRecord(table,stime,etime,uid,primary_key,unit,description,approved=False)
 @blueprint.route('/booking/<tname>')
 @verifySession(flask.session)
 def booking(tname, permission):
-    roomInfo = getInfo(tname, tupleToList=True)
+    rf_info = getInfo(tname, tupleToList=True)
     if 'FLOOR' in SCHEMA[tname].fields:
-        num_to_floor(roomInfo.result, roomInfo.field.index('FLOOR'))
-    text_to_link(roomInfo.result, f"/booking/{tname}/{{}}", roomInfo.field.index(SCHEMA[tname].primaryKey))
-    table = html.table(roomInfo.field_name(),roomInfo.result,{"class": "sortable filterable"})
+        num_to_floor(rf_info.result, rf_info.field.index('FLOOR'))
+    text_to_link(rf_info.result, f"/booking/{tname}/{{}}", rf_info.field.index(SCHEMA[tname].primaryKey))
 
-    return flask.render_template('booking.html', tname=tname, table=table, permission = permission)
+    return flask.render_template('booking.html', tname=tname, columns = rf_info.field_name(), data = rf_info.result, permission = permission)
 
 @blueprint.route('/booking/<tname>/<id>', methods=["GET"], endpoint = "booking2")
 @verifySession(flask.session)

@@ -14,49 +14,48 @@ def info(tname, uid, part):
                a.AVAILABILITY = ? AND APPROVED_BY IS {'NOT' if approved else ''} NULL AND
                ETIME > ? AND a.UID = ?""", availability, str(datetime.datetime.now(TIME_ZONE).replace(tzinfo=None)),uid, tupleToList=True)
     
-    if len(info.result):
-        #print(info.field_name())
-        value = "Restore" if part == "cancelled" else "Cancel"
-        for i in info.result:
-            i.append(html.input({"name": i[info.field.index(SCHEMA[tname+"_record"].primaryKey)], "type": "submit", "value": value}))
-        field = info.field_name()
-        field.append("")
-        return html.table(field, info.result, {"class": "sortable filterable"})
-    else:
-        return "No record at this moment."
+    value = "Restore" if part == "cancelled" else "Cancel"
+    for i in info.result:
+        i.append(html.input({"name": i[info.field.index(SCHEMA[tname+"_record"].primaryKey)], "type": "submit", "value": value}))
+
+    return info.result
+
 
 @blueprint.route('/records/<tname>', methods=["GET"])
-@verifySession(flask.session)
-def records(tname, permission):
+def redirect(tname):
+    return flask.redirect(f'/records/{tname}/approved')
 
-    table = {
-        part: info(tname, flask.session["UID"], part) for part in ("approved", "denied", "pending", "cancelled")
-    }
-    return flask.render_template('records.html', tname = tname, table=table, permission = permission)
-
-@blueprint.route('/records/<tname>/<action>', methods=["POST"], endpoint="recordsUpdate")
+@blueprint.route('/records/<tname>/<path>', methods=["GET"])
 @verifySession(flask.session)
-def records(tname, action, permission):
+def records(tname,  permission, path):
+
+    return flask.render_template('records.html', tname = tname, permission = permission)
+
+@blueprint.route('/records/<tname>/<path>', methods=["POST"], endpoint="recordsUpdate2")
+@verifySession(flask.session)
+def records(tname,  permission, path):
+    result = info(tname, flask.session["UID"], path)
+    return flask.jsonify(data = result)
+
+@blueprint.route('/records/<tname>/<path>/<bid>', methods=["POST"], endpoint="recordsUpdate3")
+@verifySession(flask.session)
+def records(tname, bid, permission, path="approved"):
     try:
-        if action == "cancel":
+        if path != "cancelled":
             sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ?",
-                False, None, flask.request.form.get("BID"), commit = True)
+                False, None, bid, commit = True)
         else:
-            stime,etime = sql(f"SELECT STIME, ETIME FROM {tname+'_record'} WHERE BID = ?", flask.request.form.get("BID")).result[0]
+            stime,etime = sql(f"SELECT STIME, ETIME FROM {tname+'_record'} WHERE BID = ?", bid).result[0]
             if len(sql(f"SELECT * FROM {tname+'_record'} WHERE AVAILABILITY AND STIME < ? AND ETIME > ?", etime, stime).result) > 0:
                 return flask.jsonify({"error": "Error: Selected session is occupied by others."})
             elif permission["EDIT"+tname.upper()+"_RECORD"]:
                 sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ?",
-                    True, flask.session["UID"], flask.request.form.get("BID"), commit = True)
-            elif strToDate(sql(f"SELECT STIME FROM {tname}_record WHERE BID = ?", flask.request.form.get("BID")).result[0][0]) - datetime.datetime.now(TIME_ZONE).replace(tzinfo=None) >= BOOK_TIME:
+                    True, flask.session["UID"], bid, commit = True)
+            elif strToDate(sql(f"SELECT STIME FROM {tname}_record WHERE BID = ?", bid).result[0][0]) - datetime.datetime.now(TIME_ZONE).replace(tzinfo=None) >= BOOK_TIME:
                 sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ?",
-                    True, None, flask.request.form.get("BID"), commit = True)
+                    True, None, bid, commit = True)
             else:
                 return flask.jsonify({"error": "Error: You can only book rooms after a week."})
-            
-        table = {
-            part: info(tname, flask.session["UID"], part) for part in ("approved", "denied", "pending", "cancelled")
-        }
     except Exception as error:
         return flask.jsonify({"error": error})
-    return flask.jsonify({"table": table, "error": "Succeed."})
+    return flask.jsonify()

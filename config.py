@@ -6,7 +6,7 @@ from pytz import timezone as _timezone
 IP = '0.0.0.0'
 
 # PORT of this application
-PORT = 5000
+PORT = 80
 
 # Debug
 DEBUG = True

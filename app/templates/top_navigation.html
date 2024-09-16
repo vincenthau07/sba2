@@ -1,85 +1,80 @@
-<div class="top-navigation-wrap">
-    <span>
-        <a href="/home">THMSS - Facilities & Rooms Booking System</a>
-    </span>
-    <div class="logout">
-        <a href="/logout">Logout</a>
-    </div>
-</div>
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">THMSS</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/home">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">Booking</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/booking/room">Room</a></li>
+                        <li><a class="dropdown-item" href="/booking/facility">Facility</a></li>
+                    </ul>
+                </li>
 
-<div class="top-navigation-main">
-    <div class="top-level-entry-container">
-        <a href="/home"><button> Home </button></a>
-    </div>
-    <div class="top-level-entry-container">
-        <button> Booking </button>
-        <ul>
-            <a href="/booking/room">
-                <li>Room</li>
-            </a>
-            <a href="/booking/facility">
-                <li>Facility</li>
-            </a>
-        </ul>
-    </div>
-    
-    <div class="top-level-entry-container">
-        <button> My Records </button>
-        <ul>
-            <a href="/records/room">
-                <li> Room </li>
-            </a>
-            <a href="/records/facility">
-                <li> Facility </li>
-            </a>
-        </ul>
-    </div>
-    {% if permission["EDITROOM_RECORD"] or permission["EDITFACILITY_RECORD"] %}
-    <div class="top-level-entry-container">
-        <button> Approve </button>
-        <ul>
-            {% if permission["EDITROOM_RECORD"] %}
-            <a href="/approve/room">
-                <li>Room</li>
-            </a>
-            {% endif %}
-            {% if permission["EDITFACILITY_RECORD"] %}
-            <a href="/approve/facility">
-                <li>Facility</li>
-            </a>
-            {% endif %}
-        </ul>
-    </div>
-    {% endif %}
-    {% set table = ["facility", "facility_record", "roles", "room", "room_record", "school_category", "school_unit", "user"] %}
-    {% set flag = [] %}
-    {% for i in table %}
-        {% if permission["EDIT"+i.upper()] %}
-            {% if flag|length == 0 %}
-                {% set temp = flag.append(True) %}
-                <div class="top-level-entry-container">
-                    <button> Management </button>
-                    <ul>
-            {% endif %}
-            <a href="/management/{{ i|safe }}">
-                <li>{{ " ".join(i.split("_")).title()|safe }}</li>
-            </a>
-        {% endif %}
-        
-    {% endfor %}
-    {% if flag|length %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">My Records</a>
+                    <ul class="dropdown-menu">
+                        {% if permission["EDITROOM_RECORD"] %}
+                        <li><a class="dropdown-item" href="/records/room">Room</a></li>
+                        {% endif %}
+                        {% if permission["EDITFACILITY_RECORD"] %}
+                        <li><a class="dropdown-item" href="/records/facility">Facility</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+
+                {% if permission["EDITROOM_RECORD"] or permission["EDITFACILITY_RECORD"] %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">Approve</a>
+                    <ul class="dropdown-menu">
+                        {% if permission["EDITROOM_RECORD"] %}
+                        <li><a class="dropdown-item" href="/approve/room">Room</a></li>
+                        {% endif %}
+                        {% if permission["EDITFACILITY_RECORD"] %}
+                        <li><a class="dropdown-item" href="/approve/facility">Facility</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% set table = ["facility", "facility_record", "roles", "room", "room_record", "school_category", "school_unit", "user"] %}
+                {% set flag = [] %}
+                {% for i in table %}
+                    {% if permission["EDIT"+i.upper()]%}
+                        {% if flag|length == 0 %}
+                            {% set temp = flag.append(True) %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href='#' role="button" data-bs-toggle="dropdown">Management</a>
+                                <ul class="dropdown-menu">
+                        {% endif %}
+                        <li><a class="dropdown-item" href="/management/{{ i|safe }}">{{ " ".join(i.split("_")).title()|safe }}</a></li>
+                    {% endif %}
+                    
+                {% endfor %}
+                {% if permission["ROLE"]=="ADMIN" %}
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
+                    <li><a class="dropdown-item" href="/sql">SQL</a></li>
+                {% endif %}
+                {% if flag|length %}
+                        </ul>
+                    </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/account">My Account</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
             </ul>
         </div>
-    {% endif %}
-    {% if permission["ROLE"]=="ADMIN" %}
-    <div class="top-level-entry-container">
-        <a href="/dashboard"><button> Dashboard </button></a>
     </div>
-    <div class="top-level-entry-container">
-        <a href="/sql"><button> SQL </button></a>
-    </div>
-    {% endif %}
-    <div class="top-level-entry-container">
-        <a href="/account"><button> My Account </button></a>
-    </div>
-</div>
+</nav>
