@@ -20,12 +20,8 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">My Records</a>
                     <ul class="dropdown-menu">
-                        {% if permission["EDITROOM_RECORD"] %}
                         <li><a class="dropdown-item" href="/records/room">Room</a></li>
-                        {% endif %}
-                        {% if permission["EDITFACILITY_RECORD"] %}
                         <li><a class="dropdown-item" href="/records/facility">Facility</a></li>
-                        {% endif %}
                     </ul>
                 </li>
 
