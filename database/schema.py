@@ -32,7 +32,7 @@ SCHEMA = {
 	        "UNIT":	field(int, "Unit", foreignKey=("school_unit", "UNIT")),
 	        "DESCRIPTION": field(str, "Description"),
 	        "AVAILABILITY":	field(bool, "Availability"),
-	        "APPROVED_BY":	field(str, "Approved by", command=["SELECT UID FROM user WHERE ROLE IN (SELECT ROLE FROM roles WHERE EDITROOM_RECORD)"]),
+	        "APPROVED_BY":	field(str, "Approved by", command=["SELECT UID FROM user WHERE ROLE IN (SELECT ROLE FROM roles WHERE EDITROOM_RECORD) UNION SELECT 'None'"]),
         }, ("BID"), True
     ),
     "login": table(
@@ -47,13 +47,12 @@ SCHEMA = {
             "ROLE": field(str),
             "EDITUSER": field(bool),
 	        "EDITROOM": field(bool),
-	        "ADDRECORD": field(bool),
 	        "EDITROOM_RECORD": field(bool),
 	        "EDITFACILITY": field(bool),
-            "EDITSCHOOL_CATEGORY": field(bool),
 	        "EDITSCHOOL_UNIT": field(bool),
 	        "EDITFACILITY_RECORD": field(bool),
-	        "EDITROLES": field(bool)
+	        "EDITROLES": field(bool),
+            "EDITSCHOOL_CATEGORY": field(bool)
         }, ("ROLE"), True
     ),
     "room": table(

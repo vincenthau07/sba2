@@ -15,8 +15,9 @@ def info(tname, uid, part):
                ETIME > ? AND a.UID = ?""", availability, str(datetime.datetime.now(TIME_ZONE).replace(tzinfo=None)),uid, tupleToList=True)
     
     value = "Restore" if part == "cancelled" else "Cancel"
+    color = "btn btn-outline-primary" if part == "cancelled" else "btn btn-outline-danger"
     for i in info.result:
-        i.append(html.input({"name": i[info.field.index(SCHEMA[tname+"_record"].primaryKey)], "type": "submit", "value": value}))
+        i.append(html.input({"class": color,"name": i[info.field.index(SCHEMA[tname+"_record"].primaryKey)], "type": "submit", "value": value}))
 
     return info.result
 

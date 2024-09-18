@@ -297,6 +297,16 @@ class html:
         rtn += ">"
         return rtn
 
+    def button(text, params: dict={}):
+        """
+        Return a <button> in html code
+        """
+        rtn = f"<button"
+        for key in params:
+            rtn += f" {key}=\"{params[key]}\""
+        rtn += ">" + text + "</button>"
+        return rtn
+
 def num_to_floor(li: list, column_index: int):
     """
     Convert number in a column to floor number

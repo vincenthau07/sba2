@@ -1,0 +1,86 @@
+.top-navigation-wrap{
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    padding: 0px 10px 0px 10px;
+    background-color: #3C3633;
+    color: white;
+    font-size: 20;
+    font-weight: bold;
+    line-height: 40px;
+    font-family: serif;
+    position: relative;
+    z-index: 2;
+}
+.top-navigation-wrap span{
+    float: left;
+}
+
+.logout{
+    font-weight: normal;
+    float: right; 
+    font-family: Arial;
+}
+.top-navigation-main{
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    padding-left: 10px;
+    padding-right: max(calc(100% - 1000px), 0px);
+    background: #696360;
+    color: white;
+    font-size: 18;
+    align-items: center;
+    display: flex;
+    justify-content: space-around;
+    z-index: 1;
+    position: relative;
+}
+.top-level-entry-container{
+    background-color: #696360;
+    position: relative;
+    display: inline-block;
+    /*transition: background 2s;*/
+}
+.top-level-entry-container button{
+    background: #696360;
+    border-radius: 5px;
+    padding: 7px 10px 7px 10px;
+    border: 0px;
+    font-size: 18;
+    color: white;
+}
+.top-level-entry-container ul{
+    list-style-type: none;
+    margin: 0;
+    background: #696360;
+    border-radius: 5px;
+    position: absolute;
+    padding: 10px;
+    display: None;
+    text-align: left;
+}
+.top-level-entry-container:hover button{
+    background-color: #dadada;
+    color: #696360;
+}
+
+.top-level-entry-container:hover ul{
+    display: block;
+    width: auto;
+}
+.top-level-entry-container li{
+    width: auto;
+    background: #696360;
+    border-radius: 5px;
+    padding: 7px 10px 7px 10px;
+    border: 0px;
+    font-size: 18;
+    color: white;
+}
+.top-level-entry-container li:hover{
+    background-color: #dadada;
+    color: #696360;
+}

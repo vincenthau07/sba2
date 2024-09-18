@@ -1,24 +1,89 @@
 <html>
     <head>
         <title>SQL</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="/static/css/top-navigation.css">
-        <link rel="stylesheet" type="text/css" href="/static/css/home.css">
-        <link rel="icon" type="image/png" href="/static/photos/icon.png">
-        <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script src="/static/js/filter.js"></script>
+        {% include "/header.html" %}
+
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.min.css">
+        <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.min.js"></script>
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
         <script>
             $(document).ready(function(){
+
                 $(document).on('click',"input[name='submit']", function(){
+                    
                     var sql = $("textarea[name='sql']").val();
                     $.ajax({
                         type: 'POST',
                         url: "",
                         data: {"sql": sql},
                         success: function(response) {
-                            $('.code').html(response.code);
-                            filterable();
+                            let $o = $('.output')
+                            let results = response.results
+                            $o.html('');
+                            for(let i=0; i<results.length; i++){
+                                code = ""
+                                code+=(` <div class="card">
+                                                <div class="card-header">
+                                                    <a class="collapsed btn container-fluid text-start" data-bs-toggle="collapse" href="#collapse`+i+`">
+                                                        <span class="badge rounded-pill bg-primary">Statement#`+(i+1)+`</span>&nbsp`+results[i][1]);
+                                if (results[i][0]){
+                                    code+=(`&nbsp<span class="badge rounded-pill bg-success">Success</span>
+                                                        </a>
+                                                    </div>`)
+                                    if (results[i].length==3){
+                                        code+=(`<div id="collapse`+i+`" class="collapse show" data-bs-parent="#accordion">
+                                                        <div class="card-body">
+                                                            <table class='table' id="tableinfo`+i+`"></table>
+                                                        </div>
+                                                    </div>`);
+                                        }
+                                }
+                                else{
+                                    code+=(`&nbsp<span class="badge rounded-pill bg-danger">Failed</span>&nbsp`+results[i][2]+`
+                                                        </a>
+                                                    </div>`);
+                                }
+                                code+=(`</div>`);
+                                $o.append(code)
+                                if (results[i][0]&&results[i].length==3){
+                                    let col = [];
+                                    for (let j = 0; j < results[i][2].columns.length; j++) {
+                                        col.push({ title: results[i][2].columns[j] });
+                                    };
+                                    $('#tableinfo'+i).DataTable({
+                                        layout: {
+                                            topStart: 'pageLength',
+                                            topEnd: 'search',
+                                            bottomStart: 'info',
+                                            bottom2End: 'paging',
+                                            bottomEnd: {
+                                                buttons: [
+                                                    {
+                                                        extend: 'copy',
+                                                        className: 'btn btn-outline-secondary'
+                                                    },
+                                                    {
+                                                        extend: 'excel',
+                                                        className: 'btn btn-outline-success'
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        order: [[0, 'dsc']],
+                                        data: results[i][2].data,
+                                        columns: col,
+                                        scrollX: true,
+                                        initComplete: function () {
+                                            var btns = $('.dt-button');
+                                            btns.removeClass('dt-button');
+                                            $('.show').removeClass('show');
+                                        }
+                                    })
+                                }
+                            }
+                            
                         },
                         error: function(error) {
                             console.log("Error:", error);
@@ -31,15 +96,15 @@
     <body>
         {% include "/top_navigation.html" %}
         
-        <div id="content">
-            <h1>
-                SQL
-            </h1>
-            <textarea id="sql" rows="4" cols="50" name="sql"></textarea>
+        <div class="container mt-5">
+            <h2 class="fw-bold">
+                <a class="text-decoration-none text-dark" href="/sql">SQL</a>
+            </h2>
+            <hr>
+            <textarea class="form-control" id="sql" rows="8" cols="50" name="sql"></textarea>
             <br>
-            <input type="submit" value="Submit" name = "submit">
-            <div class = "code"></div>
-            
+            <input class='btn btn-outline-primary' type="submit" value="Submit" name = "submit">
+            <div class = "container-fluid output mt-3"></div>
         </div>
     </body>
 </html>

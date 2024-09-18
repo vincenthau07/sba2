@@ -13,20 +13,17 @@ def sqlWeb(permission):
 def sqlResult(permission):
     cmd = flask.request.form["sql"]
     code = ""
-    j = 1
+    results = []
     for i in cmd.split(";"):
         if i.isspace() or len(i) == 0:
             continue
-        code+= f"<span id='badge'>statement #{j}</span>"
         try:
             result = sql(i, commit=True)
-            code+=f"{i}<span id='badge' style='background-color:#20c836'>Succeed</span>"
+
             if result.field:
-                code+=html.table(result.field,result.result, {"class": "filterable"})
+                results.append([True,i,{'columns': result.field, 'data': result.result}])
+            else:
+                results.append([True,i])
         except Exception as error:
-            code+=f"{i}<span id='badge' style='background-color:#c82036'>Failed</span>"
-            code+=html.linebreak()
-            code+=f"Error: {error}"
-        code+="<br>"
-        j+=1
-    return flask.jsonify({"code": code})
+            results.append([False,i,str(error)])
+    return flask.jsonify({"results": results})

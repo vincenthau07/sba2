@@ -1,32 +1,98 @@
 <html>
-    <head>
-        <title>{{ ' '.join(tname.split('_'))|title }} Management</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="/static/css/top-navigation.css">
-        <link rel="stylesheet" type="text/css" href="/static/css/home.css">
-        <link rel="icon" type="image/png" href="/static/photos/icon.png">
-        <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script src="/static/js/filter.js"></script>
-        <script>
-            const field = {{ field|tojson| safe  }};
-            const input_format = {{ input_format|tojson| safe  }};
-        </script>
-        <script src="/static/js/management.js"></script>
-    </head>
-    <body>
-        {% include "/top_navigation.html" %}
-        
-        <div id="content">
-            <h1>
-                <a href="/management/{{ tname }}">{{ ' '.join(tname.split('_'))|title }} Management</a>
-            </h1>
-            
-            <div id="error"></div>
-            <div class="table">
-                {{ table|safe }}
-            </div>
 
+<head>
+    <title>{{ ' '.join(tname.split('_'))|title }} Management</title>
+    {% include "/header.html" %}
+    <script>
+        const input_format = {{ input_format| tojson | safe  }};
+        const pk_index = {{pk_index|tojson|safe}};
+        const fields = {{ fields | safe }};
+        const col = {{ columns | safe }};
+        //console.log(input_format)
+    </script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/2.1.0/css/select.dataTables.min.css">
+    <script src="https://cdn.datatables.net/select/2.1.0/js/dataTables.select.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+
+    <script src="/static/js/management.js">
+        
+    </script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    {% include "/top_navigation.html" %}
+    
+    <div class="container mt-5 content">
+        <h2 class="fw-bold">
+            <a class="text-decoration-none text-dark" href="/management/{{ tname }}">{{ ' '.join(tname.split('_'))|title
+                }} Management</a>
+        </h2>
+        <hr>
+        <div class="container-fluid alert-box"></div>
+        <table id="tableinfo" class="display"></table>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this record? You cannot undo deletion.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger delete" data-bs-dismiss="modal">Delete</button>
+                </div>
+            </div>
         </div>
-    </body>
+    </div>
+
+    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">Create New Entry</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body addcontent">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary add" data-bs-dismiss="modal">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Entry</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body editcontent">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary edit" data-bs-dismiss="modal">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+
+</body>
+
 </html>

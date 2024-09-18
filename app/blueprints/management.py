@@ -22,51 +22,44 @@ def input_format(tname: str):
             rtn[field] = ["datetime"]
     return rtn
 
+def get_fields(tname):
+    return [SCHEMA[tname].fields[key].displayName if SCHEMA[tname].fields[key].displayName else key for key in SCHEMA[tname].fields]
+
 def info(tname, tableOnly = False):
     info = sql(f"SELECT * FROM {tname} ORDER BY {SCHEMA[tname].primaryKey}",tupleToList=True)
 
-    for i in info.result:
-        i.append(html.input({"name": i[info.field.index(SCHEMA[tname].primaryKey)], "type": "submit", "value": "Edit"}))
-        i.append(html.input({"name": i[info.field.index(SCHEMA[tname].primaryKey)], "type": "submit", "value": "Delete"}))
-    #info.field_display.append("#Edit")
-    field = info.field_name()
-    field.append("")
-    field.append("")
     
-    table = html.table(field, info.result, {"class": "sortable filterable"}) + html.input({"name": "add", "type": "submit", "value": "+"})
-
-    if not tableOnly:
-        return table, info.field, input_format(tname)
-    else:
-        return table
+    return info.result
 
 
 @blueprint.route('/management/<tname>', methods=["GET"])
 @verifySession(flask.session, "EDIT{0}")
 def management(tname, permission):
+    
+    in_format = input_format(tname)
+    columns = get_fields(tname)
+    pk_index = list(SCHEMA[tname].fields.keys()).index(SCHEMA[tname].primaryKey)
+    fields = list(SCHEMA[tname].fields.keys())
 
-    table, field, input_format = info(tname)
+    return flask.render_template('management.html', pk_index=pk_index, fields=fields, permission=permission, tname=tname, columns=columns, input_format=in_format)
 
-    return flask.render_template('management.html', permission=permission, tname=tname, table=table, field=field, input_format=input_format)
-
-
-@blueprint.route('/management/<tname>/<action>', methods=["POST"], endpoint = "managementPOST")
+@blueprint.route('/management/<tname>', methods=["POST"], endpoint = "managementPOST2")
 @verifySession(flask.session, "EDIT{0}")
-def managementPOST(tname, action, permission):
+def management(tname, permission):
+    return flask.jsonify(data=info(tname))
+
+@blueprint.route('/management/<tname>/<action>/', methods=["POST"], endpoint = "managementPOST3")
+@blueprint.route('/management/<tname>/update/<id>', methods=["POST"], endpoint = "managementPOST")
+@verifySession(flask.session, "EDIT{0}")
+def managementPOST(tname, permission, action='update', id=''):
     try:
         if action in ("update", "delete"):
-            sql(f"DELETE FROM {tname} WHERE {SCHEMA[tname].primaryKey} = ?", flask.request.form.get("id"), commit=True)
-
+            sql(f"DELETE FROM {tname} WHERE {SCHEMA[tname].primaryKey} = ?", id, commit=True)
+        
         if action in ("update", "insert"):
             length = len(flask.request.form.getlist("data[]"))
             placeholders = ','.join(['?'] * length)
             sql(f"INSERT INTO {tname} VALUES ({placeholders})", *map(lambda i: None if i == 'None' else i, flask.request.form.getlist("data[]")), commit=True)
     except Exception as e:
-        return flask.jsonify({"error": e})
-
-    table = info(tname, tableOnly=True)
-    
-    if action == "reload":
-        return flask.jsonify(table=table)
-    else:
-        return flask.jsonify({"table": table, "error": "Succeed."})
+        return flask.jsonify({"error": str(e)})
+    return flask.jsonify({})
