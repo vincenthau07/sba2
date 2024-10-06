@@ -19,23 +19,27 @@
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 
     <script src="/static/js/management.js">
-        
+    
     </script>
-    <style>
 
-    </style>
+    <!-- Tempus Dominus -->
+    
+    <script src="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/jQuery-provider.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/css/tempus-dominus.css" rel="stylesheet" />
 </head>
 
 <body>
     {% include "/top_navigation.html" %}
-    
     <div class="container mt-5 content">
         <h2 class="fw-bold">
             <a class="text-decoration-none text-dark" href="/management/{{ tname }}">{{ ' '.join(tname.split('_'))|title
                 }} Management</a>
         </h2>
         <hr>
-        <div class="container-fluid alert-box"></div>
+        
         <table id="tableinfo" class="display"></table>
     </div>
 
@@ -43,7 +47,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Delete</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Entry</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

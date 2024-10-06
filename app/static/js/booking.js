@@ -15,12 +15,16 @@ $(document).ready(function(){
             }
         }
     });
+    $(document).on('click',"button.book-btn", function(){
+        $('#bookModal').modal('show');
+    })
     $(document).on('change',"input[name='STIME']", function(){
         $("input[name='ETIME']").val($(this).val()); 
     });
     //change data of schedule
     $(document).on('change',"input[name='week']", function(){
         var weeknum = $(this).val();
+        loading_alert_box();
         $.ajax({
             type: 'POST',
             url: window.location.href.split('#')[0]+'/update',
@@ -30,14 +34,16 @@ $(document).ready(function(){
                 for(i=0;i<7;i++){
                     $('.event'+i).html(response.events[i]);
                 }
+                empty_alert_box();
             },
             error: function(error) {
-                console.log("Error:", error);
+                error_alert_box(error);
             }
         });
     })
     $(document).on('click',"input[name='previous']", function(){
         var weeknum = $("input[name='week']").val();
+        loading_alert_box();
         $.ajax({
             type: 'POST',
             url: window.location.href.split('#')[0]+'/update',
@@ -48,14 +54,16 @@ $(document).ready(function(){
                     $('.event'+i).html(response.events[i]);
                 }
                 $("input[name='week']").val(response.week);
+                empty_alert_box();
             },
             error: function(error) {
-                console.log("Error:", error);
+                error_alert_box(error);
             }
         });
     })
     $(document).on('click',"input[name='next']", function(){
         var weeknum = $("input[name='week']").val();
+        loading_alert_box();
         $.ajax({
             type: 'POST',
             url: window.location.href.split('#')[0]+'/update',
@@ -66,9 +74,10 @@ $(document).ready(function(){
                     $('.event'+i).html(response.events[i]);
                 }
                 $("input[name='week']").val(response.week);
+                empty_alert_box();
             },
             error: function(error) {
-                console.log("Error:", error);
+                error_alert_box(error);
             }
         });
     })
@@ -91,11 +100,12 @@ $(document).ready(function(){
     });
 
     //submit form
-    $(document).on('click', "input[name='submit']", function(){
+    $(document).on('click', "button.book", function(){
         var stime = $("input[name='STIME']").val();
         var etime = $("input[name='ETIME']").val();
         var unit = $("select[name='UNIT']").val();
-        var description = $("input[name='DESCRIPTION']").val();
+        var description = $("textarea[name='DESCRIPTION']").val();
+        loading_alert_box();
         $.ajax({
             type: 'POST',
             url: window.location.href,
@@ -106,7 +116,10 @@ $(document).ready(function(){
                 "description": description,
             },
             success: function(response) {
-                $('#error').text(response.message);
+                if ('error' in response)
+                    error_alert_box(response.error);
+                else
+                    success_alert_box();
                 var weeknum = $("input[name='week']").val();
                 $.ajax({
                     type: 'POST',
@@ -118,18 +131,16 @@ $(document).ready(function(){
                             $('.event'+i).html(response.events[i]);
                         }
                         $("input[name='week']").val(response.week);
+                        
                     },
                     error: function(error) {
-                        console.log("Error:", error);
+                        error_alert_box(error);
                     }
                 });
             },
             error: function(error) {
-                console.log("Error:", error);
+                error_alert_box(error);
             }
         });
-
-        
-        window.location.replace("#error");
     })
 });

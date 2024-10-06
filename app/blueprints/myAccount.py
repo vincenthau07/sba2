@@ -14,8 +14,12 @@ def account(permission):
 @blueprint.route('/account/update1', methods=["POST"], endpoint = "accountPersonalInfo")
 @verifySession(flask.session)
 def accountPersonalInfo(permission):
-    sql("UPDATE user SET SEX=?, EMAIL=?, UNAME=? WHERE UID = ?",flask.request.form["SEX"] ,flask.request.form["EMAIL"] ,flask.request.form['UNAME'], flask.session["UID"], commit=True)
-    return flask.jsonify({'data': get_by_primary_key('user', flask.session["UID"], ('UID', 'SEX', 'EMAIL', 'UNAME')), "error": "Succeed"})
+    try:
+        email = None if flask.request.form["EMAIL"] == '' else flask.request.form["EMAIL"]
+        sql("UPDATE user SET SEX=?, EMAIL=?, UNAME=? WHERE UID = ?",flask.request.form["SEX"] ,email ,flask.request.form['UNAME'], flask.session["UID"], commit=True)
+        return flask.jsonify({'data': get_by_primary_key('user', flask.session["UID"], ('UID', 'SEX', 'EMAIL', 'UNAME'))})
+    except Exception as error:
+        return flask.jsonify({'error': str(error)})
 
 @blueprint.route('/account/update2', methods=["POST"], endpoint = "accountPW")
 @verifySession(flask.session)
@@ -27,4 +31,4 @@ def accountPW(permission):
     if flask.request.form['PASSWORD1'] != flask.request.form['PASSWORD2']:
         return flask.jsonify({"error": "New password does not match confirm password"})
     sql("UPDATE user SET PASSWORD=? WHERE UID = ?", flask.request.form['PASSWORD1'], flask.session["UID"], commit=True)
-    return flask.jsonify({"error": "Succeed"})
+    return flask.jsonify({})

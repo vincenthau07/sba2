@@ -1,12 +1,13 @@
 var flag = 0;
-$("#deleteModal").ready(function () {
+$(document).ready(function () {
     var code = '<div class="container">';
     for(let i=0; i<fields.length; i++){
         
-        code += '<div class="mb-3"><label for="'+fields[i]+'">'+col[i]+'</label>'
+        code += '<div class="form-floating mb-3">'
 
         if(fields[i] in input_format == false){
-            code += "<input class='form-control' type=\"text\" name=\""+ fields[i]+"\"></div>"
+            code += "<input class='form-control' placeholder='any' type=\"text\" name=\""+ fields[i]+"\">"
+            
         }
         else{
             switch(input_format[fields[i]][0]){
@@ -15,21 +16,24 @@ $("#deleteModal").ready(function () {
                     for(j=0; j < input_format[fields[i]][1].length; j++){
                         code += "<option value=\""+input_format[fields[i]][1][j]+'\">'+input_format[fields[i]][1][j]+"</option>";
                     }
-                    code += "</select></div>";
+                    code += "</select>";
                     break;
                 case "number":
-                    code += "<input class='form-control' type=\"number\"></div>";
+                    code += "<input class='form-control' placeholder='any' type=\"number\">";
                     break;
                 case "checkbox":
-                    code += "<div class='form-control'><input class='form-check-input' type=\"checkbox\"></div></div>";
+                    code += "<div class='form-control'><input class='form-check-input' type=\"checkbox\"></div>";
                     break;
                 case "datetime":
-                    code += "<input class='form-control' type=\"datetime-local\"></div>";
+                    code += "<input class='datetime form-control' type=\"datetime-local\">";
                     break;
             }
         }
-
+        code += '<label>'+col[i]+'</label></div>'
     }
+    $('.datetime').each(function(){
+        $(this).datetimepicker();
+    })
     $('.editcontent, .addcontent').html(code);
 
     for (let i = 0; i < col.length; i++) {
@@ -138,7 +142,6 @@ $("#deleteModal").ready(function () {
             else
                 $elements = $('.editcontent').find('input,select');
             for (let i = 0; i < fields.length; i++){
-                console.log($elements.eq(i).attr("type"))
                 if ($elements.eq(i).attr("type")=="checkbox"){
                     data.push(0+$elements.eq(i).is(':checked'));
                 }
@@ -153,6 +156,7 @@ $("#deleteModal").ready(function () {
         };
         if (type=='update')
             type+='/'+tableinfo.rows( { selected: true } ).data()[0][pk_index]
+        loading_alert_box()
         $.ajax({
             type: 'POST',
             data: submit_data,
@@ -162,24 +166,14 @@ $("#deleteModal").ready(function () {
                 //console.log(response)
                 
                 if ('error' in response){
-                    $('.alert-box').append(`
-                        <div class="alert alert-danger alert-dismissible">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            <strong>Error!</strong>`+response.error+`
-                        </div>
-                    `);
+                    error_alert_box(response.error);
                 }
                 else{
-                    $('.alert-box').append(
-                        `<div class="alert alert-success alert-dismissible">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            <strong>Success!</strong> Action succeeded.
-                        </div>`
-                    );
+                    success_alert_box();
                 }
             },
             error: function(error) {
-                console.log("Error:", error);
+                error_alert_box(error);
             }
         });
     });

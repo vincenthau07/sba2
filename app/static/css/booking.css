@@ -1,10 +1,4 @@
-
-div ul li{
-    margin: 0px;
-    padding: 0px;
-    top: 0%;
-}
-.scrollable{
+.scrollable {
     width: 1132px;
     height: 500px;
     overflow: auto;
@@ -12,7 +6,8 @@ div ul li{
     margin-top: 15px;
     margin-bottom: 15px;
 }
-.schedule{
+
+.schedule {
     float: left;
     top: 0%;
     line-height: 24px;
@@ -22,7 +17,7 @@ div ul li{
     position: relative;
 }
 
-.timeline{
+.timeline {
     display: block;
     float: left;
     width: auto;
@@ -31,31 +26,37 @@ div ul li{
     padding: 0px;
     width: 55px;
 }
-.timeline ul{
+
+.timeline ul {
     margin: 0px;
     padding: 0px;
 }
-.timeline li{
+
+.timeline li {
     box-sizing: border-box;
     padding: 5px;
     height: 80px;
-.timeline-text{
-    transform: translateY(65px);
+
+    .timeline-text {
+        transform: translateY(65px);
+    }
 }
-}
-.column{
+
+.column {
     float: left;
     display: absolute;
     box-sizing: border-box;
     border-left: 1px solid #d0c1ba;
-    
+
 }
-.column ul{
+
+.column ul {
     box-sizing: border-box;
     padding: 0px;
     margin: 0px;
 }
-.column li{
+
+.column li {
     box-sizing: border-box;
     display: block;
     border-bottom: 1px solid #d0c1ba;
@@ -64,7 +65,8 @@ div ul li{
     margin: 0px;
     z-index: 0;
 }
-.field-bar{
+
+.field-bar {
     margin-top: 15px;
     line-height: 30px;
     font-size: 18px;
@@ -74,12 +76,13 @@ div ul li{
     height: 80px;
     min-width: 1057px;
 }
-.field{
-    position: relative; 
+
+.field {
+    position: relative;
     margin: 0;
     box-sizing: border-box;
     color: white;
-    background-color: #3C3633;
+    background-color: #212529;
     font-weight: bold;
     text-align: center;
     padding: 5px 5px 5px 5px;
@@ -91,7 +94,8 @@ div ul li{
     overflow: hidden;
     z-index: 1;
 }
-.event-box{
+
+.event-box {
     background-color: white;
     display: block;
     box-sizing: border-box;
@@ -100,7 +104,8 @@ div ul li{
     width: 150px;
     text-align: left;
 }
-.event{
+
+.event {
     box-sizing: border-box;
     display: inline-block;
     width: 150px;
@@ -110,21 +115,27 @@ div ul li{
     color: white;
     transition: opacity 0.5s;
     overflow: hidden;
+    padding: 7px;
+    padding-top: 15px;
 }
-.event:not(.toggle):hover{
+
+.event:not(.toggle):hover {
     opacity: 0.8;
-    
+
 }
-.event h3{
+
+.event h3 {
     font-size: 18px;
     opacity: 80%;
     line-height: 0px;
 }
-.event h2{
+
+.event h2 {
     font-size: 20px;
     line-height: 20px;
 }
-.event.toggle{
+
+.event.toggle {
     display: block;
     position: fixed;
     z-index: 2;
@@ -132,16 +143,19 @@ div ul li{
     height: 300px;
     top: 50%;
     left: 50%;
-    transform: translate(-300px,-150px);
+    transform: translate(-300px, -150px);
     transition: none;
 }
-.event.toggle h3{
+
+.event.toggle h3 {
     line-height: 20px;
 }
-.event.toggle h2{
+
+.event.toggle h2 {
     line-height: 30px;
 }
-.description{
+
+.description {
     box-sizing: border-box;
     padding: 10px;
     z-index: 2;
@@ -152,12 +166,14 @@ div ul li{
     height: 300px;
     top: 50%;
     left: 50%;
-    transform: translate(-151px,-150px);
+    transform: translate(-151px, -150px);
 }
-.description h1{
+
+.description h1 {
     font-size: 20px;
 }
-.close-button{
+
+.close-button {
     background-image: url("/static/photos/close-button.png");
     background-size: 30px;
     display: none;
@@ -166,14 +182,16 @@ div ul li{
     height: 30px;
     top: 50%;
     left: 50%;
-    transform: translate(270px,-150px);
+    transform: translate(270px, -150px);
     z-index: 3;
     transition: opacity 0.5s;
 }
-.close-button:hover{
+
+.close-button:hover {
     opacity: 0.7;
 }
-.mask{
+
+.mask {
     display: none;
     position: fixed;
     width: 100%;
@@ -186,6 +204,7 @@ div ul li{
     pointer-events: none;
     z-index: 2;
 }
-.description{
+
+.description {
     display: none;
 }

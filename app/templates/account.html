@@ -1,92 +1,176 @@
 <html>
     <head>
         <title>My Account</title>
-        <link rel="stylesheet" type="text/css" href="/static/css/home.css">
-        <link rel="stylesheet" type="text/css" href="/static/css/top-navigation.css">
-        <link rel="stylesheet" type="text/css" href="/static/css/account.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script src="/static/js/account.js"></script>
-        <link rel="icon" type="image/png" href="/static/photos/icon.png">
+        {% include "/header.html" %}
+        <script>
+            $(document).ready(function(){
+                $(document).on('click','button.change', function(){
+                    $('#'+$(this).attr('name')+'Modal').modal('show');
+                });
+                $(document).on('click',"button.info", function(){
+                    let submit_data = {};
+
+                    submit_data["SEX"] = $("select[name='SEX']").val();
+                    submit_data["EMAIL"] = $("input[name='EMAIL']").val();
+                    submit_data["UNAME"] = $("input[name='UNAME']").val();
+                    console.log(submit_data)
+                    loading_alert_box();
+                    $.ajax({
+                        type: 'POST',
+                        url: window.location.href + "/update1",
+                        data: submit_data,
+                        success: function(response) {
+                            if ('error' in response)
+                                error_alert_box(response.error);
+                            else{
+                                success_alert_box();
+                                if("data" in response){
+                                    $("select[name='SEX']").val(response.data[1]).change();
+                                    $("input[name='EMAIL']").val(response.data[2]).change();
+                                    $("input[name='UNAME']").val(response.data[3]).change();
+                                    $(".SEX").html(response.data[1]);
+                                    $(".EMAIL").html(response.data[2]);
+                                    $(".UNAME").html(response.data[3]);
+                                }
+                            }
+                        },
+                        error: function(error) {
+                            error_alert_box(error);
+                        }
+                    });
+                });
+                $(document).on('click',"button.pass", function(){
+                    let submit_data = {}
+
+
+                    submit_data["OLD_PASSWORD"] = $("input[name='OLD_PASSWORD']").val();
+                    submit_data["PASSWORD1"] = $("input[name='PASSWORD1']").val();
+                    submit_data["PASSWORD2"] = $("input[name='PASSWORD2']").val();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: window.location.href + "/update2",
+                        data: submit_data,
+                        success: function(response) {
+                            if ('error' in response)
+                                error_alert_box(response.error)
+                            else
+                                success_alert_box()
+                            $("input[name='OLD_PASSWORD'], input[name='PASSWORD1'], input[name='PASSWORD2']").val('');
+                        },
+                        error: function(error) {
+                            error_alert_box(error)
+                        }
+                    });
+                });
+            });
+        </script>
     </head>
     <body>
-        {% include "/old_top_navigation.html" %}
+        {% include "/top_navigation.html" %}
         
-        <div id="content">
-            <h1>
-                <a href = "/account">My Account</a>
-            </h1>
-            Update your personal information or password here.
-        </div>
-        <table class="form">
-            <tr>
-                <td colspan="2"><h3>
+        
+        <div class="container mt-5">
+            <h2 class="fw-bold">
+                <a class="text-decoration-none text-dark" href="/account">My Account</a>
+            </h2>
+            <hr>
+            <div class="mt-4 p-5 bg-light rounded">
+                <h3 class="fw-bold">
                     Personal Information
-                </h3></td>
-            </tr>
-            <tr>
-                <td>UID</td>
-                <td>{{ data[0] }}</td>
-            </tr>
-            <tr>
-                <td>Sex</td>
-                <td>
-                    <select name="SEX">
-                        <option value="M" {{ "selected" if data[1]=="M" else "" |safe }}>M</option>
-                        <option value="F" {{ "selected" if data[1]=="F" else "" |safe }}>F</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td><input type="text" name="EMAIL" value="{{ data[2] }}"></td>
-            </tr>
-            <tr>
-                <td>Name</td>
-                <td>
-                    <input type="text" name="UNAME" value="{{ data[3] }}">
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <button class = "submit1">Confirm</button>
-                </td>
-            </tr>
-        </table>
-        <div id="content">
-            <div id="error" class="e1"></div>
+                </h3>
+                <table class="table">
+                    <tr>
+                        <td><strong>UID</strong></td>
+                        <td>{{ data[0] }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sex</strong></td>
+                        <td class="SEX">{{ data[1] }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email</strong></td>
+                        <td class="EMAIL">{{ data[2] }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Name</strong></td>
+                        <td class="NAME">{{ data[3] }}</td>
+                    </tr>
+                </table>
+                <button class="btn btn-outline-dark change" name="info">Change Information</button>
+                <button class="btn btn-outline-primary change" name="pass">Change Password</button>
+            </div>
         </div>
-        <table class="form">
-            <tr>
-                <td colspan="2"><h3>
-                    Password
-                </h3></td>
-            </tr>
-            <tr>
-                <td>Old</td>
-                <td>
-                    <input type="password" name="OLD_PASSWORD" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
-                </td>
-            </tr>
-            <tr>
-                <td>New</td>
-                <td>
-                    <input type="password" name="PASSWORD1" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
-                </td>
-            </tr>
-            <tr>
-                <td>Confirm</td>
-                <td>
-                    <input type="password" name="PASSWORD2" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <button class = "submit2">Confirm</button>
-                </td>
-            </tr>
-        </table>
-        <div id="content">
-            <div id="error" class="e2"></div>
+
+        <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="infoModalLabel">Change Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body infocontent">
+                        <div class="container form">
+                            <div class="form-floating mb-3">
+                                
+                                <select class='form-select' name="SEX">
+                                    <option value="M" {{ "selected" if data[1]=="M" else "" |safe }}>M</option>
+                                    <option value="F" {{ "selected" if data[1]=="F" else "" |safe }}>F</option>
+                                </select>
+                                <label>Sex</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                
+                                <input class='form-control' type="text" name="EMAIL" value="{{ data[2] }}">
+                                <label>Email</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                
+                                <input class='form-control' type="text" name="UNAME" value="{{ data[3] }}">
+                                <label>Name</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary info" data-bs-dismiss="modal">Change</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="passModal" tabindex="-1" aria-labelledby="passModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="passModalLabel">Change Passowrd</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body passcontent">
+                        <div class="container form">
+                            <div class="form-floating mb-3">
+                                
+                                <input class='form-control' type="password" name="OLD_PASSWORD" placeholder="••••••••">
+                                <label>Old Password</label>
+                            </div>
+                            <div class="form-floating mb-3">
+
+                                <input class='form-control' type="password" name="PASSWORD1" placeholder="••••••••">
+                                <label>New Password</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                
+                                <input class='form-control' type="password" name="PASSWORD2" placeholder="••••••••">
+                                <label>Confirm Password</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary pass" data-bs-dismiss="modal">Change</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

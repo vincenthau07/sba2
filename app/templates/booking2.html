@@ -2,13 +2,8 @@
 <html>
     <head>
         <title>Booking - {{ id }}</title>
-        <link rel="stylesheet" type="text/css" href="/static/css/top-navigation.css">
-        <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+        {% include "/header.html" %}
         <link rel="stylesheet" type="text/css" href="/static/css/booking.css">
-        <link rel="icon" type="image/png" href="/static/photos/icon.png">
-
-        <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script>
             const categories = {{ categories|tojson| safe  }};
             const units = {{ units|tojson| safe  }};
@@ -16,89 +11,111 @@
         <script src="/static/js/booking.js"></script>
     </head>
     <body>
-        {% include "/old_top_navigation.html" %}
+        {% include "/top_navigation.html" %}
 
-        <div id="content">
-            <h1>
-                <a href = "/booking/{{ tname|safe }}">{{ tname.title()|safe }} Booking</a> >> <a href = "/booking/{{ tname|safe }}/{{ id }}">{{ id }} - {{ name }}</a>
-            </h1>
-            <input type="week" name="week" min="{{ minweek|safe }}" value="{{ minweek|safe }}">
-            <input type="submit" value = "<" name="previous">
-            <input type="submit" value = ">" name="next">
-            {{ field_bar|safe }}
-            <div class="scrollable">
-                <div class="timeline">
-                    <ul>
-                        <script>
-                            for(i=0; i<=24; i++){
-                                if(i<=9)
-                                    var j = "0" + i
-                                else
-                                    var j = i
-                                if (i%24<10){
-                                    document.write('<li><div class="timeline-text">0'+j%24+':00</div></li>')
-                                }
-                                else{
-                                    document.write('<li><div class="timeline-text">'+j%24+':00</div></li>')
-                                }
-                                
-                            }
-                        </script>
-                    </ul>
+        <div class="container mt-5">
+            <h2 class="fw-bold">
+                <a class="text-decoration-none text-dark" href = "/booking/{{ tname|safe }}">{{ tname.title()|safe }} Booking</a> >> <a class="text-decoration-none text-dark" href = "/booking/{{ tname|safe }}/{{ id }}">{{ id }} - {{ name }}</a>
+            </h2>
+            <hr>
+            <div class="row">
+                <div class="col-9">
+                    <input class="btn btn-primary" type="week" name="week" min="{{ minweek|safe }}" value="{{ minweek|safe }}">
+                    <input class="btn btn-outline-primary" type="submit" value = "<" name="previous">
+                    <input class="btn btn-outline-primary" type="submit" value = ">" name="next">
                 </div>
-                
-                <div class = "schedule">
-
-                    {% for i in range(7) %}
-                        <div class = "column">
-                            
-                            <ul>
-                                <script>
-                                    for(j=0; j<=24; j++){
-                                        document.write('<li></li>')
-                                    }
-                                </script>
-                            </ul>
-                            <div class = "event{{ i|safe }}">
-                                {{ events[i]|safe }}
-                            </div>
-                        </div>
-                    {% endfor %}
+                <div class="col-3 text-end">
+                    <button class="btn btn-outline-dark book-btn">Book</button>
                 </div>
             </div>
-            <h1>Booking Form</h1>
-            <table>
-                <thead>
-                    <th>Start Date & Time</th>
-                    <th>End Date & Time</th>
-                    <th>School Unit</th>
-                    <th>Description</th>
-                    <th>#Submit</th>
-                </thead>
-                <tr>
-                    <td>
-                        <input type="datetime-local" name="STIME">
-                    </td>
-                    <td>
-                        <input type="datetime-local" name="ETIME">
-                    </td>
-                    <td>
-                        <select name="CATEGORY">
-                            <option disabled selected value> -- category(optional) -- </option>
-                        </select><br>
-                        <select name="UNIT">
-                            <option disabled selected value> -- unit -- </option>
-                        </select>
-                    </td>
-                    <td>
-                        <input type="text" name="DESCRIPTION" placeholder = "Description">
-                    </td>
-                    <td>
-                        <input type="submit" value = "submit" name = "submit">
-                    </td>
-                </tr>
-            </table>
-            <div id="error"></div>
+                
+            <div class="container-fluid overflow-hidden">
+            <div class="overflow-auto" style="position: relative;">
+                {{ field_bar|safe }}
+                <div class="scrollable">
+                    <div class="timeline">
+                        <ul>
+                            <script>
+                                for(i=0; i<=24; i++){
+                                    if(i<=9)
+                                        var j = "0" + i
+                                    else
+                                        var j = i
+                                    if (i%24<10){
+                                        document.write('<li><div class="timeline-text">0'+j%24+':00</div></li>')
+                                    }
+                                    else{
+                                        document.write('<li><div class="timeline-text">'+j%24+':00</div></li>')
+                                    }
+                                    
+                                }
+                            </script>
+                        </ul>
+                    </div>
+                    
+                    <div class = "schedule">
+
+                        {% for i in range(7) %}
+                            <div class = "column">
+                                
+                                <ul>
+                                    <script>
+                                        for(j=0; j<=24; j++){
+                                            document.write('<li></li>')
+                                        }
+                                    </script>
+                                </ul>
+                                <div class = "event{{ i|safe }}">
+                                    {{ events[i]|safe }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="modal fade" id="bookModal" tabindex="-1" aria-labelledby="bookModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bookModalLabel">Booking Form ({{ id }} - {{ name }})</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body bookcontent">
+                        <div class="container form">
+                            <div class="form-floating mb-3">
+                                <input type="datetime-local" name="STIME" class='form-control'>
+                                <label>Start Datetime</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="datetime-local" name="ETIME" class='form-control'>
+                                <label>End Datetime</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <select name="CATEGORY" class='form-control'>
+                                    <option disabled selected value> -- category(optional) -- </option>
+                                </select>
+                                <label>Unit Category (optional)</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <select name="UNIT" class='form-control'>
+                                    <option disabled selected value> -- unit -- </option>
+                                </select>
+                                <label>School Unit</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <textarea type="text" name="DESCRIPTION" class="form-control" placeholder = "Any"></textarea>
+                                <label>Description</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary book" data-bs-dismiss="modal">Book</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

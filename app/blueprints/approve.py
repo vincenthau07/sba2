@@ -35,8 +35,8 @@ def approvePOST(tname, action, permission):
             sql(f"UPDATE {tname}_record SET APPROVED_BY = ? WHERE BID = ?", flask.session["UID"], flask.request.form.get("id"), commit=True)
         else:
             sql(f"UPDATE {tname}_record SET AVAILABILITY = 0, APPROVED_BY = ? WHERE BID = ?", flask.session["UID"], flask.request.form.get("id"), commit=True)
-    except Exception as e:
-        return flask.jsonify({"error": e})
+    except Exception as error:
+        return flask.jsonify({"error": str(error)})
 
     
-    return flask.jsonify({"error": "Succeed."})
+    return flask.jsonify({})

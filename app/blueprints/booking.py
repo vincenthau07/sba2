@@ -110,35 +110,38 @@ def booking2(tname, id, permission):
 
 @blueprint.route('/booking/<tname>/<id>', methods=["POST"], endpoint="bksubmitform")
 @verifySession(flask.session)
-def bksubmitform(tname, id, permission):    
-    if len(flask.request.form.get("stime")) == 0  or len(flask.request.form.get("etime")) == 0 or len(flask.request.form.get("description")) == 0 or flask.request.form.get("unit") is None:
-        return flask.jsonify({"message": "Error: Some information is missing."})
-    else:
-        stime = strToDate(flask.request.form.get("stime"))
-        etime = strToDate(flask.request.form.get("etime"))
-        if etime<=stime:
-            return flask.jsonify({"message": "Ending time must be after starting time."})
-        elif len(getEvents(tname, id,stime = stime+datetime.timedelta(seconds=1), etime = etime-datetime.timedelta(seconds=1)).result)>0:
-            return flask.jsonify({"message": "Error: Selected session is occupied by others."})
-        
-        elif permission[f"EDIT{tname.upper()}_RECORD"]:
-            if stime < datetime.datetime.now(TIME_ZONE).replace(tzinfo=None):
-                return flask.jsonify({"message": "Error: You cannot book rooms in the past."})
-            else:
-                try:
-                    addRecord(tname,stime,etime,flask.session.get('UID'),id,flask.request.form.get("unit"),flask.request.form.get("description"), True)
-                    return flask.jsonify({"message": "Succeed."})
-                except Exception as error:
-                    return flask.jsonify({"message": f"Error: {error}"})
+def bksubmitform(tname, id, permission):
+    try:
+        if len(flask.request.form.get("stime")) == 0  or len(flask.request.form.get("etime")) == 0 or len(flask.request.form.get("description")) == 0 or flask.request.form.get("unit") is None:
+            return flask.jsonify({"error": "Error: Some information is missing."})
         else:
-            if stime < datetime.datetime.now(TIME_ZONE).replace(tzinfo=None) + BOOK_TIME:
-                return flask.jsonify({"message": "Error: You can only book rooms after a week."})
+            stime = strToDate(flask.request.form.get("stime"))
+            etime = strToDate(flask.request.form.get("etime"))
+            if etime<=stime:
+                return flask.jsonify({"error": "Ending time must be after starting time."})
+            elif len(getEvents(tname, id,stime = stime+datetime.timedelta(seconds=1), etime = etime-datetime.timedelta(seconds=1)).result)>0:
+                return flask.jsonify({"error": "Error: Selected session is occupied by others."})
+            
+            elif permission[f"EDIT{tname.upper()}_RECORD"]:
+                if stime < datetime.datetime.now(TIME_ZONE).replace(tzinfo=None):
+                    return flask.jsonify({"error": "Error: You cannot book rooms in the past."})
+                else:
+                    try:
+                        addRecord(tname,stime,etime,flask.session.get('UID'),id,flask.request.form.get("unit"),flask.request.form.get("description"), True)
+                        return flask.jsonify({})
+                    except Exception as error:
+                        return flask.jsonify({"error": f"Error: {error}"})
             else:
-                try:
-                    addRecord(tname,stime,etime,flask.session.get('UID'),id,flask.request.form.get("unit"),flask.request.form.get("description"))
-                    return flask.jsonify({"message": "Succeed."})
-                except Exception as error:
-                    return flask.jsonify({"message": f"Error: {error}"})
+                if stime < datetime.datetime.now(TIME_ZONE).replace(tzinfo=None) + BOOK_TIME:
+                    return flask.jsonify({"error": "Error: You can only book rooms after a week."})
+                else:
+                    try:
+                        addRecord(tname,stime,etime,flask.session.get('UID'),id,flask.request.form.get("unit"),flask.request.form.get("description"))
+                        return flask.jsonify({})
+                    except Exception as error:
+                        return flask.jsonify({"error": f"Error: {error}"})
+    except Exception as error:
+        return flask.jsonify({"error": str(error)})
 
 
 @blueprint.route('/booking/<tname>/<id>/update', methods=["POST"], endpoint="bkupdate")

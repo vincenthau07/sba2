@@ -43,20 +43,20 @@ def records(tname,  permission, path):
 def records(tname, bid, permission, path="approved"):
     try:
         if path != "cancelled":
-            sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ?",
-                False, None, bid, commit = True)
+            sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ? AND UID = ?",
+                False, None, bid, flask.session['UID'], commit = True)
         else:
             stime,etime = sql(f"SELECT STIME, ETIME FROM {tname+'_record'} WHERE BID = ?", bid).result[0]
             if len(sql(f"SELECT * FROM {tname+'_record'} WHERE AVAILABILITY AND STIME < ? AND ETIME > ?", etime, stime).result) > 0:
-                return flask.jsonify({"error": "Error: Selected session is occupied by others."})
+                return flask.jsonify({"error": "Selected session is occupied by others."})
             elif permission["EDIT"+tname.upper()+"_RECORD"]:
-                sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ?",
-                    True, flask.session["UID"], bid, commit = True)
+                sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ? AND UID = ?",
+                    True, flask.session["UID"], bid, flask.session['UID'], commit = True)
             elif strToDate(sql(f"SELECT STIME FROM {tname}_record WHERE BID = ?", bid).result[0][0]) - datetime.datetime.now(TIME_ZONE).replace(tzinfo=None) >= BOOK_TIME:
-                sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ?",
-                    True, None, bid, commit = True)
+                sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ? AND UID = ?",
+                    True, None, bid, flask.session['UID'], commit = True)
             else:
-                return flask.jsonify({"error": "Error: You can only book rooms after a week."})
+                return flask.jsonify({"error": "You can only book rooms after a week."})
     except Exception as error:
-        return flask.jsonify({"error": error})
-    return flask.jsonify()
+        return flask.jsonify({"error": str(error)})
+    return flask.jsonify({})

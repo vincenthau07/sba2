@@ -3,9 +3,7 @@
 <head>
     <title>Home</title>
     {% include "/header.html" %}
-    <script src="/static/js/approve.js">
 
-    </script>
     <script>
         $(document).ready(function () {
 
@@ -27,15 +25,22 @@
                 let text = '';
 
                 let submit_data = { "id": $(this).attr("name") };
+                loading_alert_box();
                 $.ajax({
                     type: 'POST',
                     url: window.location.href + "/" + type.toLowerCase(),
                     data: submit_data,
                     success: function (response) {
+                        if ('error' in response){
+                            error_alert_box(response.error);
+                        }
+                        else{
+                            success_alert_box();
+                        }
                         tableinfo.ajax.reload(null, false);
                     },
                     error: function (error) {
-                        console.log("Error:", error);
+                        error_alert_box(error);
                     }
                 });
             });
