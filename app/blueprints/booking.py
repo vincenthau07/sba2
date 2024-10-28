@@ -16,43 +16,33 @@ def getEvents(table, id: str, date: datetime.date=None, stime: None=None, etime:
     if date is not None:
         stime = datetime.datetime.combine(date, datetime.datetime.min.time())
         etime = stime + datetime.timedelta(days=1)
-    rtn = sql(f"""SELECT {', '.join(field)}, NAME FROM {table+'_record'} r, school_unit s
+    result = sql(f"""SELECT {', '.join(field)}, NAME FROM {table+'_record'} r, school_unit s
                    WHERE r.UNIT = s.UNIT AND AVAILABILITY AND {table[0].upper()+"ID"}=? 
-                   AND STIME < ? AND ETIME > ?""", id, str(etime), str(stime), tupleToList=True,**kwargs)
-    for row in rtn.result:
-        row[rtn.field.index("STIME")] = max(strToDate(row[rtn.field.index("STIME")]), stime)
-        row[rtn.field.index("ETIME")] = min(strToDate(row[rtn.field.index("ETIME")]), etime)
-    return rtn
+                   AND STIME < ? AND ETIME > ? ORDER BY STIME ASC""", id, str(etime), str(stime), tupleToList=True,**kwargs)
 
-def eventHTML(result: sql, id) -> str:
-    rtn = ""
-    for record in result.result:
-        top = (record[result.field.index("STIME")] - datetime.datetime.combine(datetime.datetime.now(TIME_ZONE).replace(tzinfo=None).date(), datetime.datetime.min.time())).total_seconds() % 86400 * 80 / 3600 + 80
-        height = (record[result.field.index("ETIME")] - record[result.field.index("STIME")]).total_seconds() * 80 / 3600
+    rtn = []
 
-        
-        if record[result.field.index("APPROVED_BY")] is None:
+    for row in result.result:
+        row[result.field.index("STIME")] = max(strToDate(row[result.field.index("STIME")]), stime)
+        row[result.field.index("ETIME")] = min(strToDate(row[result.field.index("ETIME")]), etime)
+        if row[result.field.index("APPROVED_BY")] is None:
             background_color = f"rgb(192,192,192)"
         else:
-            random.seed(record[result.field.index("NAME")])
-            background_color = f"hsl({random.randint(0,359)}, 65%, 50%)"
-        rtn += f'''
-        <div class = "event-box" style = "top: {top}px; height: {height}px">
-            <div class = "mask"></div>
-            <div class = "event" style = "height: {height}px; background-color: {background_color}">
-                <h3>{str(record[result.field.index("STIME")])[11:16]} - {str(record[result.field.index("ETIME")])[11:16]}
-                <h2>{record[result.field.index("NAME")]}</h2>
-            </div>
-            <div class = "close-button"></div>
-            <div class = "description">
-                <h1>Booked by: {record[result.field.index("UID")]} - {get_by_primary_key("user", record[result.field.index("UID")], "UNAME")}</h1>
-                
-                <p> Description: {"(NOT APPROVED)" if record[result.field.index("APPROVED_BY")] is None else ""}</p>
-                <p>
-                    {record[result.field.index("DESCRIPTION")]}
-                </p>
-            </div>
-        </div>'''
+            random.seed(row[result.field.index("NAME")])
+            background_color = f"hsl({random.randint(0,359)}, 25%, 46%)"
+        rtn.append({
+            "weekday": row[result.field.index("STIME")].weekday(),
+            "start": str(row[result.field.index("STIME")])[11:16],
+            "end": str(row[result.field.index("ETIME")])[11:16],
+            "background_color": background_color,
+            "title": row[result.field.index("NAME")],
+            "content": f"""
+                <h2>Booked by: {row[result.field.index("UID")]} - {get_by_primary_key("user", row[result.field.index("UID")], "UNAME")}</h2>
+                 <p> Description: {"(NOT APPROVED)" if row[result.field.index("APPROVED_BY")] is None else ""}</p>
+                 <p>
+                     {row[result.field.index("DESCRIPTION")]}
+                 </p>"""
+        })
     return rtn
 
 def fieldHTML(dates: list):
@@ -90,23 +80,19 @@ def booking2(tname, id, permission):
 
     #exact dates of week
     dates = weekNumToDate(minweek)
-    field_bar = html.div(fieldHTML(dates), {"class": "field-bar"})
 
     #events in this week
-    eventsql = []
-    for date in dates:
-        eventsql.append(getEvents(tname, id, date))
-    events = []
-    for i in range(len(eventsql)):
-        events.append(eventHTML(eventsql[i],i))
-
+    data = []
+    for i in range(len(dates)):
+        data.extend(getEvents(tname, id, dates[i]))
+            
     categories = [row[0] for row in sql("SELECT CATEGORY FROM school_category").result]
     units = [row for row in sql("SELECT UNIT, NAME, CATEGORY FROM school_unit").result]
 
     return flask.render_template('booking2.html', tname=tname, id = id,
                                   name = name, permission = permission,
-                                  field_bar=field_bar, minweek = minweek, 
-                                  events=events, categories=categories, units=units)
+                                  col=list(map(str,dates)), minweek = minweek, 
+                                  data=data, categories=categories, units=units)
 
 @blueprint.route('/booking/<tname>/<id>', methods=["POST"], endpoint="bksubmitform")
 @verifySession(flask.session)
@@ -119,7 +105,7 @@ def bksubmitform(tname, id, permission):
             etime = strToDate(flask.request.form.get("etime"))
             if etime<=stime:
                 return flask.jsonify({"error": "Ending time must be after starting time."})
-            elif len(getEvents(tname, id,stime = stime+datetime.timedelta(seconds=1), etime = etime-datetime.timedelta(seconds=1)).result)>0:
+            elif len(getEvents(tname, id,stime = stime+datetime.timedelta(seconds=1), etime = etime-datetime.timedelta(seconds=1)))>0:
                 return flask.jsonify({"error": "Error: Selected session is occupied by others."})
             
             elif permission[f"EDIT{tname.upper()}_RECORD"]:
@@ -157,11 +143,8 @@ def bkupdate(tname, id, permission):
         week = dateToWeekNumber(dates[0] + datetime.timedelta(days=7))
         dates = weekNumToDate(week)
         
-    field = fieldHTML(dates)
-    eventsql = []
+    data = []
     for date in dates:
-        eventsql.append(getEvents(tname,id,date))
-    events = []
-    for i in range(len(eventsql)):
-        events.append(eventHTML(eventsql[i],i))
-    return flask.jsonify({"field": field, "events": events, "week": week})
+        data.extend(getEvents(tname,id,date))
+
+    return flask.jsonify({"col": list(map(str,dates)), "data": data, 'week': week})

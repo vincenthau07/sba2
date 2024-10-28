@@ -30,10 +30,7 @@ $(document).ready(function(){
             url: window.location.href.split('#')[0]+'/update',
             data: {week: weeknum},
             success: function(response) {
-                $('.field-bar').html(response.field);
-                for(i=0;i<7;i++){
-                    $('.event'+i).html(response.events[i]);
-                }
+                updateSchedule(response.data, response.col)
                 empty_alert_box();
             },
             error: function(error) {
@@ -49,10 +46,7 @@ $(document).ready(function(){
             url: window.location.href.split('#')[0]+'/update',
             data: {week: weeknum, previous: true},
             success: function(response) {
-                $('.field-bar').html(response.field);
-                for(i=0;i<7;i++){
-                    $('.event'+i).html(response.events[i]);
-                }
+                updateSchedule(response.data, response.col)
                 $("input[name='week']").val(response.week);
                 empty_alert_box();
             },
@@ -69,10 +63,7 @@ $(document).ready(function(){
             url: window.location.href.split('#')[0]+'/update',
             data: {week: weeknum, next: true},
             success: function(response) {
-                $('.field-bar').html(response.field);
-                for(i=0;i<7;i++){
-                    $('.event'+i).html(response.events[i]);
-                }
+                updateSchedule(response.data, response.col);
                 $("input[name='week']").val(response.week);
                 empty_alert_box();
             },
@@ -126,10 +117,7 @@ $(document).ready(function(){
                     url: window.location.href.split('#')[0]+'/update',
                     data: {week: weeknum},
                     success: function(response) {
-                        $('.field-bar').html(response.field);
-                        for(i=0;i<7;i++){
-                            $('.event'+i).html(response.events[i]);
-                        }
+                        updateSchedule(response.data, response.col);
                         $("input[name='week']").val(response.week);
                         
                     },

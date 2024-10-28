@@ -27,7 +27,7 @@ function update_bar(rp) {
             easing: "swing",
             step: function (p) {
                 $bar.css({
-                    width: p + "%"
+                    transform: "scaleX("+p/100+")", 
                 });
                 $val.text(p.toFixed(1));
             }

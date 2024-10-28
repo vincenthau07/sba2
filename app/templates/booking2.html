@@ -2,13 +2,17 @@
 <html>
     <head>
         <title>Booking - {{ id }}</title>
-        {% include "/header.html" %}
+        <script>document.getElementsByTagName("html")[0].className += " js";</script>
         <link rel="stylesheet" type="text/css" href="/static/css/booking.css">
+        {% include "/header.html" %}
+        <script src="/static/js/booking_main.js"></script>
+        <script src="/static/js/booking_util.js"></script>
+        <script src="/static/js/booking.js"></script>
         <script>
             const categories = {{ categories|tojson| safe  }};
             const units = {{ units|tojson| safe  }};
         </script>
-        <script src="/static/js/booking.js"></script>
+
     </head>
     <body>
         {% include "/top_navigation.html" %}
@@ -29,52 +33,9 @@
                 </div>
             </div>
                 
-            <div class="container-fluid overflow-hidden">
-            <div class="overflow-auto" style="position: relative;">
-                {{ field_bar|safe }}
-                <div class="scrollable">
-                    <div class="timeline">
-                        <ul>
-                            <script>
-                                for(i=0; i<=24; i++){
-                                    if(i<=9)
-                                        var j = "0" + i
-                                    else
-                                        var j = i
-                                    if (i%24<10){
-                                        document.write('<li><div class="timeline-text">0'+j%24+':00</div></li>')
-                                    }
-                                    else{
-                                        document.write('<li><div class="timeline-text">'+j%24+':00</div></li>')
-                                    }
-                                    
-                                }
-                            </script>
-                        </ul>
-                    </div>
-                    
-                    <div class = "schedule">
-
-                        {% for i in range(7) %}
-                            <div class = "column">
-                                
-                                <ul>
-                                    <script>
-                                        for(j=0; j<=24; j++){
-                                            document.write('<li></li>')
-                                        }
-                                    </script>
-                                </ul>
-                                <div class = "event{{ i|safe }}">
-                                    {{ events[i]|safe }}
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            </div>
+            <div id="schedule"></div>
         </div>
+        
         <div class="modal fade" id="bookModal" tabindex="-1" aria-labelledby="bookModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -117,5 +78,13 @@
                 </div>
             </div>
         </div>
+        
+        
+        <script>
+            const dt = {{ data|tojson }};
+            const col = {{ col|tojson }};
+            createSchedule($('#schedule'), 30);
+            updateSchedule(dt, col);
+        </script>
     </body>
 </html>
