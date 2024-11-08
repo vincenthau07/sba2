@@ -14,7 +14,7 @@ def get_num_each_month():
     rtn3 = []
     m1 = datetime.datetime.now(TIME_ZONE).replace(tzinfo=None).month - 11
     y1 = datetime.datetime.now(TIME_ZONE).replace(tzinfo=None).year + (m1-1)//12
-    m1 %= 12
+    m1 = (m1-1)%12+1
     for i in range(12):
         m2 = m1 + 1
         y2 = y1 + (m2-1)//12
