@@ -4013,34 +4013,10 @@ a {
     }
 }
 
-.cd-schedule__event [data-event="event-1"],
-.cd-schedule-modal[data-event="event-1"] .cd-schedule-modal__header-bg {
-    background: hsl(199, 25%, 46%);
-    background: var(--cd-color-event-1)
-}
-
-.cd-schedule__event [data-event="event-2"],
-.cd-schedule-modal[data-event="event-2"] .cd-schedule-modal__header-bg {
-    background: hsl(271, 23%, 26%);
-    background: var(--cd-color-event-2)
-}
-
-.cd-schedule__event [data-event="event-3"],
-.cd-schedule-modal[data-event="event-3"] .cd-schedule-modal__header-bg {
-    background: hsl(162, 14%, 68%);
-    background: var(--cd-color-event-3)
-}
-
-.cd-schedule__event [data-event="event-4"],
-.cd-schedule-modal[data-event="event-4"] .cd-schedule-modal__header-bg {
-    background: hsl(31, 89%, 68%);
-    background: var(--cd-color-event-4)
-}
-
 .cd-schedule-modal {
     position: fixed;
     z-index: 3;
-    top: 56px;
+    top: 112px;
     right: 0;
     height: 100%;
     width: 100%;

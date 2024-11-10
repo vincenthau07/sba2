@@ -30,7 +30,7 @@ def redirect(tname):
 @verifySession(flask.session)
 def records(tname,  permission, path):
 
-    return flask.render_template('records.html', tname = tname, permission = permission)
+    return flask.render_template('records.html', tname = tname, permission = permission, tz=TIME_ZONE)
 
 @blueprint.route('/records/<tname>/<path>', methods=["POST"], endpoint="recordsUpdate2")
 @verifySession(flask.session)

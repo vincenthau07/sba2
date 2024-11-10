@@ -20,7 +20,7 @@ def info(tname):
 @blueprint.route('/approve/<tname>', methods=["GET"])
 @verifySession(flask.session, "EDIT{0}_RECORD")
 def approve(tname, permission):
-    return flask.render_template('approve.html', permission=permission, tname=tname)
+    return flask.render_template('approve.html', permission=permission, tname=tname, tz=TIME_ZONE)
 
 @blueprint.route('/approve/<tname>', methods=["POST"], endpoint = "approvePOST2")
 @verifySession(flask.session, "EDIT{0}_RECORD")

@@ -15,7 +15,7 @@ SERVER_MODE = 0
 DEBUG = True
 
 # Set time zone of website
-TIME_ZONE = _timezone('Asia/Hong_Kong')
+TIME_ZONE = _timezone('asia/Hong_Kong')
 
 # Time section that is only available for booking after a period of time
 BOOK_TIME = _timedelta(days=7)

@@ -1,12 +1,13 @@
 import flask, datetime
 from app.helpers import *
+from config import TIME_ZONE
 
 blueprint = flask.Blueprint("sql", __name__)
 
 @blueprint.route('/sql', methods=["GET"])
 @verifySession(flask.session, role="ADMIN")
 def sqlWeb(permission):
-    return flask.render_template('sql.html', permission=permission)
+    return flask.render_template('sql.html', permission=permission, tz=TIME_ZONE)
     
 @blueprint.route('/sql', methods = ['POST'], endpoint = "sqlPOST")
 @verifySession(flask.session, role="ADMIN")

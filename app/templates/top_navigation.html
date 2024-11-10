@@ -1,81 +1,135 @@
-<nav class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">THMSS</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/home">Home</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">Booking</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/booking/room">Room</a></li>
-                        <li><a class="dropdown-item" href="/booking/facility">Facility</a></li>
-                    </ul>
-                </li>
+<div class="sticky-top">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">My Records</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/records/room">Room</a></li>
-                        <li><a class="dropdown-item" href="/records/facility">Facility</a></li>
-                    </ul>
-                </li>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">THMSS</a>
+            <span class="navbar-text ms-auto" id="datetime" style="font-family: 'Consolas', 'Courier New', monospace;"></span>
+        </div>
+        
+    </nav>
 
-                {% if permission["EDITROOM_RECORD"] or permission["EDITFACILITY_RECORD"] %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">Approve</a>
-                    <ul class="dropdown-menu">
-                        {% if permission["EDITROOM_RECORD"] %}
-                        <li><a class="dropdown-item" href="/approve/room">Room</a></li>
-                        {% endif %}
-                        {% if permission["EDITFACILITY_RECORD"] %}
-                        <li><a class="dropdown-item" href="/approve/facility">Facility</a></li>
-                        {% endif %}
-                    </ul>
-                </li>
-                {% endif %}
-
-                {% set table = ["facility", "facility_record", "roles", "room", "room_record", "school_category", "school_unit", "user"] %}
-                {% set flag = [] %}
-                {% for i in table %}
-                    {% if permission["EDIT"+i.upper()]%}
-                        {% if flag|length == 0 %}
-                            {% set temp = flag.append(True) %}
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href='#' role="button" data-bs-toggle="dropdown">Management</a>
-                                <ul class="dropdown-menu">
-                        {% endif %}
-                        <li><a class="dropdown-item" href="/management/{{ i|safe }}">{{ " ".join(i.split("_")).title()|safe }}</a></li>
-                    {% endif %}
-                    
-                {% endfor %}
-                {% if permission["ROLE"]=="ADMIN" %}
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
-                    <li><a class="dropdown-item" href="/sql">SQL</a></li>
-                {% endif %}
-                {% if flag|length %}
+    <nav class="navbar navbar-expand-lg bg-light navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">eBooking</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">Booking</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/booking/room">Room</a></li>
+                            <li><a class="dropdown-item" href="/booking/facility">Facility</a></li>
                         </ul>
                     </li>
-                {% endif %}
-            </ul>
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/account">My Account</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">Logout</a>
-                </li>
-            </ul>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">My Records</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/records/room">Room</a></li>
+                            <li><a class="dropdown-item" href="/records/facility">Facility</a></li>
+                        </ul>
+                    </li>
+
+                    {% if permission["EDITROOM_RECORD"] or permission["EDITFACILITY_RECORD"] %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">Approve</a>
+                        <ul class="dropdown-menu">
+                            {% if permission["EDITROOM_RECORD"] %}
+                            <li><a class="dropdown-item" href="/approve/room">Room</a></li>
+                            {% endif %}
+                            {% if permission["EDITFACILITY_RECORD"] %}
+                            <li><a class="dropdown-item" href="/approve/facility">Facility</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    {% endif %}
+
+                    {% set table = ["facility", "facility_record", "roles", "room", "room_record", "school_category", "school_unit", "user"] %}
+                    {% set flag = [] %}
+                    {% for i in table %}
+                        {% if permission["EDIT"+i.upper()]%}
+                            {% if flag|length == 0 %}
+                                {% set temp = flag.append(True) %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href='#' role="button" data-bs-toggle="dropdown">Management</a>
+                                    <ul class="dropdown-menu">
+                            {% endif %}
+                            <li><a class="dropdown-item" href="/management/{{ i|safe }}">{{ " ".join(i.split("_")).title()|safe }}</a></li>
+                        {% endif %}
+                        
+                    {% endfor %}
+                    {% if permission["ROLE"]=="ADMIN" %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="/sql">SQL</a></li>
+                    {% endif %}
+                    {% if flag|length %}
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account">My Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            Logout 
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
-<div class="container-fluid pt-2 fixed-top" style="margin-top: 60px; opacity: 70%; pointer-events: none;">
+    </nav>
+</div>
+<div class="container-fluid fixed-bottom" style="opacity: 70%">
     <div class="container alert-box">
 
     </div>
 </div>
+
+<script>
+    function updateDateTime() {
+        const now = new Date();
+
+        const options = {
+            
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZone: {{ tz|safe|tojson }},
+            hour12: false
+        };
+
+        const formatter = new Intl.DateTimeFormat('en-US', options);
+        const parts = formatter.formatToParts(now);
+
+        const year = parts.find(p => p.type === 'year').value;
+        const month = parts.find(p => p.type === 'month').value;
+        const day = parts.find(p => p.type === 'day').value;
+        const hour = parts.find(p => p.type === 'hour').value;
+        const minute = parts.find(p => p.type === 'minute').value;
+        const second = parts.find(p => p.type === 'second').value;
+        const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const weekday = weekdays[now.getUTCDay()].toUpperCase();
+
+
+        const formattedDateTime = `${year}/${month}/${day} ${hour}:${minute}:${second}, ${weekday}`;
+        document.getElementById('datetime').textContent = formattedDateTime;
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+</script>

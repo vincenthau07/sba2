@@ -9,11 +9,13 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
         <script>
+
             $(document).ready(function(){
 
                 $(document).on('click',"input[name='submit']", function(){
                     
                     var sql = $("textarea[name='sql']").val();
+                    loading_alert_box()
                     $.ajax({
                         type: 'POST',
                         url: "",
@@ -86,7 +88,7 @@
                             
                         },
                         error: function(error) {
-                            console.log("Error:", error);
+                            error_alert_box(error);
                         }
                     });
                 })
@@ -101,6 +103,9 @@
                 <a class="text-decoration-none text-dark" href="/sql">SQL</a>
             </h2>
             <hr>
+            <p>
+                Run SQL statements here to manage the database.
+            </p>
             <textarea class="form-control" id="sql" rows="8" cols="50" name="sql"></textarea>
             <br>
             <input class='btn btn-outline-primary' type="submit" value="Submit" name = "submit">

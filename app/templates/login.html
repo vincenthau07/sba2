@@ -1,35 +1,81 @@
 <html>
     <head>
-        <title>THMSS - Facilities & Rooms Booking System</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Home</title>
+        {% include "/header.html" %}
         <link rel="stylesheet" type="text/css" href="/static/css/login.css">
-        <link rel="icon" type="image/png" href="/static/photos/icon.png">
+        <script>
+            $(document).ready(function(){
+
+                $(document).on('click',"input[name='submit']", function(){
+                    loading_alert_box()
+                    var uid = $("input[name='userid']").val();
+                    var pass = $("input[name='password']").val();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "",
+                        data: {"userid": uid, "password": pass},
+                        success: function(response) {
+                            empty_alert_box();
+                            if (response.success){
+                                window.location.href = '/home';
+                            }
+                            else{
+                                $('#errorModal').find('.modal-body').html(response.msg);
+                                $('#errorModal').modal('show');
+                            }
+                        },
+                        error: function(error) {
+                            error_alert_box(error);
+                        }
+                    });
+                })
+                $('html').keypress("keydown", function (e) {
+                    var key = e.which;
+                    if (key == 13) {
+                        $("input[name='submit']").click();
+                    }
+                });
+
+            })
+        </script>
+        
     </head>
     <body>
-        <div id="photo"></div>
-        <div id="photo2"></div>
-        <div id="login">
-            
-            <div id="form">
-                <h1>
-                    HKTA Tang Hin Memorial Secondary School
-                </h1>
-                <h3>
-                    Facilities & Rooms Booking System
-                </h3>
-                <div class="login_form">
-                    <form action="/login" method="POST">
-                        <input class = "textbox" type="text" name="userid" placeholder = "Enter UserID" id="content">
-                        <input class = "textbox" type="password" name="password" placeholder = "Enter Password" id="content">
-                        <div class="error">{{ error }}</div>
-                        <input class = "button" type="submit" value="Login">
-                    </form>
-                    
+        {% include "/top_nav_login.html" %}
+        <div class="d-flex align-items-center mt-5 justify-content-center w-100">
+            <div class="bg-white rounded p-4 text-center" style="width: 450px; max-width: 90%;">
+                <h1>Login</h1>
+                <div class="w-100 form">
+                    <div class="form-floating mt-3">
+                        <input class='form-control' type="text" name="userid" placeholder="any">
+                        <label>User ID</label>
+                    </div>
+                    <div class="form-floating mt-3">
+                        <input class='form-control' type="password" name="password" placeholder="any">
+                        <label>Password</label>
+                    </div>
                 </div>
-                
+                <div class="text-end w-100">Forget password?<br>Please contact Admin</div>
+                <input class='mt-4 mb-4 btn btn-outline-primary w-100' type="submit" value="Login" name = "submit">
+                <div class="text-end w-100">Do not have an account?<br>Please contact Admin</div>
             </div>
-
-            
         </div>
     </body>
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </html>

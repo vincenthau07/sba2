@@ -1,6 +1,7 @@
 import flask, datetime
 from app.helpers import *
 from database.schema import SCHEMA
+from config import TIME_ZONE
 
 blueprint = flask.Blueprint("management", __name__)
 
@@ -41,7 +42,7 @@ def management(tname, permission):
     pk_index = list(SCHEMA[tname].fields.keys()).index(SCHEMA[tname].primaryKey)
     fields = list(SCHEMA[tname].fields.keys())
 
-    return flask.render_template('management.html', pk_index=pk_index, fields=fields, permission=permission, tname=tname, columns=columns, input_format=in_format)
+    return flask.render_template('management.html', pk_index=pk_index, fields=fields, permission=permission, tname=tname, columns=columns, input_format=in_format, tz=TIME_ZONE)
 
 @blueprint.route('/management/<tname>', methods=["POST"], endpoint = "managementPOST2")
 @verifySession(flask.session, "EDIT{0}")

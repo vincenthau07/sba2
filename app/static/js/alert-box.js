@@ -6,6 +6,8 @@ function alert_box(bold_text, text, color_type, dissappear=true){
     );
     if(dissappear){
         $('.alert').each(function(){
+            $('.alert').addClass('alert-dismissible');
+            $('.alert').prepend('<button type="button" class="btn-close" data-bs-dismiss="alert"></button>')
             setTimeout(function() {
                 $('.alert').animate({opacity: 0}, 500,
                     function(){

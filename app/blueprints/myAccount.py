@@ -1,6 +1,7 @@
 import flask
 from app.helpers import *
 from datetime import datetime
+from config import TIME_ZONE
 # import modules.sql as sql
 
 blueprint = flask.Blueprint("myAccount", __name__)
@@ -9,7 +10,7 @@ blueprint = flask.Blueprint("myAccount", __name__)
 @verifySession(flask.session)
 def account(permission):
     data = get_by_primary_key('user', flask.session["UID"], ('UID', 'SEX', 'EMAIL', 'UNAME'))
-    return flask.render_template('account.html', data = data, permission = permission)
+    return flask.render_template('account.html', data = data, permission = permission, tz=TIME_ZONE)
 
 @blueprint.route('/account/update1', methods=["POST"], endpoint = "accountPersonalInfo")
 @verifySession(flask.session)

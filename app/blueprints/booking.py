@@ -67,7 +67,7 @@ def booking(tname, permission):
         num_to_floor(rf_info.result, rf_info.field.index('FLOOR'))
     text_to_link(rf_info.result, f"/booking/{tname}/{{}}", rf_info.field.index(SCHEMA[tname].primaryKey))
 
-    return flask.render_template('booking.html', tname=tname, columns = rf_info.field_name(), data = rf_info.result, permission = permission)
+    return flask.render_template('booking.html', tname=tname, columns = rf_info.field_name(), data = rf_info.result, permission = permission, tz=TIME_ZONE)
 
 @blueprint.route('/booking/<tname>/<id>', methods=["GET"], endpoint = "booking2")
 @verifySession(flask.session)
@@ -92,7 +92,7 @@ def booking2(tname, id, permission):
     return flask.render_template('booking2.html', tname=tname, id = id,
                                   name = name, permission = permission,
                                   col=list(map(str,dates)), minweek = minweek, 
-                                  data=data, categories=categories, units=units)
+                                  data=data, categories=categories, units=units, tz=TIME_ZONE)
 
 @blueprint.route('/booking/<tname>/<id>', methods=["POST"], endpoint="bksubmitform")
 @verifySession(flask.session)

@@ -119,11 +119,11 @@ ScheduleTemplate.prototype.openModal = function(target) {
 			eventHeight = target.offsetHeight,
 			eventWidth = target.offsetWidth;
 		var windowWidth = window.innerWidth,
-			windowHeight = window.innerHeight;
+			windowHeight = window.innerHeight-112;
 		var modalWidth = ( windowWidth*.8 > self.modalMaxWidth ) ? self.modalMaxWidth : windowWidth*.8,
 			modalHeight = ( windowHeight*.8 > self.modalMaxHeight ) ? self.modalMaxHeight : windowHeight*.8;
 		var modalTranslateX = parseInt((windowWidth - modalWidth)/2 - eventLeft),
-			modalTranslateY = parseInt((windowHeight - modalHeight)/2 - eventTop);
+			modalTranslateY = parseInt((windowHeight - modalHeight)/2 - eventTop)+112;
 		
 		var HeaderBgScaleY = modalHeight/eventHeight,
 			BodyBgScaleX = (modalWidth - eventWidth);
@@ -232,13 +232,13 @@ ScheduleTemplate.prototype.checkEventModal = function(modalOpen) {
 			eventHeight = target.offsetHeight,
 			eventWidth = target.offsetWidth;
 		var windowWidth = window.innerWidth,
-			windowHeight = window.innerHeight;
+			windowHeight = window.innerHeight-112;
 		var modalWidth = ( windowWidth*.8 > self.modalMaxWidth ) ? self.modalMaxWidth : windowWidth*.8,
 			modalHeight = ( windowHeight*.8 > self.modalMaxHeight ) ? self.modalMaxHeight : windowHeight*.8;
 		var HeaderBgScaleY = modalHeight/eventHeight,
 			BodyBgScaleX = (modalWidth - eventWidth);
 		setTimeout(function(){
-			self.modal.setAttribute('style', 'top:'+(windowHeight/2 - modalHeight/2)+'px;left:'+(windowWidth/2 - modalWidth/2)+'px;height:'+modalHeight+'px;width:'+modalWidth+'px;transform: translateY(0) translateX(0)');
+			self.modal.setAttribute('style', 'top:'+(windowHeight/2 - modalHeight/2+112)+'px;left:'+(windowWidth/2 - modalWidth/2)+'px;height:'+modalHeight+'px;width:'+modalWidth+'px;transform: translateY(0) translateX(0)');
 			//change modal modalBodyBg height/width
 			self.modalBodyBg.style.height = modalHeight+'px';self.modalBodyBg.style.transform = 'scaleY(1) scaleX('+BodyBgScaleX/100+')';self.modalBodyBg.style.width = '100px';
 			//set modalHeader width

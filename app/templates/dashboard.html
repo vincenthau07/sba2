@@ -10,9 +10,9 @@
         <script type="text/javascript" src="/static/js/chart.utils.js"></script>
         <script type="text/javascript" src="https://yourweb.com/inc/chart.utils.js"></script>
         <script>
-            const data = {{ data | safe }}
-            
+            const data = {{ data | safe }};
         </script>
+
         <script src="/static/js/dashboard.js"></script>
     </head>
     <body>
@@ -25,7 +25,12 @@
                 <a class="text-decoration-none text-dark" href = "/dashboard">Dashboard</a>
             </h2>
             <hr>
-
+            <p>
+                Monitor system performance and user activity here.
+            </p>
+            
+            <div class="h3 mt-5 mb-4"> System Performance: </div>
+            <hr>
             <div class="row">
                 <div class="col-6 rounded bg-light p-4 border border-white" style="box-sizing: border-box;">
                     <!--Code Source: https://codepen.io/jagathish/pen/ZXzbzN -->
@@ -50,9 +55,9 @@
                     </div>
                 </div>
             </div>
-
-            <div class="h3 mt-5 mb-4"> Report in the Past 1 Year: </div>
-
+            
+            <div class="h3 mt-5 mb-4"> User Activity in the Past 1 Year: </div>
+            <hr>
             <div class="row">
                 <div class="col-lg-6 rounded bg-light p-4 border border-white">
                     <h2>Website Login Times</h2>
@@ -81,11 +86,11 @@
             </div>
             <div class="row">
                 <div class="col-lg-6 rounded bg-light p-4 border border-white">
-                    <h2>Top 10 Most Popular Room</h2>
+                    <h2>Top 10 Most Popular Room (in hour)</h2>
                     <canvas id="10_r" class="w-100"></canvas>
                 </div>
                 <div class="col-lg-6 rounded bg-light p-4 border border-white">
-                    <h2>Top 10 Most Popular Facility</h2>
+                    <h2>Top 10 Most Popular Facility (in hour)</h2>
                     <canvas id="10_f" class="w-100"></canvas>
                 </div>
             </div>

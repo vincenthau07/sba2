@@ -5,6 +5,7 @@
     {% include "/header.html" %}
 
     <script>
+
         $(document).ready(function () {
 
 
@@ -56,7 +57,10 @@
             <a class="text-decoration-none text-dark" href="/approve/{{ tname }}">Approve - {{ '
                 '.join(tname.split('_'))|title }}</a>
         </h2>
-
+        <hr>
+        <p>
+            Review and manage room booking requests here.
+        </p>
         <table id="tableinfo" class="display">
             <thead>
                 <tr>

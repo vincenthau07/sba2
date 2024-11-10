@@ -4,6 +4,7 @@
 
         {% include "/header.html" %}
         <script>
+
             $(document).ready(function(){
                 col = {{columns|safe}};
                 for(let i = 0; i<col.length; i++){
@@ -30,13 +31,13 @@
             </h2>
             <hr>
             <p>
-                To book a {{tname}}, please click hyperlink of its {{tname}} ID
+                To book a {{tname}}, please click on the corresponding {{tname}} ID hyperlink.
             </p>
-            
-            <div class="container-fluid">
-                <table id="tableinfo" class="display">
-                </table>
-            </div>
+            <p>
+                Details of each {{tname}} are listed for your convenience.
+            </p>
+            <table id="tableinfo" class="display">
+            </table>
         </div>
         
     </body>

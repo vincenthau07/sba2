@@ -13,34 +13,40 @@ def make_session_permanent():
 
 
 @blueprint.route('/')
-@blueprint.route('/login', methods=["GET","POST"])
+def main():
+    if sessionValidity(session=flask.session):
+        return flask.redirect('/home')
+    else:
+        return flask.render_template('main.html')
+@blueprint.route('/login', methods=["GET"])
 def login():
-    if flask.request.method == 'POST':
-        user = flask.request.form["userid"]
-        pw = flask.request.form["password"]
-        #print(get_by_primary_key("user", user, "PASSWORD"))
-        if user == '':
-            error = "Empty username"
-        elif pw == '':
-            error = "Empty password"
-        else:
-            try:
-                if pw == get_by_primary_key("user", user, "PASSWORD"):
-                    flask.session['UID'] = user
-                    flask.session.permanent = True
-                    sql("INSERT INTO login (UID, IP, TIME) VALUES (?,?,?)", user, flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr), str(datetime.now(TIME_ZONE).replace(tzinfo=None)), commit=True)
-                    return flask.redirect('/home')
-            finally:
-                error = "Invalid username or password"
+    if sessionValidity(session=flask.session):
+        return flask.redirect('/home')
+    else:
+        return flask.render_template('login.html')
         
-        return flask.render_template('login.html', error=error)
+
+@blueprint.route('/login', methods=["POST"], endpoint= "login post")
+def login_POST():
+    user = flask.request.form["userid"]
+    pw = flask.request.form["password"]
+    #print(get_by_primary_key("user", user, "PASSWORD"))
+    if user == '':
+        error = "Empty username"
+    elif pw == '':
+        error = "Empty password"
+    else:
+        try:
+            if pw == get_by_primary_key("user", user, "PASSWORD"):
+                flask.session['UID'] = user
+                flask.session.permanent = True
+                sql("INSERT INTO login (UID, IP, TIME) VALUES (?,?,?)", user, flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr), str(datetime.now(TIME_ZONE).replace(tzinfo=None)), commit=True)
+                return flask.jsonify({'success': True})
+        finally:
+            error = "Invalid username or password"
     
-    elif flask.request.method == 'GET':
-        if sessionValidity(session=flask.session):
-            return flask.redirect('/home')
-        else:
-            return flask.render_template('login.html')
-        
+    return flask.jsonify({'success': False, 'msg': error})
+
 @blueprint.route('/logout')
 @verifySession(flask.session)
 def logout(permission):

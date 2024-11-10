@@ -1,7 +1,7 @@
 
 <html>
     <head>
-        <title>Booking - {{ id }}</title>
+        <title>{{ id }}</title>
         <script>document.getElementsByTagName("html")[0].className += " js";</script>
         <link rel="stylesheet" type="text/css" href="/static/css/booking.css">
         {% include "/header.html" %}
@@ -22,6 +22,15 @@
                 <a class="text-decoration-none text-dark" href = "/booking/{{ tname|safe }}">{{ tname.title()|safe }} Booking</a> >> <a class="text-decoration-none text-dark" href = "/booking/{{ tname|safe }}/{{ id }}">{{ id }} - {{ name }}</a>
             </h2>
             <hr>
+            <p>
+                Use the schedule below to view bookings. Click on any scheduled event for more details. 
+            </p>
+            <p>
+                To book a new time slot, click the "Book" button.
+            </p>
+            <p>
+                Navigate through the weeks using the arrows or select a specific week to jump to that week.
+            </p>
             <div class="row">
                 <div class="col-9">
                     <input class="btn btn-primary" type="week" name="week" min="{{ minweek|safe }}" value="{{ minweek|safe }}">
