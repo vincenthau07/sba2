@@ -106,4 +106,4 @@ def dashboard(permission):
 @blueprint.route('/dashboard/update', methods=["POST"], endpoint = "dashboard update")
 @verifySession(flask.session, role="ADMIN")
 def dashboard(permission):
-    return flask.jsonify({"cpu": psutil.cpu_percent(), "ram": psutil.virtual_memory().percent})    return flask.jsonify({"cpu": psutil.cpu_percent(), "ram": psutil.virtual_memory().percent})
+    return flask.jsonify({"cpu": psutil.cpu_percent(), "ram": psutil.virtual_memory().percent})
