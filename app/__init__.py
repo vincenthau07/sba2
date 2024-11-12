@@ -2,6 +2,7 @@ from flask import Flask
 import datetime, os
 import importlib
 import config
+from app.blueprints.auth import oauth
 
 def create_app():
     """
@@ -14,6 +15,8 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.urandom(24)
     app.config['PERMANENT_SESSION_LIFETIME'] = config.SESSION_LIFETIME
+
+    oauth.init_app(app)
 
     #load all webpages from path "/blueprints"
     # print(os.listdir(os.path.dirname("app/blueprints/")))

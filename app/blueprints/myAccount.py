@@ -2,6 +2,7 @@ import flask
 from app.helpers import *
 from datetime import datetime
 from config import TIME_ZONE
+import app.error_message as error_msg
 # import modules.sql as sql
 
 blueprint = flask.Blueprint("myAccount", __name__)
@@ -26,10 +27,10 @@ def accountPersonalInfo(permission):
 @verifySession(flask.session)
 def accountPW(permission):
     if flask.request.form['OLD_PASSWORD'] != get_by_primary_key("user", flask.session['UID'], "PASSWORD"):
-        return flask.jsonify({"error": "Incorrect old password"})
+        return flask.jsonify({"error": error_msg.account.incorrect_current_password})
     if len(flask.request.form['PASSWORD1']) < 8:
-        return flask.jsonify({"error": "New password must include at least 8 characters"})
+        return flask.jsonify({"error": error_msg.account.weak_new_password})
     if flask.request.form['PASSWORD1'] != flask.request.form['PASSWORD2']:
-        return flask.jsonify({"error": "New password does not match confirm password"})
+        return flask.jsonify({"error": error_msg.account.new_passwords_not_match})
     sql("UPDATE user SET PASSWORD=? WHERE UID = ?", flask.request.form['PASSWORD1'], flask.session["UID"], commit=True)
     return flask.jsonify({})

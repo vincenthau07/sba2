@@ -2,6 +2,8 @@ import flask
 from app.helpers import *
 import datetime, random
 from config import BOOK_TIME, TIME_ZONE
+import app.error_message as error_msg
+
 blueprint = flask.Blueprint('booking', __name__)
 
 #convert between html weekpicker data & python datetime
@@ -99,33 +101,33 @@ def booking2(tname, id, permission):
 def bksubmitform(tname, id, permission):
     try:
         if len(flask.request.form.get("stime")) == 0  or len(flask.request.form.get("etime")) == 0 or len(flask.request.form.get("description")) == 0 or flask.request.form.get("unit") is None:
-            return flask.jsonify({"error": "Error: Some information is missing."})
+            return flask.jsonify({"error": error_msg.booking.empty_input})
         else:
             stime = strToDate(flask.request.form.get("stime"))
             etime = strToDate(flask.request.form.get("etime"))
             if etime<=stime:
-                return flask.jsonify({"error": "Ending time must be after starting time."})
+                return flask.jsonify({"error": error_msg.booking.end_time_before_start_time})
             elif len(getEvents(tname, id,stime = stime+datetime.timedelta(seconds=1), etime = etime-datetime.timedelta(seconds=1)))>0:
-                return flask.jsonify({"error": "Error: Selected session is occupied by others."})
+                return flask.jsonify({"error": error_msg.booking.occupied_time_session})
             
             elif permission[f"EDIT{tname.upper()}_RECORD"]:
                 if stime < datetime.datetime.now(TIME_ZONE).replace(tzinfo=None):
-                    return flask.jsonify({"error": "Error: You cannot book rooms in the past."})
+                    return flask.jsonify({"error": error_msg.booking.start_time_in_the_past})
                 else:
                     try:
                         addRecord(tname,stime,etime,flask.session.get('UID'),id,flask.request.form.get("unit"),flask.request.form.get("description"), True)
                         return flask.jsonify({})
                     except Exception as error:
-                        return flask.jsonify({"error": f"Error: {error}"})
+                        return flask.jsonify({"error": str(error)})
             else:
                 if stime < datetime.datetime.now(TIME_ZONE).replace(tzinfo=None) + BOOK_TIME:
-                    return flask.jsonify({"error": "Error: You can only book rooms after a week."})
+                    return flask.jsonify({"error": error_msg.booking.book_after_a_period_of_time})
                 else:
                     try:
                         addRecord(tname,stime,etime,flask.session.get('UID'),id,flask.request.form.get("unit"),flask.request.form.get("description"))
                         return flask.jsonify({})
                     except Exception as error:
-                        return flask.jsonify({"error": f"Error: {error}"})
+                        return flask.jsonify({"error": str(error)})
     except Exception as error:
         return flask.jsonify({"error": str(error)})
 
