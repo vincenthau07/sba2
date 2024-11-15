@@ -2,7 +2,7 @@ import flask
 from app.helpers import *
 import app.error_message as error_msg
 from datetime import datetime
-from config import TIME_ZONE
+from config import TIME_ZONE, CLIENT_ID, CLIENT_SECRET
 # from google_auth_oauthlib.flow import Flow
 import json
 from authlib.integrations.flask_client import OAuth
@@ -12,9 +12,9 @@ with open("app/client_secret.json", "r") as jfile:
 
 oauth = OAuth()
 google = oauth.register(
-    name='google',
-    client_id="486522423247-paab3n7imi4182bnioupbgn2tvkk1tba.apps.googleusercontent.com",
-    client_secret="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",
+    name='THMSS eBooking',
+    client_id=CLIENT_ID,
+    client_secret=CLIENT_SECRET,
     api_base_url='https://www.googleapis.com/oauth2/v1/',
     userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
     server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',

@@ -22,3 +22,7 @@ BOOK_TIME = _timedelta(days=7)
 
 # Time that session will be expired after last action 
 SESSION_LIFETIME = _timedelta(days=0, hours=0, minutes=30)
+
+# Google Oauth2 configs
+CLIENT_ID = "486522423247-paab3n7imi4182bnioupbgn2tvkk1tba.apps.googleusercontent.com"
+CLIENT_SECRET = "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"
