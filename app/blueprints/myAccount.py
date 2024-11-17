@@ -2,7 +2,7 @@ import flask
 from app.helpers import *
 from datetime import datetime
 from config import TIME_ZONE
-import app.error_message as error_msg
+import error_message as error_msg
 # import modules.sql as sql
 
 blueprint = flask.Blueprint("myAccount", __name__)

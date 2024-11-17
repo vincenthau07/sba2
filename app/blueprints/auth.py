@@ -1,14 +1,11 @@
 import flask
 from app.helpers import *
-import app.error_message as error_msg
+import error_message as error_msg
 from datetime import datetime
 from config import TIME_ZONE, CLIENT_ID, CLIENT_SECRET
 # from google_auth_oauthlib.flow import Flow
 import json
 from authlib.integrations.flask_client import OAuth
-
-with open("app/client_secret.json", "r") as jfile:
-    OAUTH = json.load(jfile)
 
 oauth = OAuth()
 google = oauth.register(

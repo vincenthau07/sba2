@@ -2,7 +2,7 @@ import flask
 from app.helpers import *
 import datetime, random
 from config import BOOK_TIME, TIME_ZONE
-import app.error_message as error_msg
+import error_message as error_msg
 
 blueprint = flask.Blueprint('booking', __name__)
 
