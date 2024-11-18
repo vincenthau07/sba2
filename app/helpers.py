@@ -122,7 +122,7 @@ def sessionValidity(session):
         return False
     try:
         get_by_primary_key("user", session['UID'])
-    except TypeError:
+    except:
         return False
     return True
 
