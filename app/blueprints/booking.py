@@ -71,7 +71,7 @@ def booking(tname, permission):
 
     return flask.render_template('booking.html', tname=tname, columns = rf_info.field_name(), data = rf_info.result, permission = permission, tz=TIME_ZONE)
 
-@blueprint.route('/booking/<tname>/<id>', methods=["GET"], endpoint = "booking2")
+@blueprint.route('/booking/<tname>/<id>', methods=["GET"])
 @verifySession(flask.session)
 def booking2(tname, id, permission):
 
@@ -96,7 +96,7 @@ def booking2(tname, id, permission):
                                   col=list(map(str,dates)), minweek = minweek, 
                                   data=data, categories=categories, units=units, tz=TIME_ZONE)
 
-@blueprint.route('/booking/<tname>/<id>', methods=["POST"], endpoint="bksubmitform")
+@blueprint.route('/booking/<tname>/<id>', methods=["POST"])
 @verifySession(flask.session)
 def bksubmitform(tname, id, permission):
     try:
@@ -132,7 +132,7 @@ def bksubmitform(tname, id, permission):
         return flask.jsonify({"error": str(error)})
 
 
-@blueprint.route('/booking/<tname>/<id>/update', methods=["POST"], endpoint="bkupdate")
+@blueprint.route('/booking/<tname>/<id>/update', methods=["POST"])
 @verifySession(flask.session)
 def bkupdate(tname, id, permission):
     dates = weekNumToDate(flask.request.form.get('week'))

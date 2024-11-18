@@ -22,14 +22,14 @@ def info(tname):
 def approve(tname, permission):
     return flask.render_template('approve.html', permission=permission, tname=tname, tz=TIME_ZONE)
 
-@blueprint.route('/approve/<tname>', methods=["POST"], endpoint = "approvePOST2")
+@blueprint.route('/approve/<tname>', methods=["POST"])
 @verifySession(flask.session, "EDIT{0}_RECORD")
-def approve(tname, permission):
+def approvePOST(tname, permission):
     return flask.jsonify(data=info(tname))
 
-@blueprint.route('/approve/<tname>/<action>', methods=["POST"], endpoint = "approvePOST")
+@blueprint.route('/approve/<tname>/<action>', methods=["POST"])
 @verifySession(flask.session, "EDIT{0}_RECORD")
-def approvePOST(tname, action, permission):
+def approvePOST2(tname, action, permission):
     try:
         if action == "approve":
             sql(f"UPDATE {tname}_record SET APPROVED_BY = ? WHERE BID = ?", flask.session["UID"], flask.request.form.get("id"), commit=True)

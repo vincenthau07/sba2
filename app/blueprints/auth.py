@@ -39,6 +39,7 @@ def main():
         return flask.redirect('/home')
     else:
         return flask.render_template('main.html')
+    
 @blueprint.route('/login', methods=["GET"])
 def login():
     if sessionValidity(session=flask.session):
@@ -47,7 +48,7 @@ def login():
         return flask.render_template('login.html')
         
 
-@blueprint.route('/login', methods=["POST"], endpoint= "login post")
+@blueprint.route('/login', methods=["POST"])
 def login_POST():
     if "google-btn" in flask.request.form:
         # authorization_url, state = flow.authorization_url()
@@ -76,7 +77,7 @@ def login_POST():
         
         return flask.jsonify({'error': error})
 
-@blueprint.route('/callback', endpoint='callback')
+@blueprint.route('/callback')
 def callback():
     token = google.authorize_access_token()
     email = google.get('userinfo').json()['email']

@@ -103,7 +103,7 @@ def dashboard(permission):
     }
     return flask.render_template('dashboard.html', permission = permission, ram = ram, data=data, tz=TIME_ZONE)
 
-@blueprint.route('/dashboard/update', methods=["POST"], endpoint = "dashboard update")
+@blueprint.route('/dashboard/update', methods=["POST"])
 @verifySession(flask.session, role="ADMIN")
-def dashboard(permission):
+def dashboardPOST(permission):
     return flask.jsonify({"cpu": psutil.cpu_percent(), "ram": psutil.virtual_memory().percent})

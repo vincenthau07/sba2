@@ -13,7 +13,7 @@ def account(permission):
     data = get_by_primary_key('user', flask.session["UID"], ('UID', 'SEX', 'EMAIL', 'UNAME'))
     return flask.render_template('account.html', data = data, permission = permission, tz=TIME_ZONE)
 
-@blueprint.route('/account/update1', methods=["POST"], endpoint = "accountPersonalInfo")
+@blueprint.route('/account/update1', methods=["POST"])
 @verifySession(flask.session)
 def accountPersonalInfo(permission):
     try:
@@ -23,7 +23,7 @@ def accountPersonalInfo(permission):
     except Exception as error:
         return flask.jsonify({'error': str(error)})
 
-@blueprint.route('/account/update2', methods=["POST"], endpoint = "accountPW")
+@blueprint.route('/account/update2', methods=["POST"])
 @verifySession(flask.session)
 def accountPW(permission):
     if flask.request.form['OLD_PASSWORD'] != get_by_primary_key("user", flask.session['UID'], "PASSWORD"):

@@ -178,6 +178,7 @@ def verifySession(session, permission: str=None, role=None):
                 return flask.redirect('/home')
             kwargs["permission"] = permission_li
             return func(*args, **kwargs)
+        decorator.__name__ = func.__name__
         return decorator
     return wrapper 
 

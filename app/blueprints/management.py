@@ -44,15 +44,15 @@ def management(tname, permission):
 
     return flask.render_template('management.html', pk_index=pk_index, fields=fields, permission=permission, tname=tname, columns=columns, input_format=in_format, tz=TIME_ZONE)
 
-@blueprint.route('/management/<tname>', methods=["POST"], endpoint = "managementPOST2")
+@blueprint.route('/management/<tname>', methods=["POST"])
 @verifySession(flask.session, "EDIT{0}")
-def management(tname, permission):
+def managementPOST(tname, permission):
     return flask.jsonify(data=info(tname))
 
-@blueprint.route('/management/<tname>/<action>/', methods=["POST"], endpoint = "managementPOST3")
-@blueprint.route('/management/<tname>/update/<id>', methods=["POST"], endpoint = "managementPOST")
+@blueprint.route('/management/<tname>/<action>/', methods=["POST"])
+@blueprint.route('/management/<tname>/update/<id>', methods=["POST"])
 @verifySession(flask.session, "EDIT{0}")
-def managementPOST(tname, permission, action='update', id=''):
+def managementPOST2(tname, permission, action='update', id=''):
     try:
         if action in ("update", "delete"):
             sql(f"DELETE FROM {tname} WHERE {SCHEMA[tname].primaryKey} = ?", id, commit=True)

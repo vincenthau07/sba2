@@ -1,6 +1,5 @@
 from app import create_app
 import config
-import os, datetime, time
 
 #start website
 app = create_app()

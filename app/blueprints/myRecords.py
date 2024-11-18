@@ -32,15 +32,15 @@ def records(tname,  permission, path):
 
     return flask.render_template('records.html', tname = tname, permission = permission, tz=TIME_ZONE)
 
-@blueprint.route('/records/<tname>/<path>', methods=["POST"], endpoint="recordsUpdate2")
+@blueprint.route('/records/<tname>/<path>', methods=["POST"])
 @verifySession(flask.session)
-def records(tname,  permission, path):
+def recordsPOST(tname,  permission, path):
     result = info(tname, flask.session["UID"], path)
     return flask.jsonify(data = result)
 
-@blueprint.route('/records/<tname>/<path>/<bid>', methods=["POST"], endpoint="recordsUpdate3")
+@blueprint.route('/records/<tname>/<path>/<bid>', methods=["POST"])
 @verifySession(flask.session)
-def records(tname, bid, permission, path="approved"):
+def recordsPOST2(tname, bid, permission, path="approved"):
     try:
         if path != "cancelled":
             sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ? AND UID = ?",

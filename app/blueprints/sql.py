@@ -9,7 +9,7 @@ blueprint = flask.Blueprint("sql", __name__)
 def sqlWeb(permission):
     return flask.render_template('sql.html', permission=permission, tz=TIME_ZONE)
     
-@blueprint.route('/sql', methods = ['POST'], endpoint = "sqlPOST")
+@blueprint.route('/sql', methods = ['POST'])
 @verifySession(flask.session, role="ADMIN")
 def sqlResult(permission):
     cmd = flask.request.form["sql"]
