@@ -9,13 +9,13 @@ from authlib.integrations.flask_client import OAuth
 
 oauth = OAuth()
 google = oauth.register(
-    name='THMSS eBooking',
-    client_id=CLIENT_ID,
-    client_secret=CLIENT_SECRET,
-    api_base_url='https://www.googleapis.com/oauth2/v1/',
-    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
-    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
-    client_kwargs={'scope': 'openid email profile'},
+    name = 'THMSS eBooking',
+    client_id = CLIENT_ID,
+    client_secret = CLIENT_SECRET,
+    api_base_url = 'https://www.googleapis.com/oauth2/v1/',
+    userinfo_endpoint = 'https://openidconnect.googleapis.com/v1/userinfo',
+    server_metadata_url ='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs = {'scope': 'openid email profile'},
 )
 
 
@@ -35,26 +35,26 @@ def make_session_permanent():
 
 @blueprint.route('/')
 def main():
-    if sessionValidity(session=flask.session):
+    if sessionValidity(session = flask.session):
         return flask.redirect('/home')
     else:
         return flask.render_template('main.html')
     
-@blueprint.route('/login', methods=["GET"])
+@blueprint.route('/login', methods = ["GET"])
 def login():
-    if sessionValidity(session=flask.session):
+    if sessionValidity(session = flask.session):
         return flask.redirect('/home')
     else:
         return flask.render_template('login.html')
         
 
-@blueprint.route('/login', methods=["POST"])
+@blueprint.route('/login', methods = ["POST"])
 def login_POST():
     if "google-btn" in flask.request.form:
         # authorization_url, state = flow.authorization_url()
         # flask.session["state"] = state
         # return flask.redirect(authorization_url)
-        redirect_uri = flask.url_for('auth.callback', _external=True)
+        redirect_uri = flask.url_for('auth.callback', _external = True)
         return google.authorize_redirect(redirect_uri)
 
     else:
@@ -70,7 +70,10 @@ def login_POST():
                 if pw == get_by_primary_key("user", user, "PASSWORD"):
                     flask.session['UID'] = user
                     flask.session.permanent = True
-                    sql("INSERT INTO login (UID, IP, TIME) VALUES (?,?,?)", user, flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr), str(datetime.now(TIME_ZONE).replace(tzinfo=None)), commit=True)
+                    sql("INSERT INTO login (UID, IP, TIME) VALUES (?,?,?)", 
+                        user, 
+                        flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr), 
+                        str(datetime.now(TIME_ZONE).replace(tzinfo=None)), commit=True)
                     return flask.jsonify({})
             finally:
                 error = error_msg.login.invalid_account

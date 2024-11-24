@@ -2,7 +2,7 @@ console.log(data)
 function post_a_request() {
     return new Promise((resolve) => {
         $.ajax({
-            type: 'POST',
+            type: 'GET',
             url: window.location.href.split('#')[0] + '/update',
             success: function (response) {
                 resolve(response);

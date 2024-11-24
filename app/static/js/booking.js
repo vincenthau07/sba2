@@ -1,3 +1,24 @@
+function getSchedule(data, callback) {
+    $.ajax({
+        type: 'POST',
+        url: window.location.href.split('#')[0]+'/update',
+        data: data,
+        success: function(response) {
+            if ('error' in response)
+                error_alert_box(response.error)
+            else{
+                updateSchedule(response.data, response.col)
+                empty_alert_box();
+                callback(response);
+            }
+        },
+        error: function(error) {
+            error_alert_box(error);
+        }
+    });
+}
+
+
 $(document).ready(function(){
 
     //booking request form
@@ -25,52 +46,23 @@ $(document).ready(function(){
     $(document).on('change',"input[name='week']", function(){
         var weeknum = $(this).val();
         loading_alert_box();
-        $.ajax({
-            type: 'POST',
-            url: window.location.href.split('#')[0]+'/update',
-            data: {week: weeknum},
-            success: function(response) {
-                updateSchedule(response.data, response.col)
-                empty_alert_box();
-            },
-            error: function(error) {
-                error_alert_box(error);
-            }
-        });
+        console.log(weeknum)
+        getSchedule({week: weeknum}, function(response){})
+        
     })
     $(document).on('click',"input[name='previous']", function(){
         var weeknum = $("input[name='week']").val();
         loading_alert_box();
-        $.ajax({
-            type: 'POST',
-            url: window.location.href.split('#')[0]+'/update',
-            data: {week: weeknum, previous: true},
-            success: function(response) {
-                updateSchedule(response.data, response.col)
-                $("input[name='week']").val(response.week);
-                empty_alert_box();
-            },
-            error: function(error) {
-                error_alert_box(error);
-            }
-        });
+        getSchedule({week: weeknum, previous: true}, function(response){
+            $("input[name='week']").val(response.week);
+        })
     })
     $(document).on('click',"input[name='next']", function(){
         var weeknum = $("input[name='week']").val();
         loading_alert_box();
-        $.ajax({
-            type: 'POST',
-            url: window.location.href.split('#')[0]+'/update',
-            data: {week: weeknum, next: true},
-            success: function(response) {
-                updateSchedule(response.data, response.col);
-                $("input[name='week']").val(response.week);
-                empty_alert_box();
-            },
-            error: function(error) {
-                error_alert_box(error);
-            }
-        });
+        getSchedule({week: weeknum, next: true}, function(response){
+            $("input[name='week']").val(response.week);
+        })
     })
 
 
@@ -112,19 +104,9 @@ $(document).ready(function(){
                 else
                     success_alert_box();
                 var weeknum = $("input[name='week']").val();
-                $.ajax({
-                    type: 'POST',
-                    url: window.location.href.split('#')[0]+'/update',
-                    data: {week: weeknum},
-                    success: function(response) {
-                        updateSchedule(response.data, response.col);
-                        $("input[name='week']").val(response.week);
-                        
-                    },
-                    error: function(error) {
-                        error_alert_box(error);
-                    }
-                });
+                getSchedule({week: weeknum}, function(response){
+                    $("input[name='week']").val(response.week);
+                })
             },
             error: function(error) {
                 error_alert_box(error);

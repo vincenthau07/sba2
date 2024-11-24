@@ -11,8 +11,8 @@
 
             var tableinfo = $("#tableinfo").DataTable({
                 ajax: {
-                    type: 'POST',
-                    url: window.location.href,
+                    type: 'GET',
+                    url: window.location.href.split('#')[0]+'/update',
                     dataSrc: 'data',
                 },
                 scrollX: true
@@ -25,11 +25,14 @@
                 const path = { "Approve": "/approve", "Deny": "/deny" }
                 let text = '';
 
-                let submit_data = { "id": $(this).attr("name") };
+                let submit_data = {
+                    "type": type.toLowerCase(),
+                    "id": $(this).attr("name") 
+                };
                 loading_alert_box();
                 $.ajax({
                     type: 'POST',
-                    url: window.location.href + "/" + type.toLowerCase(),
+                    url: window.location.href.split('#')[0],
                     data: submit_data,
                     success: function (response) {
                         if ('error' in response){

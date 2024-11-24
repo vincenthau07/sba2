@@ -1,5 +1,9 @@
-import sqlite3, flask, re, datetime
+import sqlite3
+import flask
+import re
+import datetime
 from typing import Union
+from config import TIME_ZONE
 import threading
 
 conn = sqlite3.connect("database/database.sqlite", check_same_thread=False)
@@ -25,7 +29,10 @@ class sql():
     tupleToList (bool, optional)
         If yes, convert result from tuple to list
     """
-    def __init__(self,command: str,*params,commit=False, tupleToList=False) -> None:
+    def __init__(self, command: str, 
+                 *params , 
+                 commit = False, 
+                 tupleToList = False) -> None:
         try:
             _lock.acquire(True)
             #execute sql command
@@ -46,7 +53,6 @@ class sql():
                 self.result = [list(arr) for arr in self.result]
 
             self.field = [i[0] for i in cur.description] if cur.description else None
-            #self.description = copy.deepcopy(cur.description)
         finally:
             _lock.release()
     
@@ -82,7 +88,10 @@ class sql():
                     break
         return rtn
 
-def get_by_primary_key(table: str, primary_key, required_field: Union[str, list]="*", **args):
+def get_by_primary_key(table: str, 
+                       primary_key, 
+                       required_field: Union[str, list]="*", 
+                       **args):
     """
     Return a record with input (a) field(s) or all fields matching a specific primary key
 
@@ -102,7 +111,9 @@ def get_by_primary_key(table: str, primary_key, required_field: Union[str, list]
     tuple: a record
     """
     rtn = sql(f"""SELECT {required_field if type(required_field) is str else ','.join(required_field)} FROM {table} 
-               WHERE {SCHEMA[table].primaryKey} = ?""", primary_key, **args).result[0]
+               WHERE {SCHEMA[table].primaryKey} = ?""",
+               primary_key, **args
+               ).result[0]
     return rtn[0] if type(required_field) is str else rtn
 
 def sessionValidity(session):
@@ -126,7 +137,7 @@ def sessionValidity(session):
         return False
     return True
 
-def role_permissions(uid=None,role=None):
+def role_permissions(uid = None,role = None):
     """
     Get all permissions of a user or a role
 
@@ -156,7 +167,7 @@ def role_permissions(uid=None,role=None):
         permissions[field[i]] = result.result[0][i]
     return permissions
 
-def verifySession(session, permission: str=None, role=None):
+def verifySession(session, permission: str = None, role = None):
     """
     A decorator. Check if session is valid and user is allowed to browse this webpage. If session is not valid, redirect to /login. If user is not allowed, redirect to /home.
     
@@ -171,11 +182,23 @@ def verifySession(session, permission: str=None, role=None):
     """
     def wrapper(func):
         def decorator(*args, **kwargs):
+            
             if not sessionValidity(session):
                 return flask.redirect('/login')
+            
             permission_li = role_permissions(uid = session["UID"])
-            if permission and not permission_li[permission.format(*map(lambda x: x.upper(), kwargs.values()))] or role and permission_li[SCHEMA["roles"].primaryKey]!=role:
-                return flask.redirect('/home')
+            
+            if permission is not None:
+                required_permission = permission.format(
+                    *map(lambda x: x.upper(), kwargs.values())
+                    )
+                if not permission_li[required_permission]:
+                    return flask.redirect('/home')
+                
+            if role is not None:
+                if permission_li[SCHEMA["roles"].primaryKey] != role:
+                    return flask.redirect('/home')
+                
             kwargs["permission"] = permission_li
             return func(*args, **kwargs)
         decorator.__name__ = func.__name__
@@ -201,8 +224,8 @@ def dateToWeekNumber(date: datetime.datetime) -> str:
     """
     date += datetime.timedelta(days=4-datetime.date.isoweekday(date))
     date2 = datetime.date(date.year,1,1)
-    date2 += datetime.timedelta(days=(11-datetime.date.isoweekday(date2))%7-3)
-    return f"{date.year}-W{(date-date2).days//7+1:02d}"
+    date2 += datetime.timedelta(days = (11-datetime.date.isoweekday(date2)) % 7 - 3)
+    return f"{date.year}-W{(date-date2).days//7 + 1:02d}"
 
 def weekNumToDate(week) -> list:
     """
@@ -223,10 +246,10 @@ def weekNumToDate(week) -> list:
     """
     year = int(week[:4])
     week = int(week[-2:])
-    date = datetime.date(year,1,1)
-    date += datetime.timedelta(days=(11-datetime.date.isoweekday(date))%7-3)
-    date += datetime.timedelta(days=(week-1)*7)
-    d = datetime.timedelta(days=1)
+    date = datetime.date(year, 1, 1)
+    date += datetime.timedelta(days = (11-datetime.date.isoweekday(date)) % 7 - 3)
+    date += datetime.timedelta(days = (week-1) * 7)
+    d = datetime.timedelta(days = 1)
     rtn = []
     for i in range(7):
         rtn.append(date)
@@ -241,21 +264,21 @@ class html:
         rtn = "<table"
         for key in params:
             rtn+=f" {key}=\"{params[key]}\""
-        rtn+=">"
-        rtn+="<thead>"
-        rtn+="<tr>"
+        rtn +=">"
+        rtn +="<thead>"
+        rtn +="<tr>"
         for i in field:
             rtn+=f"<th>{i}</th>"
-        rtn+="</tr>"
-        rtn+="</thead>"
-        rtn+="<tbody>"
+        rtn +="</tr>"
+        rtn +="</thead>"
+        rtn +="<tbody>"
         for i in cell:
-            rtn+="<tr>"
+            rtn +="<tr>"
             for j in i:
-                rtn+=f"<td>{j}</td>"
+                rtn +=f"<td>{j}</td>"
             rtn+="</tr>"
-        rtn+="</tbody>"
-        rtn+="</table>"
+        rtn +="</tbody>"
+        rtn +="</table>"
         return rtn
 
     def hyperlink(text: str, link: str, params: dict={}):
@@ -265,9 +288,9 @@ class html:
         rtn = f"<a href=\"{link}\""
         for key in params:
             rtn += f" {key}=\"{params[key]}\""
-        rtn+= ">"
-        rtn+= text
-        rtn+= "</a>"
+        rtn += ">"
+        rtn += text
+        rtn += "</a>"
         return rtn
 
     def linebreak():
@@ -283,9 +306,9 @@ class html:
         rtn = f"<div"
         for key in params:
             rtn += f" {key}=\"{params[key]}\""
-        rtn+= ">"
-        rtn+= text
-        rtn+= "</div>"
+        rtn += ">"
+        rtn += text
+        rtn += "</div>"
         return rtn
 
     def input(params: dict={}):
@@ -325,7 +348,9 @@ def num_to_floor(li: list, column_index: int):
     """
     for i in range(len(li)):
         floornum = li[i][column_index]
-        li[i][column_index] = "G/F" if floornum == 0 else f"{floornum}/F" if floornum > 0 else f"B{floornum}/F"
+        li[i][column_index] = ("G/F" if floornum == 0 
+                               else f"{floornum}/F" if floornum > 0 
+                               else f"B{floornum}/F")
     return li
 
 def text_to_link(li: list, path: str, column_index: int):
@@ -354,6 +379,18 @@ def strToDate(string):
     Convert from `str` to `datetime.datetime`
     """
     if len(string) > 16:
-        return datetime.datetime(int(string[:4]),int(string[5:7]),int(string[8:10]),int(string[11:13]),int(string[14:16]),int(string[17:19]))
+        return datetime.datetime(int(string[:4]),
+                                 int(string[5:7]),
+                                 int(string[8:10]),
+                                 int(string[11:13]),
+                                 int(string[14:16]),
+                                 int(string[17:19]))
     else:
-        return datetime.datetime(int(string[:4]),int(string[5:7]),int(string[8:10]),int(string[11:13]),int(string[14:16]))
+        return datetime.datetime(int(string[:4]),
+                                 int(string[5:7]),
+                                 int(string[8:10]),
+                                 int(string[11:13]),
+                                 int(string[14:16]))
+
+def getDatetimeNow():
+    return datetime.datetime.now(TIME_ZONE).replace(tzinfo=None)

@@ -102,8 +102,8 @@ $(document).ready(function () {
             }
         },
         ajax: {
-            type: 'POST',
-            url: window.location.href,
+            type: 'GET',
+            url: window.location.href.split('#')[0]+'/update',
             dataSrc: 'data',
         },
         columns: col,
@@ -154,16 +154,16 @@ $(document).ready(function () {
             }
             submit_data['data'] = data;
         };
-        if (type=='update')
-            type+='/'+tableinfo.rows( { selected: true } ).data()[0][pk_index]
+        if (type == 'update' || type == 'delete')
+            submit_data['id'] = tableinfo.rows( { selected: true } ).data()[0][pk_index]
+        submit_data['type'] = type;
         loading_alert_box()
         $.ajax({
             type: 'POST',
+            url: window.location.href.split('#')[0],
             data: submit_data,
-            url: window.location.href+'/'+type,
             success: function(response) {
                 tableinfo.ajax.reload(null, false);
-                //console.log(response)
                 
                 if ('error' in response){
                     error_alert_box(response.error);

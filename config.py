@@ -11,6 +11,9 @@ PORT = 80
 # Sever Mode (0: development server) (1: production WSGI server)
 SERVER_MODE = 0
 
+# Multithreading (for development server only)
+THREADED = True
+
 # Flask Debug Mode (for development server only)
 DEBUG = True
 

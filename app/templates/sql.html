@@ -21,6 +21,11 @@
                         url: "",
                         data: {"sql": sql},
                         success: function(response) {
+                            if ('error' in response){
+                                error_alert_box(response['error']);
+                                return;
+                            }
+                            success_alert_box()
                             let $o = $('.output')
                             let results = response.results
                             $o.html('');

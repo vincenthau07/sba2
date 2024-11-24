@@ -13,8 +13,8 @@
             $('.' + path).addClass("active");
             var tableinfo = $("#tableinfo").DataTable({
                 ajax: {
-                    type: 'POST',
-                    url: window.location.href,
+                    type: 'GET',
+                    url: window.location.href.split('#')[0]+'/update',
                     dataSrc: 'data'
                 },
                 scrollX: true
@@ -27,32 +27,19 @@
                 $('#'+type.toLowerCase()+'Modal').modal('show');
 
                 selected = $(this).attr("name");
-                
-                // if (confirm(text)) {
-                //     $.ajax({
-                //         type: 'POST',
-                //         url: window.location.href + '/' + $(this).attr("name"),
-                //         success: function (response) {
-                //             tableinfo.ajax.reload(null, false);
-                //         },
-                //         error: function (error) {
-                //             console.log("Error:", error);
-                //         }
-                //     });
-                // }
             });
             $(document).on('click', "button.cancel, button.restore", function () {
                 loading_alert_box()
                 $.ajax({
                     type: 'POST',
-                    url: window.location.href + '/' + selected,
+                    url: window.location.href.split('#')[0],
+                    data: {'id': selected},
                     success: function (response) {
                         if ('error' in response){
-                            error_alert_box(response.error);
+                            error_alert_box(response['error']);
+                            return;
                         }
-                        else{
-                            success_alert_box();
-                        }
+                        success_alert_box();
                         tableinfo.ajax.reload(null, false);
                     },
                     error: function (error) {
