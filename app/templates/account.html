@@ -35,7 +35,7 @@
                             }
                         },
                         error: function(error) {
-                            error_alert_box(error);
+                            error_alert_box(error.responseText);
                         }
                     });
                 });
@@ -59,7 +59,7 @@
                             $("input[name='OLD_PASSWORD'], input[name='PASSWORD1'], input[name='PASSWORD2']").val('');
                         },
                         error: function(error) {
-                            error_alert_box(error)
+                            error_alert_box(error.responseText);
                         }
                     });
                 });
@@ -125,7 +125,7 @@
                             </div>
                             <div class="form-floating mb-3">
                                 
-                                <input class='form-control' type="text" name="EMAIL" value="{{ data[2] }}">
+                                <input class='form-control' type="email" name="EMAIL" value="{{ data[2] }}">
                                 <label>Email</label>
                             </div>
                             <div class="form-floating mb-3">

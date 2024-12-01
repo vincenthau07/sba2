@@ -1,5 +1,5 @@
 from flask import Flask
-import datetime, os
+import os
 import importlib
 import config
 from app.blueprints.auth import oauth
@@ -18,9 +18,9 @@ def create_app():
 
     oauth.init_app(app)
 
-    #load all webpages from path "/blueprints"
-    # print(os.listdir(os.path.dirname("app/blueprints/")))
-    for module in os.listdir(os.path.join(os.path.dirname(__file__),'blueprints')):
+    for module in os.listdir(os.path.join(os.path.dirname(__file__),
+                                          'blueprints')
+                             ):
         if module[-3:] == '.py':
             print(f"Loading blueprint-{module}...")
             app.register_blueprint(importlib.import_module(f"app.blueprints.{module[:-3]}").blueprint)

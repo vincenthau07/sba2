@@ -9,6 +9,7 @@ class booking:
     start_time_in_the_past =        "You cannot book rooms in the past."
     book_after_a_period_of_time =   "You can only book rooms after a week."
 class account:
+    invalid_email =                 "Invalid Email Format."
     incorrect_current_password =    "Incorrect current password."
     new_passwords_not_match =       "New password does not match confirm new password."
     weak_new_password =             "New password must include at least 8 characters."

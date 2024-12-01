@@ -13,7 +13,7 @@ function getSchedule(data, callback) {
             }
         },
         error: function(error) {
-            error_alert_box(error);
+            error_alert_box(error.responseText);
         }
     });
 }
@@ -109,7 +109,7 @@ $(document).ready(function(){
                 })
             },
             error: function(error) {
-                error_alert_box(error);
+                error_alert_box(error.responseText);
             }
         });
     })

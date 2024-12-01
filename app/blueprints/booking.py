@@ -14,7 +14,7 @@ def checkAvailability(func):
             if not get_by_primary_key(kwargs['tname'], kwargs['id'], ('AVAILABILITY')):
                 return flask.redirect(f"/booking/{kwargs['tname']}")
         except:
-            return flask.redirect('/home')
+            flask.abort(403)    #403 Forbidden
         return func(*args, **kwargs)
     decorator.__name__ = func.__name__
     return decorator
@@ -95,7 +95,7 @@ def addRecord(table, stime, etime,
 @blueprint.route('/booking/<tname>')
 @verifySession(flask.session)
 def booking(tname, permission):
-    rf_info = getInfo(tname, tupleToList=True)
+    rf_info = getInfo(tname, tupleToList = True)
     if 'FLOOR' in SCHEMA[tname].fields:
         num_to_floor(rf_info.result, rf_info.field.index('FLOOR'))
     text_to_link(rf_info.result, f"/booking/{tname}/{{}}", rf_info.field.index(SCHEMA[tname].primaryKey))
@@ -114,7 +114,7 @@ def booking2(tname, id, permission):
     name = get_by_primary_key(tname, id, tname[0].upper()+"NAME")
 
     
-    minweek = dateToWeekNumber(getDatetimeNow().date())   #minweek value
+    minweek = dateToWeekNumber(getDatetimeNow().date())
 
     #exact dates of week
     dates = weekNumToDate(minweek)
@@ -152,12 +152,12 @@ def bksubmitform(tname, id, permission):
         else:
             stime = strToDate(flask.request.form.get("stime"))
             etime = strToDate(flask.request.form.get("etime"))
-            if etime<=stime:
+            if etime <= stime:
                 return flask.jsonify({"error": error_msg.booking.end_time_before_start_time})
             elif len(getEvents(tname, id, 
                                stime = stime+datetime.timedelta(seconds = 1), 
                                etime = etime-datetime.timedelta(seconds = 1))
-                    )>0:
+                    ) > 0:
                 return flask.jsonify({"error": error_msg.booking.occupied_time_session})
             
             elif permission[f"EDIT{tname.upper()}_RECORD"]:
@@ -178,7 +178,10 @@ def bksubmitform(tname, id, permission):
                     return flask.jsonify({"error": error_msg.booking.book_after_a_period_of_time})
                 else:
                     try:
-                        addRecord(tname,stime,etime,flask.session.get('UID'),id,flask.request.form.get("unit"),flask.request.form.get("description"))
+                        addRecord(tname, stime, etime, 
+                                  flask.session.get('UID'), id,
+                                  flask.request.form.get("unit"), 
+                                  flask.request.form.get("description"))
                         return flask.jsonify({})
                     except Exception as error:
                         return flask.jsonify({"error": str(error)})
@@ -190,7 +193,7 @@ def bksubmitform(tname, id, permission):
 @verifySession(flask.session)
 @checkAvailability
 def bkupdate(tname, id, permission):
-    print(flask.request.form.get('week'))
+
     dates = weekNumToDate(flask.request.form.get('week'))
     week = flask.request.form.get('week')
     if 'next' in flask.request.form:

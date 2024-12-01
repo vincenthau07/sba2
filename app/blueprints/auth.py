@@ -18,13 +18,6 @@ google = oauth.register(
     client_kwargs = {'scope': 'openid email profile'},
 )
 
-
-# GOOGLE_CLIENT_ID = OAUTH['web']['client_id']
-# flow = Flow.from_client_secrets_file(
-#     client_secrets_file="app/client_secret.json",
-#     scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"]
-# )
-
 blueprint = flask.Blueprint("auth", __name__)
 
 @blueprint.before_request
@@ -73,10 +66,11 @@ def login_POST():
                     sql("INSERT INTO login (UID, IP, TIME) VALUES (?,?,?)", 
                         user, 
                         flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr), 
-                        str(datetime.now(TIME_ZONE).replace(tzinfo=None)), commit=True)
+                        str(getDatetimeNow()), commit=True)
                     return flask.jsonify({})
-            finally:
-                error = error_msg.login.invalid_account
+            except:
+                pass
+            error = error_msg.login.invalid_account
         
         return flask.jsonify({'error': error})
 
@@ -91,7 +85,12 @@ def callback():
         user = result[0][0]
         flask.session['UID'] = user
         flask.session.permanent = True
-        sql("INSERT INTO login (UID, IP, TIME) VALUES (?,?,?)", user, flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr), str(datetime.now(TIME_ZONE).replace(tzinfo=None)), commit=True)
+        sql("INSERT INTO login (UID, IP, TIME) VALUES (?,?,?)",
+            user, 
+            flask.request.environ.get('HTTP_X_REAL_IP', flask.request.remote_addr),
+            str(getDatetimeNow()),
+            commit=True
+            )
         return flask.redirect('/home')
 
 @blueprint.route('/logout')

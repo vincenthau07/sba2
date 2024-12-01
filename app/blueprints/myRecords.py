@@ -1,4 +1,4 @@
-import flask, datetime
+import flask
 from app.helpers import *
 from config import BOOK_TIME, TIME_ZONE
 blueprint = flask.Blueprint("myRecords", __name__)

@@ -10,6 +10,73 @@
         <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
         <script>
 
+            function add_accordion_item($selector, iteration, result){
+                console.log(result);
+                var button, content;
+                if (result[0]){
+                    button = `&nbsp<span class="badge rounded-pill bg-success">Success</span>`;
+                }
+                else{
+                    button = `&nbsp<span class="badge rounded-pill bg-danger">Failed</span>&nbsp${result[2]}`;
+                }
+                button = `
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse${iteration}" aria-expanded="true" aria-controls="panelsStayOpen-collapse${iteration}">
+                        <span class="badge rounded-pill bg-primary">Statement#${iteration+1}</span>&nbsp${result[1]}${button}
+                    </button>`;
+                if(result[0] && result.length == 3){
+                    content = `
+                        <div id="panelsStayOpen-collapse${iteration}" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-heading${iteration}">
+                            <div class="accordion-body">
+                                <table class='table' id="tableinfo${iteration}"></table>
+                            </div>
+                        </div>`;
+                }
+                else{
+                    content = '';
+                }
+                $selector.append(`
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="panelsStayOpen-heading${iteration}">
+                            ${button}
+                        </h2>
+                        ${content}
+                    </div>`);
+                if (result[0] && result.length == 3){
+                    var col = [];
+                    for (let j = 0; j < result[2].columns.length; j++) {
+                        col.push({title: result[2].columns[j]});
+                    };
+                    $('#tableinfo' + iteration).DataTable({
+                        layout: {
+                            topStart: 'pageLength',
+                            topEnd: 'search',
+                            bottomStart: 'info',
+                            bottom2End: 'paging',
+                            bottomEnd: {
+                                buttons: [
+                                    {
+                                        extend: 'copy',
+                                        className: 'btn btn-outline-secondary'
+                                    },
+                                    {
+                                        extend: 'excel',
+                                        className: 'btn btn-outline-success'
+                                    }
+                                ]
+                            }
+                        },
+                        data: result[2].data,
+                        columns: col,
+                        scrollX: true,
+                        initComplete: function () {
+                            var btns = $('.dt-button');
+                            btns.removeClass('dt-button');
+                            $('.show').removeClass('show');
+                        }
+                    })
+                }
+            }
+
             $(document).ready(function(){
 
                 $(document).on('click',"input[name='submit']", function(){
@@ -29,66 +96,8 @@
                             let $o = $('.output')
                             let results = response.results
                             $o.html('');
-                            for(let i=0; i<results.length; i++){
-                                code = ""
-                                code+=(` <div class="card">
-                                                <div class="card-header">
-                                                    <a class="collapsed btn container-fluid text-start" data-bs-toggle="collapse" href="#collapse`+i+`">
-                                                        <span class="badge rounded-pill bg-primary">Statement#`+(i+1)+`</span>&nbsp`+results[i][1]);
-                                if (results[i][0]){
-                                    code+=(`&nbsp<span class="badge rounded-pill bg-success">Success</span>
-                                                        </a>
-                                                    </div>`)
-                                    if (results[i].length==3){
-                                        code+=(`<div id="collapse`+i+`" class="collapse show" data-bs-parent="#accordion">
-                                                        <div class="card-body">
-                                                            <table class='table' id="tableinfo`+i+`"></table>
-                                                        </div>
-                                                    </div>`);
-                                        }
-                                }
-                                else{
-                                    code+=(`&nbsp<span class="badge rounded-pill bg-danger">Failed</span>&nbsp`+results[i][2]+`
-                                                        </a>
-                                                    </div>`);
-                                }
-                                code+=(`</div>`);
-                                $o.append(code)
-                                if (results[i][0]&&results[i].length==3){
-                                    let col = [];
-                                    for (let j = 0; j < results[i][2].columns.length; j++) {
-                                        col.push({ title: results[i][2].columns[j] });
-                                    };
-                                    $('#tableinfo'+i).DataTable({
-                                        layout: {
-                                            topStart: 'pageLength',
-                                            topEnd: 'search',
-                                            bottomStart: 'info',
-                                            bottom2End: 'paging',
-                                            bottomEnd: {
-                                                buttons: [
-                                                    {
-                                                        extend: 'copy',
-                                                        className: 'btn btn-outline-secondary'
-                                                    },
-                                                    {
-                                                        extend: 'excel',
-                                                        className: 'btn btn-outline-success'
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        order: [[0, 'dsc']],
-                                        data: results[i][2].data,
-                                        columns: col,
-                                        scrollX: true,
-                                        initComplete: function () {
-                                            var btns = $('.dt-button');
-                                            btns.removeClass('dt-button');
-                                            $('.show').removeClass('show');
-                                        }
-                                    })
-                                }
+                            for(let i = 0; i < results.length; i++){
+                                add_accordion_item($o, i, results[i]);
                             }
                             
                         },
@@ -114,7 +123,7 @@
             <textarea class="form-control" id="sql" rows="8" cols="50" name="sql"></textarea>
             <br>
             <input class='btn btn-outline-primary' type="submit" value="Submit" name = "submit">
-            <div class = "container-fluid output mt-3"></div>
+            <div class = "accordion output mt-3 mb-5" id="accordionPanelsStayOpenExample"></div>
         </div>
     </body>
 </html>

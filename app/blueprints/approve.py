@@ -11,7 +11,7 @@ def retrieve_pending_records(tname):
     info = sql(f"""SELECT BID, a.{tname[0].upper()}ID, {tname[0].upper()}NAME, UID, STIME, ETIME, NAME, DESCRIPTION 
                FROM {tname}_record a, school_unit b, {tname} d
                WHERE a.{tname[0].upper()}ID = d.{tname[0].upper()}ID AND a.UNIT = b.UNIT 
-               AND a.AVAILABILITY AND APPROVED_BY IS NULL AND ETIME>? ORDER BY {SCHEMA[tname+"_record"].primaryKey}""",str(datetime.now(TIME_ZONE).replace(tzinfo=None)),tupleToList=True)
+               AND a.AVAILABILITY AND APPROVED_BY IS NULL AND ETIME>? ORDER BY {SCHEMA[tname+"_record"].primaryKey}""",str(getDatetimeNow()),tupleToList=True)
 
     #append approve and cancel button
     for i in info.result:

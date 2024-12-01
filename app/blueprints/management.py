@@ -1,4 +1,5 @@
-import flask, datetime
+import flask
+import datetime
 from app.helpers import *
 from database.schema import SCHEMA
 from config import TIME_ZONE

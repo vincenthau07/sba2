@@ -8,7 +8,7 @@ function post_a_request() {
                 resolve(response);
             },
             error: function () {
-                error_alert_box(error);
+                error_alert_box(error.responseText);
                 resolve({});
             }
         });

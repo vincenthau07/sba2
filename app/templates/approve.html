@@ -44,7 +44,7 @@
                         tableinfo.ajax.reload(null, false);
                     },
                     error: function (error) {
-                        error_alert_box(error);
+                        error_alert_box(error.responseText);
                     }
                 });
             });

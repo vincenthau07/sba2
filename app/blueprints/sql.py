@@ -1,4 +1,4 @@
-import flask, datetime
+import flask
 from app.helpers import *
 from config import TIME_ZONE
 
@@ -12,22 +12,23 @@ def sqlWeb(permission):
                                  tz = TIME_ZONE)
     
 @blueprint.route('/sql', methods = ['POST'])
-@verifySession(flask.session, role="ADMIN")
+@verifySession(flask.session, role = "ADMIN")
 def sqlResult(permission):
-    cmd = flask.request.form["sql"]
-    code = ""
+    cmds = flask.request.form["sql"]
     results = []
-    for i in cmd.split(";"):
-        if i.isspace() or len(i) == 0:
+    for cmd in cmds.split(";"):
+        if cmd.isspace() or len(cmd) == 0:
             continue
         try:
-            result = sql(i, commit=True)
+            result = sql(cmd, commit = True)
 
             if result.field:
-                results.append([True, i, {'columns': result.field, 
-                                          'data': result.result}])
+                results.append([True, cmd, {'columns': result.field, 
+                                          'data': result.result}]
+                               )
             else:
-                results.append([True, i])
+                results.append([True, cmd]
+                               )
         except Exception as error:
-            results.append([False, i, str(error)])
+            results.append([False, cmd, str(error)])
     return flask.jsonify({"results": results})

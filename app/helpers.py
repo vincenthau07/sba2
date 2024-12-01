@@ -184,7 +184,7 @@ def verifySession(session, permission: str = None, role = None):
         def decorator(*args, **kwargs):
             
             if not sessionValidity(session):
-                return flask.redirect('/login')
+                flask.abort(401)        #401 unauthorized
             
             permission_li = role_permissions(uid = session["UID"])
             
@@ -193,11 +193,11 @@ def verifySession(session, permission: str = None, role = None):
                     *map(lambda x: x.upper(), kwargs.values())
                     )
                 if not permission_li[required_permission]:
-                    return flask.redirect('/home')
+                    flask.abort(403)    #403 Forbidden
                 
             if role is not None:
                 if permission_li[SCHEMA["roles"].primaryKey] != role:
-                    return flask.redirect('/home')
+                    flask.abort(403)    #403 Forbidden
                 
             kwargs["permission"] = permission_li
             return func(*args, **kwargs)
@@ -222,8 +222,8 @@ def dateToWeekNumber(date: datetime.datetime) -> str:
     >>> dataToWeekNumber(datetime.datetime(2024, 1, 1))
     2024-W01
     """
-    date += datetime.timedelta(days=4-datetime.date.isoweekday(date))
-    date2 = datetime.date(date.year,1,1)
+    date += datetime.timedelta(days = 4-datetime.date.isoweekday(date))
+    date2 = datetime.date(date.year, 1, 1)
     date2 += datetime.timedelta(days = (11-datetime.date.isoweekday(date2)) % 7 - 3)
     return f"{date.year}-W{(date-date2).days//7 + 1:02d}"
 

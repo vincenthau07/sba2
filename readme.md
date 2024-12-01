@@ -9,13 +9,13 @@ A website server for facilities and rooms booking.
 
 # How-to-Get-Started
 
-**Make sure you have installed Python with 3.11.0 or above, and Pip with version 24.0 or above**
+**Make sure you have installed Python with 3.10.0 or above, and Pip with version 24.0 or above**
 
 It might work in older python version but it is **NOT GUARANTEED**.
 
-You can get python installer from: [Python 3.11.0](https://www.python.org/downloads/release/python-3110/)
+You can get python installer from: [Python 3.10.0](https://www.python.org/downloads/release/python-3110/)
 
-**Make sure you have installed Module Flask with version 3.0.2 or above**
+**Make sure you have installed required Modules**
 
 You can install the required modules with:
 ```
@@ -35,7 +35,7 @@ Localhost: 127.0.0.1
 LAN: { IP-ADDRESS }
 
 
-If you wish to browse through WAN, please consider using gunicorn, port forwards, tunneling, etc.
+If you wish to browse through WAN, please consider using gunicorn, port forwards, etc.
 
 # Website-Guide
 ## Login
@@ -103,22 +103,3 @@ Note: It will integrate into new templates in the future.
 
 ## Logout
 Logout
-
-# Folders
-## /app
-Server Application
-
-## /app/helpers.py
-Some useful python functions
-
-## /blueprints
-Python codes for each webpage.
-
-## /app/templates
-Html code for each webpage.
-
-## /app/static
-Static elements (photos, css, js) for webpages.
-
-## /database
-Database files and schema in python.
