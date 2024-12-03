@@ -8,7 +8,7 @@ function getSchedule(data, callback) {
                 error_alert_box(response.error)
             else{
                 updateSchedule(response.data, response.col)
-                empty_alert_box();
+                empty_alert_box()
                 callback(response);
             }
         },
@@ -100,13 +100,15 @@ $(document).ready(function(){
             },
             success: function(response) {
                 if ('error' in response)
-                    error_alert_box(response.error);
-                else
-                    success_alert_box();
-                var weeknum = $("input[name='week']").val();
-                getSchedule({week: weeknum}, function(response){
-                    $("input[name='week']").val(response.week);
-                })
+                    error_alert_box(response.error); 
+                else{
+                    var weeknum = $("input[name='week']").val();
+                    getSchedule({week: weeknum}, function(response){
+                        success_alert_box();
+                        $("input[name='week']").val(response.week);
+                    })
+                }
+                
             },
             error: function(error) {
                 error_alert_box(error.responseText);

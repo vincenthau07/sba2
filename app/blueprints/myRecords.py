@@ -1,4 +1,5 @@
 import flask
+import error_message as error_msg
 from app.helpers import *
 from config import BOOK_TIME, TIME_ZONE
 blueprint = flask.Blueprint("myRecords", __name__)
@@ -62,7 +63,7 @@ def recordsPOST2(tname, permission, path="approved"):
             if len(sql(f"SELECT * FROM {tname+'_record'} WHERE AVAILABILITY AND STIME < ? AND ETIME > ?",
                        etime, stime).result
                    ) > 0:
-                return flask.jsonify({"error": "Selected session is occupied by others."})
+                return flask.jsonify({"error": error_msg.booking.occupied_time_session})
             
             elif permission["EDIT"+tname.upper()+"_RECORD"]:
                 sql(f"UPDATE {tname+'_record'} SET AVAILABILITY = ?, APPROVED_BY = ? WHERE BID = ? AND UID = ?",

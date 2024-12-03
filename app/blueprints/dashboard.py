@@ -21,12 +21,14 @@ def get_num_each_month():
         m2 = m1 + 1
         y2 = y1 + (m2-1)//12
         m2 = (m2-1) % 12 +1
-        rtn.append(sql(f"""SELECT COUNT(*) FROM room_record WHERE STIME < ? AND ETIME >= ?""", 
+        rtn.append(sql(f"""SELECT COUNT(*) FROM room_record WHERE STIME < ? AND ETIME >= ? 
+                                AND AVAILABILITY AND APPROVED_BY IS NOT NULL""", 
                        str(datetime.datetime(year = y2, month = m2, day = 1)), 
                        str(datetime.datetime(year = y1, month = m1, day = 1))
                        ).result[0][0]
                    )
-        rtn2.append(sql(f"""SELECT COUNT(*) FROM facility_record WHERE STIME < ? AND ETIME >= ?""", 
+        rtn2.append(sql(f"""SELECT COUNT(*) FROM facility_record WHERE STIME < ? AND ETIME >= ? 
+                                AND AVAILABILITY AND APPROVED_BY IS NOT NULL""", 
                         str(datetime.datetime(year = y2, month = m2, day = 1)), 
                         str(datetime.datetime(year = y1, month = m1, day = 1))
                         ).result[0][0]
@@ -135,4 +137,4 @@ def dashboard(permission):
 @blueprint.route('/dashboard/update', methods = ["GET"])
 @verifySession(flask.session, role = "ADMIN")
 def dashboardPOST(permission):
-    return flask.jsonify({"cpu": psutil.cpu_percent(), "ram": psutil.virtual_memory().percent})
+    return flask.jsonify({"cpu": psutil.cpu_percent(interval = 1, percpu = False), "ram": psutil.virtual_memory().percent})

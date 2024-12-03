@@ -12,7 +12,7 @@ def checkAvailability(func):
     def decorator(*args,**kwargs):
         try:
             if not get_by_primary_key(kwargs['tname'], kwargs['id'], ('AVAILABILITY')):
-                return flask.redirect(f"/booking/{kwargs['tname']}")
+                flask.abort(403)    #403 Forbidden
         except:
             flask.abort(403)    #403 Forbidden
         return func(*args, **kwargs)
@@ -56,7 +56,9 @@ def getEvents(table, id: str,
         rtn.append({
             "weekday": row[result.field.index("STIME")].weekday(),
             "start": str(row[result.field.index("STIME")])[11:16],
-            "end": str(row[result.field.index("ETIME")])[11:16],
+            "end": (str(row[result.field.index("ETIME")])[11:16] 
+                    if row[result.field.index("ETIME")] != etime
+                    else "24:00"),
             "background_color": background_color,
             "title": row[result.field.index("NAME")],
             "content": f"""
